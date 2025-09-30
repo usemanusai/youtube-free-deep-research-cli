@@ -17,6 +17,12 @@ from youtube_chat_cli.services.tts.config_manager import get_tts_config_manager
 from youtube_chat_cli.services.monitoring.channel_monitor import get_channel_monitor
 from youtube_chat_cli.services.import_service.bulk_import import get_bulk_importer
 from youtube_chat_cli.core.database import get_video_database
+from youtube_chat_cli.services.podcast.generator import get_podcast_generator
+from youtube_chat_cli.services.podcast.styles import get_style_manager, PodcastStyle, PodcastLength, PodcastTone
+from youtube_chat_cli.services.content.source_manager import get_source_manager, SourceFilter, SourceType, SourceLocation
+from youtube_chat_cli.services.blueprint.generator import get_blueprint_generator, BlueprintConfig, BlueprintFormat, BlueprintStyle
+from youtube_chat_cli.services.workflow.manager import get_workflow_manager
+from youtube_chat_cli.services.chat.interface import get_chat_interface
 from youtube_chat_cli.core.youtube_api import get_youtube_client, YouTubeAPIError
 from youtube_chat_cli.services.n8n.client import get_n8n_client
 from youtube_chat_cli.services.monitoring.background_service import get_monitoring_service
@@ -368,51 +374,139 @@ def chat():
 
 
 @cli.command()
-@click.option('--output', '-o', default='podcast_overview.wav', help='Output audio file path')
-def podcast(output):
-    """Generate a podcast-style audio overview of the active source."""
-    active_source = session_manager.get_active_source()
+@click.option('--output', '-o', help='Output audio file path (optional)')
+@click.option('--style', '-s', default='summary',
+              type=click.Choice([style.value for style in PodcastStyle]),
+              help='Podcast style (default: summary)')
+@click.option('--length', '-l', default='medium',
+              type=click.Choice([length.value for length in PodcastLength]),
+              help='Podcast length (default: medium)')
+@click.option('--tone', '-t', default='professional',
+              type=click.Choice([tone.value for tone in PodcastTone]),
+              help='Podcast tone (default: professional)')
+@click.option('--voice', '-v', default='en-US-AriaNeural', help='TTS voice to use')
+@click.option('--use-rag/--no-rag', default=True, help='Use n8n RAG for enhanced content generation')
+@click.option('--session-id', help='Session ID for RAG context (auto-generated if not provided)')
+@click.argument('video_url', required=False)
+def podcast(output, style, length, tone, voice, use_rag, session_id, video_url):
+    """Generate a podcast-style audio from YouTube video with optional n8n RAG integration.
 
-    if not active_source:
-        click.echo(Fore.RED + "No active source set. Use 'set-source <URL>' to set one first.")
+    If no VIDEO_URL is provided, uses the active source.
+
+    Examples:
+        youtube-chat podcast https://www.youtube.com/watch?v=VIDEO_ID
+        youtube-chat podcast --style detailed --voice en-US-JennyNeural
+        youtube-chat podcast --no-rag  # Generate without RAG enhancement
+    """
+    # Determine source URL
+    if video_url:
+        source_url = video_url
+    else:
+        source_url = session_manager.get_active_source()
+        if not source_url:
+            click.echo(Fore.RED + "No video URL provided and no active source set.")
+            click.echo("Use: youtube-chat podcast <VIDEO_URL> or set-source <URL> first.")
+            return 1
+
+    # Validate YouTube URL
+    if 'youtube.com' not in source_url and 'youtu.be' not in source_url:
+        click.echo(Fore.RED + "Please provide a valid YouTube URL.")
         return 1
 
-    # Initialize services
-    llm = _get_llm_service()
-    if not llm:
-        return 1
+    # Initialize podcast generator
+    podcast_generator = get_podcast_generator()
 
-    tts = get_tts_service()
+    click.echo(Fore.CYAN + f"🎙️  Generating {style} podcast from YouTube video...")
+    click.echo(f"Source: {source_url}")
+    click.echo(f"Style: {style}")
+    click.echo(f"Voice: {voice}")
+    click.echo(f"RAG Enhancement: {'Enabled' if use_rag else 'Disabled'}")
+    click.echo()
 
-    spinner = Halo(text='Generating podcast script...', spinner='dots')
+    spinner = Halo(text='Processing video and generating podcast...', spinner='dots')
     spinner.start()
 
     try:
-        # Step 1: Generate podcast script
-        context = source_processor.process_content(active_source)
-        podcast_script = llm.generate_podcast_script(context)
+        # Generate podcast
+        result = podcast_generator.generate_podcast_from_video(
+            video_url=source_url,
+            podcast_style=style,
+            voice=voice,
+            use_rag=use_rag,
+            session_id=session_id
+        )
 
-        spinner.succeed(Fore.GREEN + 'Podcast script generated')
-        spinner = Halo(text='Generating audio...', spinner='dots')
-        spinner.start()
+        if result['status'] == 'success':
+            spinner.succeed(Fore.GREEN + 'Podcast generated successfully!')
 
-        # Step 2: Generate audio from script
-        audio_file = tts.generate_podcast_audio(podcast_script, output)
+            click.echo(Fore.CYAN + "\n=== Podcast Generation Complete ===")
+            click.echo(f"Video: {result['video_data']['title']}")
+            click.echo(f"Channel: {result['video_data']['channel']}")
+            click.echo(f"Duration: {result['video_data'].get('duration', 'Unknown')} seconds")
+            click.echo(f"Style: {style}")
+            click.echo(f"RAG Enhanced: {'Yes' if result['enhanced_with_rag'] else 'No'}")
+            click.echo(f"Audio File: {Fore.GREEN}{result['audio_file']}")
+            click.echo(f"Script Length: {len(result['script'])} characters")
 
-        spinner.succeed(Fore.GREEN + f'Podcast audio generated: {audio_file}')
+            if use_rag:
+                click.echo(f"\n{Fore.YELLOW}💡 This podcast was enhanced using your n8n RAG workflow!")
+                click.echo("The content includes insights from your knowledge base.")
 
-        click.echo(Fore.CYAN + "\n=== Podcast Generation Complete ===")
-        click.echo(f"Script length: {len(podcast_script)} characters")
-        click.echo(f"Audio saved to: {Fore.GREEN}{audio_file}")
-        click.echo("\nTip: Play the audio file with your preferred media player.")
-        click.echo()
+            click.echo(f"\n{Fore.CYAN}🎧 Play your podcast:")
+            click.echo(f"   {result['audio_file']}")
 
-    except (ProcessingError, APIError) as e:
-        spinner.fail(Fore.RED + str(e))
-        return 1
+        else:
+            spinner.fail(Fore.RED + f"Podcast generation failed: {result.get('error', 'Unknown error')}")
+            return 1
+
     except Exception as e:
         spinner.fail(Fore.RED + f"Unexpected error: {e}")
-        logger.error(f"Unexpected error in podcast: {e}")
+        logger.error(f"Unexpected error in podcast generation: {e}")
+        return 1
+
+    return 0
+
+
+@cli.command()
+@click.option('--limit', '-l', default=10, help='Maximum number of podcasts to show')
+def podcast_list(limit):
+    """List recently generated podcasts."""
+    podcast_generator = get_podcast_generator()
+
+    try:
+        podcasts = podcast_generator.list_generated_podcasts()
+
+        if not podcasts:
+            click.echo(Fore.YELLOW + "No podcasts found.")
+            click.echo("Generate your first podcast with: youtube-chat podcast <VIDEO_URL>")
+            return 0
+
+        click.echo(Fore.CYAN + f"📚 Recent Podcasts (showing {min(len(podcasts), limit)}):")
+        click.echo()
+
+        for i, podcast in enumerate(podcasts[:limit], 1):
+            # Format generation time
+            try:
+                from datetime import datetime
+                gen_time = datetime.fromisoformat(podcast['generated_at'])
+                time_str = gen_time.strftime("%Y-%m-%d %H:%M")
+            except:
+                time_str = podcast.get('generated_at', 'Unknown')
+
+            click.echo(f"{Fore.GREEN}{i:2d}.{Style.RESET_ALL} {podcast['video_title']}")
+            click.echo(f"     Channel: {podcast['video_channel']}")
+            click.echo(f"     Style: {podcast['podcast_style']}")
+            click.echo(f"     Generated: {time_str}")
+            click.echo(f"     Audio: {podcast['audio_file']}")
+            click.echo(f"     URL: {Fore.BLUE}{podcast['video_url']}")
+            click.echo()
+
+        if len(podcasts) > limit:
+            click.echo(Fore.YELLOW + f"... and {len(podcasts) - limit} more podcasts")
+            click.echo(f"Use --limit {len(podcasts)} to see all")
+
+    except Exception as e:
+        click.echo(Fore.RED + f"Error listing podcasts: {e}")
         return 1
 
     return 0
@@ -1825,6 +1919,394 @@ def logs(lines):
     except Exception as e:
         click.echo(Fore.RED + f"Error reading logs: {e}")
         return 1
+
+
+# Multi-source podcast generation
+@cli.command()
+@click.option('--sources', '-s', required=True, help='Source directory or filter pattern')
+@click.option('--style', default='summary',
+              type=click.Choice([style.value for style in PodcastStyle]),
+              help='Podcast style')
+@click.option('--length', '-l', default='medium',
+              type=click.Choice([length.value for length in PodcastLength]),
+              help='Podcast length')
+@click.option('--tone', '-t', default='professional',
+              type=click.Choice([tone.value for tone in PodcastTone]),
+              help='Podcast tone')
+@click.option('--chunk-size', default=600, help='Chunk size in seconds for long podcasts')
+@click.option('--voice', '-v', default='en-US-AriaNeural', help='TTS voice to use')
+@click.option('--use-rag/--no-rag', default=True, help='Use n8n RAG for enhanced content generation')
+@click.option('--session-id', help='Session ID for RAG context')
+@click.option('--title', help='Custom podcast title')
+@click.option('--days', default=30, help='Include sources from last N days')
+@click.option('--file-types', help='Comma-separated list of file types to include')
+def podcast_create_multi(sources, style, length, tone, chunk_size, voice, use_rag, session_id, title, days, file_types):
+    """Generate a podcast from multiple sources."""
+    source_manager = get_source_manager()
+    podcast_generator = get_podcast_generator()
+
+    click.echo(Fore.CYAN + f"🎙️  Creating multi-source {style} podcast...")
+    click.echo(f"Sources: {sources}")
+    click.echo(f"Style: {style} | Length: {length} | Tone: {tone}")
+    click.echo()
+
+    try:
+        # Add sources from directory
+        if os.path.isdir(sources):
+            added_sources = 0
+            for root, dirs, files in os.walk(sources):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    try:
+                        source_manager.add_source(file_path)
+                        added_sources += 1
+                    except Exception as e:
+                        logger.warning(f"Failed to add source {file_path}: {e}")
+
+            click.echo(f"Added {added_sources} sources from directory")
+
+        # Create source filter
+        from datetime import datetime, timedelta
+        filter_config = SourceFilter(
+            modified_since=datetime.now() - timedelta(days=days)
+        )
+
+        if file_types:
+            type_list = [SourceType(t.strip()) for t in file_types.split(',') if t.strip()]
+            filter_config.file_types = set(type_list)
+
+        # Generate podcast
+        spinner = Halo(text='Generating multi-source podcast...', spinner='dots')
+        spinner.start()
+
+        result = podcast_generator.generate_multi_source_podcast(
+            source_filter=filter_config,
+            podcast_style=style,
+            podcast_length=length,
+            podcast_tone=tone,
+            chunk_duration=chunk_size,
+            voice=voice,
+            use_rag=use_rag,
+            session_id=session_id,
+            title=title
+        )
+
+        if result['status'] == 'success':
+            spinner.succeed(Fore.GREEN + 'Multi-source podcast generated successfully!')
+
+            click.echo(Fore.CYAN + "\n=== Multi-Source Podcast Complete ===")
+            click.echo(f"Sources Processed: {result['sources_processed']}")
+            click.echo(f"Style: {result['style']} | Length: {result['length']} | Tone: {result['tone']}")
+            click.echo(f"RAG Enhanced: {'Yes' if result['enhanced_with_rag'] else 'No'}")
+            click.echo(f"Audio File: {Fore.GREEN}{result['audio_file']}")
+
+            click.echo(f"\n{Fore.CYAN}🎧 Your multi-source podcast is ready!")
+
+        else:
+            spinner.fail(Fore.RED + f"Multi-source podcast generation failed: {result.get('error', 'Unknown error')}")
+            return 1
+
+    except Exception as e:
+        if 'spinner' in locals():
+            spinner.fail(Fore.RED + f"Error: {e}")
+        else:
+            click.echo(Fore.RED + f"Error: {e}")
+        return 1
+
+    return 0
+
+
+# Blueprint generation commands
+@cli.command()
+@click.option('--sources', '-s', required=True, help='Source directory or pattern')
+@click.option('--title', '-t', required=True, help='Blueprint title')
+@click.option('--style', default='comprehensive',
+              type=click.Choice([style.value for style in BlueprintStyle]),
+              help='Blueprint style')
+@click.option('--format', '-f', default='markdown',
+              type=click.Choice([fmt.value for fmt in BlueprintFormat]),
+              help='Output format')
+@click.option('--days', default=30, help='Include sources from last N days')
+@click.option('--use-rag/--no-rag', default=True, help='Use n8n RAG for enhanced content')
+@click.option('--session-id', help='Session ID for RAG context')
+def blueprint_create(sources, title, style, format, days, use_rag, session_id):
+    """Create a comprehensive blueprint from multiple sources."""
+    source_manager = get_source_manager()
+    blueprint_generator = get_blueprint_generator()
+
+    click.echo(Fore.CYAN + f"📋 Creating {style} blueprint: {title}")
+    click.echo(f"Sources: {sources}")
+    click.echo(f"Format: {format}")
+    click.echo()
+
+    try:
+        # Add sources
+        if os.path.isdir(sources):
+            added_sources = 0
+            for root, dirs, files in os.walk(sources):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    try:
+                        source_manager.add_source(file_path)
+                        added_sources += 1
+                    except Exception as e:
+                        logger.warning(f"Failed to add source {file_path}: {e}")
+
+            click.echo(f"Added {added_sources} sources from directory")
+
+        # Create filter
+        from datetime import datetime, timedelta
+        filter_config = SourceFilter(
+            modified_since=datetime.now() - timedelta(days=days)
+        )
+
+        # Create blueprint config
+        blueprint_config = BlueprintConfig(
+            title=title,
+            style=BlueprintStyle(style),
+            format=BlueprintFormat(format)
+        )
+
+        # Generate blueprint
+        spinner = Halo(text='Generating blueprint...', spinner='dots')
+        spinner.start()
+
+        result = blueprint_generator.create_blueprint(
+            config=blueprint_config,
+            source_filter=filter_config,
+            use_rag=use_rag,
+            session_id=session_id
+        )
+
+        if result['status'] == 'success':
+            spinner.succeed(Fore.GREEN + 'Blueprint generated successfully!')
+
+            click.echo(Fore.CYAN + "\n=== Blueprint Generation Complete ===")
+            click.echo(f"Title: {result['title']}")
+            click.echo(f"Style: {result['style']} | Format: {result['format']}")
+            click.echo(f"Sources Processed: {result['sources_processed']}")
+            click.echo(f"Sections: {result['sections']}")
+            click.echo(f"Word Count: {result['word_count']}")
+            click.echo(f"Output File: {Fore.GREEN}{result['output_file']}")
+
+        else:
+            spinner.fail(Fore.RED + f"Blueprint generation failed: {result.get('error', 'Unknown error')}")
+            return 1
+
+    except Exception as e:
+        if 'spinner' in locals():
+            spinner.fail(Fore.RED + f"Error: {e}")
+        else:
+            click.echo(Fore.RED + f"Error: {e}")
+        return 1
+
+    return 0
+
+
+@cli.command()
+def blueprint_list():
+    """List generated blueprints."""
+    blueprint_generator = get_blueprint_generator()
+
+    try:
+        blueprints = blueprint_generator.list_blueprints()
+
+        if not blueprints:
+            click.echo(Fore.YELLOW + "No blueprints found.")
+            return 0
+
+        click.echo(Fore.CYAN + f"📚 Generated Blueprints ({len(blueprints)}):")
+        click.echo()
+
+        for i, blueprint in enumerate(blueprints, 1):
+            click.echo(f"{Fore.GREEN}{i:2d}.{Style.RESET_ALL} {blueprint['filename']}")
+            click.echo(f"     Size: {blueprint['size']} bytes")
+            click.echo(f"     Created: {blueprint['created_at'][:19]}")
+            click.echo(f"     Path: {blueprint['path']}")
+            click.echo()
+
+    except Exception as e:
+        click.echo(Fore.RED + f"Error listing blueprints: {e}")
+        return 1
+
+    return 0
+
+
+# Workflow management commands
+@cli.group()
+def workflow():
+    """Manage n8n conversation workflows."""
+    pass
+
+
+@workflow.command()
+@click.option('--name', '-n', required=True, help='Workflow name')
+@click.option('--url', '-u', required=True, help='Workflow webhook URL')
+@click.option('--description', '-d', default='', help='Workflow description')
+def add(name, url, description):
+    """Add a new workflow."""
+    workflow_manager = get_workflow_manager()
+
+    if workflow_manager.add_workflow(name, url, description):
+        click.echo(Fore.GREEN + f"✓ Added workflow: {name}")
+    else:
+        click.echo(Fore.RED + f"✗ Failed to add workflow: {name}")
+        return 1
+
+    return 0
+
+
+@workflow.command()
+@click.option('--name', '-n', required=True, help='Workflow name to remove')
+@click.confirmation_option(prompt='Are you sure you want to remove this workflow?')
+def remove(name):
+    """Remove a workflow."""
+    workflow_manager = get_workflow_manager()
+
+    if workflow_manager.remove_workflow(name):
+        click.echo(Fore.GREEN + f"✓ Removed workflow: {name}")
+    else:
+        click.echo(Fore.RED + f"✗ Workflow not found: {name}")
+        return 1
+
+    return 0
+
+
+@workflow.command()
+def list():
+    """List all workflows."""
+    workflow_manager = get_workflow_manager()
+    workflows = workflow_manager.list_workflows()
+
+    if not workflows:
+        click.echo(Fore.YELLOW + "No workflows configured.")
+        return 0
+
+    click.echo(Fore.CYAN + "📋 Configured Workflows:")
+    click.echo()
+
+    for workflow in workflows:
+        status_color = {
+            "active": Fore.GREEN,
+            "error": Fore.RED,
+            "unknown": Fore.YELLOW
+        }.get(workflow.status.value, Fore.WHITE)
+
+        click.echo(f"{Fore.CYAN}• {workflow.name}{Style.RESET_ALL}")
+        click.echo(f"  URL: {workflow.url}")
+        click.echo(f"  Status: {status_color}{workflow.status.value}{Style.RESET_ALL}")
+        click.echo(f"  Description: {workflow.description}")
+        if workflow.last_tested:
+            click.echo(f"  Last Tested: {workflow.last_tested.strftime('%Y-%m-%d %H:%M:%S')}")
+        click.echo()
+
+    return 0
+
+
+@workflow.command()
+@click.option('--name', '-n', help='Workflow name to test (default: test all)')
+def test(name):
+    """Test workflow connection(s)."""
+    workflow_manager = get_workflow_manager()
+
+    if name:
+        result = workflow_manager.test_workflow(name)
+        if result['status'] == 'success':
+            click.echo(Fore.GREEN + f"✓ Workflow '{name}' is working")
+            click.echo(f"  Response time: {result['response_time']:.2f}s")
+        else:
+            click.echo(Fore.RED + f"✗ Workflow '{name}' failed: {result['error']}")
+            return 1
+    else:
+        results = workflow_manager.test_all_workflows()
+        click.echo(Fore.CYAN + "Testing all workflows...")
+        click.echo()
+
+        for workflow_name, result in results.items():
+            if result['status'] == 'success':
+                click.echo(Fore.GREEN + f"✓ {workflow_name}: Working ({result['response_time']:.2f}s)")
+            else:
+                click.echo(Fore.RED + f"✗ {workflow_name}: {result['error']}")
+
+    return 0
+
+
+@workflow.command()
+@click.option('--name', '-n', required=True, help='Workflow name to set as default')
+def set_default(name):
+    """Set default workflow."""
+    workflow_manager = get_workflow_manager()
+
+    if workflow_manager.set_default_workflow(name):
+        click.echo(Fore.GREEN + f"✓ Set default workflow: {name}")
+    else:
+        click.echo(Fore.RED + f"✗ Workflow not found: {name}")
+        return 1
+
+    return 0
+
+
+# Interactive chat commands
+@cli.command()
+@click.option('--session', '-s', help='Session ID to resume')
+@click.option('--workflow', '-w', help='Workflow to use')
+def chat(session, workflow):
+    """Start interactive chat with n8n RAG workflow."""
+    try:
+        chat_interface = get_chat_interface()
+        chat_interface.start_chat(session_id=session, workflow_name=workflow)
+    except ImportError as e:
+        click.echo(Fore.RED + f"Chat interface requires additional dependencies: {e}")
+        click.echo("Install with: pip install rich")
+        return 1
+    except Exception as e:
+        click.echo(Fore.RED + f"Chat error: {e}")
+        return 1
+
+    return 0
+
+
+@cli.command()
+@click.option('--workflow', '-w', help='Workflow to use')
+@click.argument('question')
+def ask(workflow, question):
+    """Ask a single question to the n8n RAG workflow."""
+    try:
+        n8n_client = get_n8n_client()
+        workflow_manager = get_workflow_manager()
+
+        # Get workflow
+        if workflow:
+            workflow_config = workflow_manager.get_workflow(workflow)
+            if not workflow_config:
+                click.echo(Fore.RED + f"Workflow not found: {workflow}")
+                return 1
+
+        # Generate session ID
+        session_id = f"ask_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        # Send question
+        spinner = Halo(text='Getting response...', spinner='dots')
+        spinner.start()
+
+        response = n8n_client.invoke_agent(question, session_id)
+
+        spinner.stop()
+
+        if response.get('status') == 'success':
+            click.echo(Fore.CYAN + "🤖 Assistant:")
+            click.echo(response.get('response', 'No response received'))
+        else:
+            click.echo(Fore.RED + f"Error: {response.get('error', 'Unknown error')}")
+            return 1
+
+    except Exception as e:
+        if 'spinner' in locals():
+            spinner.stop()
+        click.echo(Fore.RED + f"Error: {e}")
+        return 1
+
+    return 0
 
 
 def main():

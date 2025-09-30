@@ -1,20 +1,46 @@
+# Core dependencies
 click
 python-dotenv
 requests
 halo
+colorama
+python-dateutil>=2.8.0
+tqdm>=4.62.0
+
+# YouTube and content processing
 youtube-transcript-api
 beautifulsoup4
 deepmultilingualpunctuation
-langchain-huggingface
-langchain-openai
-gtts>=2.5.0
-pydub>=0.25.0
-edge-tts
-pytest
-colorama
 google-api-python-client>=2.0.0
 google-auth-oauthlib>=1.0.0
 google-auth-httplib2>=0.2.0
+
+# AI and language processing
+langchain-huggingface
+langchain-openai
+
+# Text-to-speech
+gtts>=2.5.0
+pydub>=0.25.0
+edge-tts
+
+# Scheduling and background tasks
 apscheduler>=3.10.0
-python-dateutil>=2.8.0
-tqdm>=4.62.0
+
+# Rich terminal UI for interactive chat
+rich>=13.0.0
+
+# Document processing (optional - for enhanced source support)
+PyPDF2>=3.0.0
+python-docx>=0.8.11
+pandas>=1.5.0
+openpyxl>=3.1.0
+Pillow>=9.0.0
+pytesseract>=0.3.10
+
+# Audio/video processing (optional)
+speechrecognition>=3.10.0
+moviepy>=1.0.3
+
+# Testing
+pytest
