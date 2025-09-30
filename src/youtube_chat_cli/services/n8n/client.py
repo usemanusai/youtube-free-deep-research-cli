@@ -71,6 +71,14 @@ class N8nClient:
         """
         logger.info(f"Invoking n8n workflow for session {session_id}")
 
+        # Determine the correct endpoint based on webhook URL
+        webhook_url = self.webhook_url
+        if not webhook_url.endswith('/invoke_n8n_agent'):
+            # Handle both chat trigger and webhook endpoints
+            if 'webhook' in webhook_url:
+                webhook_url = webhook_url.rstrip('/') + '/invoke_n8n_agent'
+            # If it's a workflow URL, use it as is (for chat trigger)
+
         # Prepare the JSON payload as expected by n8n workflow
         payload = {
             "chatInput": chat_input,
@@ -84,7 +92,7 @@ class N8nClient:
 
         try:
             response = requests.post(
-                self.webhook_url,
+                webhook_url,
                 json=payload,
                 headers=headers,
                 timeout=60  # Allow longer timeout for complex RAG operations
@@ -98,7 +106,17 @@ class N8nClient:
 
             # Try to parse JSON response
             try:
-                return response.json()
+                response_data = response.json()
+                # Handle different response formats from n8n
+                if isinstance(response_data, dict):
+                    if 'output' in response_data:
+                        return {"response": response_data['output'], "status": "success"}
+                    elif 'text' in response_data:
+                        return {"response": response_data['text'], "status": "success"}
+                    else:
+                        return response_data
+                else:
+                    return {"response": str(response_data), "status": "success"}
             except json.JSONDecodeError:
                 # If not JSON, return the text response
                 return {"response": response.text, "status": "success"}

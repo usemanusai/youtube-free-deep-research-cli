@@ -28,6 +28,7 @@ from .services.monitoring.video_processor import VideoProcessor, get_video_proce
 from .services.monitoring.background_service import YouTubeMonitoringService, get_monitoring_service
 from .services.import_service.bulk_import import BulkImporter, get_bulk_importer
 from .services.n8n.client import N8nClient, get_n8n_client
+from .services.podcast.generator import PodcastGenerator, get_podcast_generator
 
 # Queue system
 from .services.monitoring.video_queue import VideoProcessingQueue, get_video_queue
@@ -54,6 +55,7 @@ __all__ = [
     'BulkImporter', 'get_bulk_importer',
     'N8nClient', 'get_n8n_client',
     'VideoProcessingQueue', 'get_video_queue',
+    'PodcastGenerator', 'get_podcast_generator',
     
     # Utils
     'SessionManager',
