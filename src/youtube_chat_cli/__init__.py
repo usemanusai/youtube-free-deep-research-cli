@@ -10,9 +10,9 @@ This package provides comprehensive functionality for:
 - Background service for continuous monitoring
 """
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __author__ = "YouTube Chat CLI Team"
-__email__ = "youtube-chat-cli@example.com"
+__email__ = "use.manus.ai@gmail.com"
 
 # Core functionality
 from .core.youtube_api import YouTubeAPIClient, YouTubeAPIError, get_youtube_client

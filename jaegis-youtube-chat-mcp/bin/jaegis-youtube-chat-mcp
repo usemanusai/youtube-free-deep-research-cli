@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+/**
+ * JAEGIS YouTube Chat CLI - MCP Server Executable
+ * 
+ * This is the main executable for the JAEGIS YouTube Chat MCP Server.
+ * It can be run directly or via npx.
+ */
+
+const path = require('path');
+const { spawn } = require('child_process');
+
+// Determine the path to the compiled JavaScript
+const serverPath = path.join(__dirname, '..', 'dist', 'index.js');
+
+// Check if we're in development mode (TypeScript source exists)
+const fs = require('fs');
+const srcPath = path.join(__dirname, '..', 'src', 'index.ts');
+const isDev = fs.existsSync(srcPath) && !fs.existsSync(serverPath);
+
+if (isDev) {
+  // Development mode - use ts-node
+  const tsNodePath = path.join(__dirname, '..', 'node_modules', '.bin', 'ts-node');
+  if (fs.existsSync(tsNodePath)) {
+    spawn(tsNodePath, [srcPath], { stdio: 'inherit' });
+  } else {
+    console.error('❌ Development mode requires ts-node. Run: npm install');
+    process.exit(1);
+  }
+} else {
+  // Production mode - use compiled JavaScript
+  if (!fs.existsSync(serverPath)) {
+    console.error('❌ Server not built. Run: npm run build');
+    process.exit(1);
+  }
+  
+  spawn('node', [serverPath], { stdio: 'inherit' });
+}
