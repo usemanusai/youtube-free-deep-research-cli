@@ -3,95 +3,240 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli)
-[![Version](https://img.shields.io/badge/version-v2.0.0-orange.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli/releases)
+[![Version](https://img.shields.io/badge/version-v2.1.0-orange.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli/releases)
 
-A comprehensive command-line platform for transforming YouTube videos and multi-source content into professional podcasts with AI-powered enhancement, multi-source processing, blueprint generation, and interactive n8n RAG workflow integration.
+**AI-powered CLI tool for YouTube video analysis, channel monitoring, and automated content processing with intelligent rate limiting and n8n RAG workflow integration.**
 
-## 🌟 Key Features
+YouTube Chat CLI is a comprehensive solution for researchers, content creators, and knowledge workers who need to efficiently analyze, monitor, and interact with YouTube content at scale while respecting platform limitations through intelligent rate limiting. Now enhanced with professional podcast generation, multi-source processing, blueprint creation, and interactive chat capabilities.
 
-### 🎙️ **Advanced Podcast Generation**
+## ✨ Features
+
+### 🎙️ **Advanced Podcast Generation (NEW in v2.1.0)**
 - **14 Professional Podcast Styles**: Interview, Debate, News Report, Educational, Storytelling, Panel Discussion, Documentary, Quick Tips, Deep Dive, Roundup, and more
 - **Multi-Voice Support**: Different speakers for different roles (host, expert, moderator, panelists)
 - **Customizable Length & Tone**: Short (2-8 min) to Extended (30+ min) with 8 different tone options
 - **Intelligent Content Synthesis**: AI-powered script generation with n8n RAG integration
 
-### 📚 **Multi-Source Content Processing**
+### 📚 **Multi-Source Content Processing (NEW in v2.1.0)**
 - **20+ File Types**: PDF, DOCX, TXT, MD, CSV, XLSX, MP3, WAV, MP4, AVI, URLs, YouTube videos/playlists/channels, PPTX, code files, images (OCR)
 - **Advanced Filtering**: Date range, file type, size, tags, location-based filtering
 - **Batch Processing**: Handle hundreds of sources efficiently with parallel processing
 - **Smart Content Prioritization**: AI selects most relevant content automatically
 
-### 📋 **Blueprint Generation**
+### 📋 **Blueprint Generation (NEW in v2.1.0)**
 - **5 Blueprint Styles**: Comprehensive, Executive, Technical, Educational, Reference
 - **Multiple Output Formats**: Markdown, PDF, HTML, DOCX, JSON
 - **Intelligent Documentation**: AI-powered synthesis from multiple sources
 - **Structured Output**: Table of contents, citations, metadata, and professional formatting
 
-### 🤖 **Interactive Chat Interface**
+### 🤖 **Interactive Chat Interface (NEW in v2.1.0)**
 - **Rich Terminal UI**: Beautiful formatting with syntax highlighting, tables, and markdown rendering
 - **Session Management**: Save, load, resume conversations with full history
 - **Real-time Streaming**: Live responses from n8n RAG workflows
 - **Export Capabilities**: JSON and Markdown export of chat sessions
 
-### 🔄 **Workflow Management**
+### 🔄 **Workflow Management (NEW in v2.1.0)**
 - **Multiple n8n Workflows**: Manage different RAG workflows for various use cases
 - **Connection Testing**: Automated workflow health checks
 - **Default Workflow**: Set preferred workflows for different tasks
 - **Import/Export**: Backup and share workflow configurations
 
+### YouTube Integration
+- **Interactive chat** with YouTube video transcripts using advanced AI models
+- **Automated channel monitoring** with configurable intervals (daily, weekly, custom)
+- **Bulk import** from channels, playlists, and URL files with comprehensive filtering
+- **Advanced filtering** by duration, keywords, view count, exclude shorts/live streams
+- **Video metadata extraction** and persistent storage with SQLite database
+- **Intelligent transcript processing** with punctuation restoration and formatting
+
+### Text-to-Speech (TTS)
+- **Support for 6 TTS libraries**: Kokoro, OpenVoice v2, MeloTTS, Chatterbox, Edge TTS, Google TTS
+- **Automated installer** with CPU-only support for compatibility
+- **Configurable voice selection** and audio settings per library
+- **Retry logic and timeout handling** for robust audio generation
+- **Podcast-style audio overviews** with natural speech patterns
+
+### Intelligent Rate Limiting
+- **Smart queue system** to prevent YouTube IP blocking and API quota exhaustion
+- **Maximum 5 videos per day** processing limit (configurable)
+- **1-2 hour delays** between video processing attempts with smart distribution
+- **Exponential backoff** on rate limit detection (2+ hour delays)
+- **Distributed processing** throughout the day instead of bulk operations
+- **Automatic rescheduling** of failed videos with intelligent retry logic
+
+### Background Service
+- **Automated channel monitoring** with APScheduler for cross-platform scheduling
+- **Daily video discovery scans** at configurable times (default: 8 AM)
+- **Continuous queue processing** every 2 hours respecting rate limits
+- **Health checks and stuck job detection** every 30 minutes
+- **Persistent state** across system restarts with PID file management
+- **Comprehensive logging** with rotation and configurable levels
+
+### n8n RAG Workflow Integration
+- **Automatic forwarding** of video data (metadata + transcripts) to n8n webhooks
+- **Structured payload format** with comprehensive video information
+- **Retry logic with exponential backoff** (3 retries, 2-second base delay)
+- **Configurable webhook URLs** and API keys for authentication
+- **Graceful fallback** with mock responses when n8n server unavailable
+
+### Data Management
+- **SQLite database** for channels, videos, import jobs, and processing queue
+- **Comprehensive statistics** and analytics with success rate tracking
+- **Import history tracking** with detailed job status and progress monitoring
+- **Video processing state management** (pending, processing, completed, failed)
+- **Automatic cleanup** of old queue entries and database optimization
+
 ## 📋 Table of Contents
 
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Podcast Styles](#podcast-styles)
-- [Multi-Source Processing](#multi-source-processing)
-- [Blueprint Generation](#blueprint-generation)
-- [Interactive Chat](#interactive-chat)
-- [Workflow Management](#workflow-management)
-- [CLI Reference](#cli-reference)
-- [n8n Integration](#n8n-integration)
-- [Contributing](#contributing)
-- [License](#license)
+- [🏗️ Architecture Overview](#️-architecture-overview)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Installation](#-installation)
+- [⚙️ Configuration](#️-configuration)
+- [📖 Usage](#-usage)
+- [🎙️ New Podcast Features](#️-new-podcast-features)
+- [📚 Multi-Source Processing](#-multi-source-processing)
+- [📋 Blueprint Generation](#-blueprint-generation)
+- [🤖 Interactive Chat](#-interactive-chat)
+- [🔄 Workflow Management](#-workflow-management)
+- [🔄 System Architecture Diagrams](#-system-architecture-diagrams)
+- [🛡️ Rate Limiting & Queue System](#️-rate-limiting--queue-system)
+- [📚 API Reference](#-api-reference)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [🛠️ Development](#️-development)
+- [📄 License](#-license)
+- [📝 Changelog](#-changelog)
+- [🙏 Acknowledgments](#-acknowledgments)
+
+## 🏗️ Architecture Overview
+
+YouTube Chat CLI follows a professional, modular architecture with clear separation of concerns:
+
+```mermaid
+graph TB
+    CLI[CLI Interface] --> Core[Core Services]
+    Core --> YT[YouTube API Client]
+    Core --> DB[(SQLite Database)]
+    Core --> Monitor[Channel Monitor]
+    Monitor --> Queue[Processing Queue]
+    Queue --> Processor[Video Processor]
+    Processor --> TTS[TTS Service]
+    Processor --> N8N[n8n Client]
+    Service[Background Service] --> Monitor
+    Service --> Queue
+    Service --> Scheduler[APScheduler]
+
+    subgraph "Rate Limiting System"
+        Queue --> RateLimit[Rate Limiter]
+        RateLimit --> Backoff[Exponential Backoff]
+        Backoff --> Reschedule[Smart Rescheduling]
+    end
+
+    subgraph "New v2.1.0 Features"
+        Core --> PodcastGen[Podcast Generator]
+        Core --> BlueprintGen[Blueprint Generator]
+        Core --> ChatInterface[Interactive Chat]
+        Core --> WorkflowMgr[Workflow Manager]
+        Core --> SourceMgr[Multi-Source Manager]
+    end
+
+    subgraph "External Services"
+        YT --> YTAPI[YouTube Data API v3]
+        N8N --> N8NWebhook[n8n Webhook]
+        TTS --> TTSLibs[6 TTS Libraries]
+    end
+```
+
+## 📋 Prerequisites
+
+- **Python 3.8+** (tested on 3.8, 3.9, 3.10, 3.11, 3.12)
+- **YouTube Data API v3 key** - [Get from Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+- **OpenRouter API key** (optional, for AI features) - [Get from OpenRouter](https://openrouter.ai/keys)
+- **n8n webhook URL** (optional, for RAG integration) - Your n8n server webhook endpoint
+
+### System Requirements
+- **Operating System**: Linux, macOS, Windows
+- **Disk Space**: 2GB minimum (for TTS libraries and database)
+- **Memory**: 4GB RAM recommended (2GB minimum)
+- **Network**: Stable internet connection for API calls
 
 ## 🚀 Installation
 
-### Option 1: Install from PyPI (Recommended)
+### Step-by-step Installation Guide
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/usemanusai/youtube-free-deep-research-cli.git
+cd youtube-free-deep-research-cli
+
+# 2. Create virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# 3. Install the package
+pip install -e .
+
+# 4. Install dependencies
+pip install -r requirements.txt
+
+# 5. Configure environment variables
+cp .env.template .env
+# Edit .env and add your API keys
+
+# 6. Install TTS libraries (optional)
+youtube-chat tts install-all --cpu-only
+```
+
+### Alternative Installation Methods
+
+**Using the installation script:**
+```bash
+chmod +x scripts/install_dependencies.sh
+./scripts/install_dependencies.sh
+```
+
+**Direct pip installation (when published):**
 ```bash
 pip install youtube-chat-cli
 ```
 
-### Option 2: Install from Source
-```bash
-# Clone the repository
-git clone https://github.com/usemanusai/youtube-free-deep-research-cli.git
-cd youtube-free-deep-research-cli
-
-# Install in development mode
-pip install -e .
-
-# Or install dependencies manually
-pip install -r requirements.txt
-```
-
-### Option 3: Using Docker
+**Using Docker:**
 ```bash
 docker pull usemanusai/youtube-chat-cli:latest
 docker run -it --env-file .env usemanusai/youtube-chat-cli
 ```
 
-## ⚡ Quick Start
+### Verify Installation
 
-### 1. Setup Environment
 ```bash
-# Copy environment template
-cp .env.template .env
+# Test CLI access
+youtube-chat --help
+python cli.py --help  # Backward compatibility
 
-# Edit .env and add your API keys
-nano .env
+# Test core functionality
+youtube-chat stats
+youtube-chat tts list
 ```
 
-### 2. Basic Podcast Generation
+## 📖 Usage
+
+### Basic Chat
+
+```bash
+# Chat with a YouTube video
+youtube-chat https://www.youtube.com/watch?v=VIDEO_ID
+
+# Set source and start interactive chat
+youtube-chat set-source "https://www.youtube.com/watch?v=VIDEO_ID"
+youtube-chat chat
+
+# Generate content analysis
+youtube-chat summarize
+youtube-chat faq
+youtube-chat toc
+```
+
+### NEW: Enhanced Podcast Generation (v2.1.0)
+
 ```bash
 # Generate a summary podcast from YouTube video
 youtube-chat podcast https://www.youtube.com/watch?v=VIDEO_ID
@@ -101,52 +246,235 @@ youtube-chat podcast --style interview --voice en-US-JennyNeural --length long V
 
 # Generate a multi-source podcast from documents
 youtube-chat podcast-create-multi --sources /path/to/documents --style roundup --length medium
+
+# Create debate-style podcast with professional tone
+youtube-chat podcast --style debate --length extended --tone professional VIDEO_URL
 ```
 
-### 3. Interactive Chat
+### NEW: Interactive Chat (v2.1.0)
+
 ```bash
 # Start interactive chat with n8n RAG
 youtube-chat chat
+
+# Resume specific session
+youtube-chat chat --session my-research-session
 
 # Ask a one-off question
 youtube-chat ask "What are the main insights from recent videos?"
 ```
 
-### 4. Blueprint Generation
+### NEW: Blueprint Generation (v2.1.0)
+
 ```bash
 # Create comprehensive documentation from sources
 youtube-chat blueprint-create --sources /path/to/research --title "Research Analysis" --style comprehensive
+
+# Generate executive summary
+youtube-chat blueprint-create --sources /path/to/reports --title "Q4 Summary" --style executive --format pdf
+```
+
+### TTS Management
+
+```bash
+# List available TTS libraries
+youtube-chat tts list
+
+# Install all TTS libraries (CPU-only for compatibility)
+youtube-chat tts install-all --cpu-only
+
+# Install specific library
+youtube-chat tts install kokoro --cpu-only --retry-count 3 --timeout 300
+
+# Configure TTS settings
+youtube-chat tts configure
+
+# Generate audio overview
+youtube-chat podcast --voice "en-US-AriaNeural" --library edge-tts
+```
+
+### Channel Monitoring
+
+```bash
+# Add channel for monitoring with filters
+youtube-chat channel add https://www.youtube.com/@channelname \
+  --check-interval 24 \
+  --no-shorts \
+  --no-live \
+  --include-keywords "AI,machine learning" \
+  --min-duration 300
+
+# List all monitored channels
+youtube-chat channel list
+
+# Update channel settings
+youtube-chat channel update CHANNEL_ID --check-interval 12 --active
+
+# Scan channels for new videos
+youtube-chat channel scan --all
+youtube-chat channel scan --channel-id CHANNEL_ID --force
+
+# Remove channel from monitoring
+youtube-chat channel remove CHANNEL_ID
+```
+
+### Bulk Import
+
+```bash
+# Import from channel (dry run first)
+youtube-chat import channel https://www.youtube.com/@channelname \
+  --limit 50 \
+  --date-from 2025-01-01 \
+  --date-to 2025-12-31 \
+  --dry-run
+
+# Import from channel (actual import)
+youtube-chat import channel https://www.youtube.com/@channelname \
+  --limit 50 \
+  --include-keywords "tutorial,guide" \
+  --exclude-keywords "shorts,live" \
+  --min-duration 300 \
+  --no-shorts
+
+# Import from playlist
+youtube-chat import playlist https://www.youtube.com/playlist?list=PLAYLIST_ID \
+  --limit 25 \
+  --dry-run
+
+# Import from file containing URLs
+youtube-chat import file video_urls.txt \
+  --include-keywords "python,programming" \
+  --no-shorts
+```
+
+### NEW: Workflow Management (v2.1.0)
+
+```bash
+# Add new workflow
+youtube-chat workflow add \
+  --name "research-workflow" \
+  --url "http://localhost:5678/workflow/ABC123" \
+  --description "Research-focused RAG workflow"
+
+# List all workflows
+youtube-chat workflow list
+
+# Test workflow connection
+youtube-chat workflow test research-workflow
+
+# Set default workflow
+youtube-chat workflow set-default research-workflow
+```
+
+### n8n Integration
+
+```bash
+# Configure n8n webhook
+youtube-chat n8n configure http://localhost:5678/workflow/vTN9y2dLXqTiDfPT \
+  --api-key your_api_key
+
+# Manually send specific video to n8n
+youtube-chat n8n send VIDEO_ID
+
+# Test n8n connection
+youtube-chat verify-connections
+```
+
+### Background Service
+
+```bash
+# Start background service (daemon mode)
+youtube-chat service start --daemon
+
+# Check service status
+youtube-chat service status
+
+# View service logs
+youtube-chat service logs --lines 50
+
+# Stop background service
+youtube-chat service stop
+```
+
+### Statistics & History
+
+```bash
+# View comprehensive statistics
+youtube-chat stats
+
+# View import history
+youtube-chat history --limit 20
+
+# View channel-specific history
+youtube-chat history --channel-id CHANNEL_ID --limit 10
+
+# View session history
+youtube-chat session list
+youtube-chat session load SESSION_ID
 ```
 
 ## ⚙️ Configuration
 
-### Required API Keys
+### Environment Variables (.env file)
 
 Create a `.env` file with the following configuration:
 
-```env
+```bash
 # Required: YouTube Data API v3 key
-YOUTUBE_API_KEY="your_youtube_api_key_here"
+YOUTUBE_API_KEY=your_youtube_api_key_here
 
 # Optional: OpenRouter API key for AI features
-OPENROUTER_API_KEY="your_openrouter_key_here"
+OPENROUTER_API_KEY=your_openrouter_key_here
 
 # Optional: n8n webhook URL for RAG integration
-N8N_WEBHOOK_URL="http://localhost:5678/workflow/vTN9y2dLXqTiDfPT"
+N8N_WEBHOOK_URL=http://localhost:5678/workflow/vTN9y2dLXqTiDfPT
 
-# TTS Configuration
+# Optional: MaryTTS server URL for advanced TTS
+MARYTTS_SERVER_URL=http://localhost:59125
+
+# TTS Configuration (NEW in v2.1.0)
 DEFAULT_TTS_VOICE="en-US-AriaNeural"
 DEFAULT_TTS_LIBRARY="edge-tts"
 
-# Podcast Generation Settings
+# Podcast Generation Settings (NEW in v2.1.0)
 DEFAULT_PODCAST_STYLE="summary"
 DEFAULT_PODCAST_LENGTH="medium"
+DEFAULT_PODCAST_TONE="professional"
 ENABLE_RAG_BY_DEFAULT=true
 ```
 
+### Rate Limiting Settings
+
+```bash
+# Maximum videos to process daily (default: 5)
+MAX_VIDEOS_PER_DAY=5
+
+# Minimum delay between videos in hours (default: 1)
+MIN_DELAY_HOURS=1
+
+# Maximum delay between videos in hours (default: 2)
+MAX_DELAY_HOURS=2
+
+# Backoff duration on rate limit in hours (default: 2)
+BACKOFF_HOURS=2
+```
+
+### Channel Monitoring Settings
+
+Configure default behavior for channel monitoring:
+
+- **Check interval**: Hours between channel scans (default: 24)
+- **Filters**: Default filters applied to all channels
+  - `no_shorts`: Exclude YouTube Shorts (videos < 60 seconds)
+  - `no_live`: Exclude live streams
+  - `min_duration`: Minimum video duration in seconds
+  - `max_duration`: Maximum video duration in seconds
+  - `include_keywords`: Only include videos with these keywords
+  - `exclude_keywords`: Exclude videos with these keywords
+
 ### Getting API Keys
 
-1. **YouTube Data API v3**: 
+1. **YouTube Data API v3**:
    - Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
    - Create a new project or select existing
    - Enable YouTube Data API v3
@@ -157,7 +485,7 @@ ENABLE_RAG_BY_DEFAULT=true
    - Sign up and generate an API key
    - Provides access to multiple AI models
 
-## 🎙️ Podcast Styles
+## 🎙️ New Podcast Features (v2.1.0)
 
 ### Available Styles
 
@@ -541,35 +869,81 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📝 Changelog
 
-### v2.0.0 (Latest) - Comprehensive Enhancement Release
+### Version 2.1.0 (2025-09-30) - Comprehensive Podcast Generation Platform
 
-#### 🎉 **Major New Features**
-- **14 Professional Podcast Styles**: Interview, Debate, News Report, Educational, Storytelling, Panel Discussion, Documentary, Quick Tips, Deep Dive, Roundup
-- **Multi-Source Content Processing**: Support for 20+ file types including documents, audio, video, web content, presentations, and code files
-- **Blueprint Generation**: Create comprehensive documentation from multiple sources with 5 different styles
-- **Interactive Chat Interface**: Rich terminal UI with syntax highlighting, session management, and export capabilities
-- **Workflow Management**: Complete n8n workflow management system with testing and configuration
+**🎉 Major New Features Added:**
+- ✨ **14 Professional Podcast Styles**: Interview, Debate, News Report, Educational, Storytelling, Panel Discussion, Documentary, Quick Tips, Deep Dive, Roundup
+- ✨ **Multi-Source Content Processing**: Support for 20+ file types including documents, audio, video, web content, presentations, and code files
+- ✨ **Blueprint Generation**: Create comprehensive documentation from multiple sources with 5 different styles
+- ✨ **Interactive Chat Interface**: Rich terminal UI with syntax highlighting, session management, and export capabilities
+- ✨ **Workflow Management**: Complete n8n workflow management system with testing and configuration
 
-#### 🚀 **Enhancements**
-- **Enhanced Podcast Generation**: Multi-voice support, customizable length and tone, intelligent chunking
-- **Advanced Filtering**: Date range, file type, size, and tag-based filtering for source selection
-- **Batch Processing**: Efficiently handle hundreds of sources with parallel processing
-- **Session Persistence**: Save and resume chat sessions with full history
-- **Professional Package Structure**: Modular architecture with proper separation of concerns
+**🚀 Enhanced Features:**
+- 🔧 **Enhanced Podcast Generation**: Multi-voice support, customizable length and tone, intelligent chunking
+- 🔧 **Advanced Filtering**: Date range, file type, size, and tag-based filtering for source selection
+- 🔧 **Batch Processing**: Efficiently handle hundreds of sources with parallel processing
+- 🔧 **Session Persistence**: Save and resume chat sessions with full history
+- 🔧 **Professional Package Structure**: Modular architecture with proper separation of concerns
 
-#### 🔧 **Technical Improvements**
-- **Rich Dependencies**: Beautiful terminal UI with Rich library
-- **Comprehensive Error Handling**: Robust error handling and logging throughout
-- **Configuration Management**: Enhanced environment variable management
-- **Documentation**: Comprehensive guides and API reference
+**🔧 Technical Improvements:**
+- 📦 **Rich Dependencies**: Beautiful terminal UI with Rich library
+- 🏗️ **Comprehensive Error Handling**: Robust error handling and logging throughout
+- 🧪 **Configuration Management**: Enhanced environment variable management
+- 📚 **Documentation**: Comprehensive guides and API reference
 
-### v1.0.0 - Initial Release
-- 🎉 Core YouTube processing functionality
-- 🤖 AI-powered content analysis with OpenRouter integration
-- 🎙️ Multi-engine TTS support (gTTS, edge-tts, MaryTTS)
-- 💬 Interactive chat interface for content Q&A
-- 📊 Bulk import and channel monitoring capabilities
-- 🔗 n8n workflow integration for automation
+### Version 2.0.0 (2025-09-30) - Complete System Overhaul
+
+**🎉 Major Release - Complete System Overhaul**
+
+**Added:**
+- ✨ **Automated YouTube channel monitoring system** with configurable intervals
+- ✨ **Bulk import functionality** for channels, playlists, and URL files
+- ✨ **Intelligent rate limiting and queue system** (5 videos/day limit)
+- ✨ **Background service** with APScheduler for automated monitoring
+- ✨ **n8n RAG workflow integration** with webhook support and retry logic
+- ✨ **Video processing queue** with smart scheduling and exponential backoff
+- ✨ **Comprehensive statistics and history tracking** with success rate monitoring
+- ✨ **SQLite database** for persistent storage of channels, videos, and jobs
+- ✨ **Enhanced TTS auto-installer** with CPU-only support and 6 library support
+- ✨ **Advanced filtering options** (duration, keywords, view count, no-shorts, no-live)
+- ✨ **Service management commands** (start, stop, status, logs)
+- ✨ **Dry-run mode** for import preview and testing
+- ✨ **Resume capability** for interrupted imports
+- ✨ **Professional package structure** with proper module organization
+
+**Improved:**
+- 🔧 **Restructured codebase** into professional package layout (`src/youtube_chat_cli/`)
+- 🔧 **Enhanced error handling** and logging throughout the system
+- 🔧 **Better CLI command organization** with grouped commands and help text
+- 🔧 **Improved configuration management** with environment variable support
+- 🔧 **Robust API client** with rate limiting and quota management
+- 🔧 **Enhanced database schema** with proper indexing and relationships
+- 🔧 **Better progress tracking** with real-time status updates
+
+**Fixed:**
+- 🐛 **TTS installation dependency conflicts** with CPU-only installation option
+- 🐛 **YouTube transcript IP blocking issues** with intelligent rate limiting
+- 🐛 **Import statement errors** with proper package structure
+- 🐛 **Database timezone handling** for consistent date/time operations
+- 🐛 **Memory leaks** in long-running background service
+- 🐛 **Concurrent access issues** with proper database locking
+
+**Technical Improvements:**
+- 📦 **Modern Python packaging** with `pyproject.toml` and proper entry points
+- 🏗️ **Modular architecture** with clear separation of concerns
+- 🧪 **Comprehensive test suite** with unit and integration tests
+- 📚 **Complete documentation** with API reference and troubleshooting guide
+- 🔒 **Security enhancements** with proper API key handling
+- ⚡ **Performance optimizations** with efficient database queries and caching
+
+### Version 1.0.0 (Previous) - Initial Release
+
+**Initial Release:**
+- Basic YouTube video transcript extraction
+- Simple AI chat functionality
+- Basic TTS support
+- Session management
+- Web scraping capabilities
 
 ## 🙏 Acknowledgments
 
