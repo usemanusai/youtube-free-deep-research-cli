@@ -2,12 +2,41 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![PyPI Version](https://img.shields.io/pypi/v/youtube-chat-cli.svg)](https://pypi.org/project/youtube-chat-cli/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/youtube-chat-cli.svg)](https://pypi.org/project/youtube-chat-cli/)
+[![npm Version](https://img.shields.io/npm/v/jaegis-youtube-chat-mcp.svg)](https://www.npmjs.com/package/jaegis-youtube-chat-mcp)
+[![npm Downloads](https://img.shields.io/npm/dm/jaegis-youtube-chat-mcp.svg)](https://www.npmjs.com/package/jaegis-youtube-chat-mcp)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli)
-[![Version](https://img.shields.io/badge/version-v2.1.0-orange.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli/releases)
+[![JAEGIS](https://img.shields.io/badge/JAEGIS-AI%20Powered-purple.svg)](https://github.com/usemanusai)
 
-**AI-powered CLI tool for YouTube video analysis, channel monitoring, and automated content processing with intelligent rate limiting and n8n RAG workflow integration.**
+**AI-powered CLI tool for YouTube video analysis, channel monitoring, and automated content processing with intelligent rate limiting and n8n RAG workflow integration. Now available as both a Python package and MCP (Model Context Protocol) server for AI assistants.**
 
-YouTube Chat CLI is a comprehensive solution for researchers, content creators, and knowledge workers who need to efficiently analyze, monitor, and interact with YouTube content at scale while respecting platform limitations through intelligent rate limiting. Now enhanced with professional podcast generation, multi-source processing, blueprint creation, and interactive chat capabilities.
+YouTube Chat CLI is a comprehensive solution for researchers, content creators, and knowledge workers who need to efficiently analyze, monitor, and interact with YouTube content at scale while respecting platform limitations through intelligent rate limiting. Now enhanced with professional podcast generation, multi-source processing, blueprint creation, interactive chat capabilities, and **MCP server support for AI assistants like Claude, ChatGPT, and other MCP-compatible systems**.
+
+## 🚀 **Quick Start Options**
+
+### 📦 **Python Package (PyPI)**
+```bash
+pip install youtube-chat-cli
+youtube-chat --help
+```
+
+### 🤖 **MCP Server for AI Assistants (npm)**
+```bash
+npx jaegis-youtube-chat-mcp
+```
+
+### 🔧 **MCP Client Configuration**
+```json
+{
+  "mcpServers": {
+    "jaegis-youtube-chat": {
+      "command": "npx",
+      "args": ["jaegis-youtube-chat-mcp"]
+    }
+  }
+}
+```
 
 ## ✨ Features
 
@@ -86,13 +115,29 @@ YouTube Chat CLI is a comprehensive solution for researchers, content creators, 
 - **Video processing state management** (pending, processing, completed, failed)
 - **Automatic cleanup** of old queue entries and database optimization
 
+### 🤖 **MCP Server Integration (NEW in v2.1.0)**
+- **35+ MCP Tools**: Complete YouTube Chat CLI functionality exposed as MCP tools
+- **AI Assistant Compatible**: Works with Claude, ChatGPT, and other MCP-compatible systems
+- **Session Management**: View, clear, and manage chat sessions through MCP
+- **Content Processing**: Set sources, summarize, and generate content via MCP tools
+- **Podcast Generation**: Create podcasts with 14 styles through MCP interface
+- **Channel Monitoring**: Add, list, and manage YouTube channels via MCP
+- **TTS Management**: Install, configure, and test TTS libraries through MCP
+- **Workflow Integration**: Manage n8n RAG workflows via MCP tools
+- **Real-time Execution**: Direct CLI command execution through MCP protocol
+- **npx Compatible**: Run directly with `npx jaegis-youtube-chat-mcp`
+
 ## 📋 Table of Contents
 
 - [🏗️ Architecture Overview](#️-architecture-overview)
 - [📋 Prerequisites](#-prerequisites)
 - [🚀 Installation](#-installation)
+  - [📦 Python Package (PyPI)](#-python-package-pypi)
+  - [🤖 MCP Server (npm)](#-mcp-server-npm)
+  - [🔧 Development Installation](#-development-installation)
 - [⚙️ Configuration](#️-configuration)
 - [📖 Usage](#-usage)
+- [🤖 MCP Server Usage](#-mcp-server-usage)
 - [🎙️ New Podcast Features](#️-new-podcast-features)
 - [📚 Multi-Source Processing](#-multi-source-processing)
 - [📋 Blueprint Generation](#-blueprint-generation)
@@ -161,7 +206,57 @@ graph TB
 
 ## 🚀 Installation
 
-### Step-by-step Installation Guide
+### 📦 Python Package (PyPI)
+
+**For direct CLI usage and Python integration:**
+
+```bash
+# Install the package
+pip install youtube-chat-cli
+
+# Configure environment variables
+youtube-chat --help  # This will show you how to set up your API keys
+
+# Install optional TTS libraries
+youtube-chat tts install-all --cpu-only
+```
+
+**Package Information:**
+- **PyPI**: https://pypi.org/project/youtube-chat-cli/
+- **Version**: 2.1.0
+- **Python**: 3.8+ required
+
+### 🤖 MCP Server (npm)
+
+**For AI assistants and MCP-compatible systems:**
+
+```bash
+# Run directly with npx (recommended)
+npx jaegis-youtube-chat-mcp
+
+# Or install globally
+npm install -g jaegis-youtube-chat-mcp
+jaegis-youtube-chat-mcp
+```
+
+**MCP Client Configuration:**
+```json
+{
+  "mcpServers": {
+    "jaegis-youtube-chat": {
+      "command": "npx",
+      "args": ["jaegis-youtube-chat-mcp"]
+    }
+  }
+}
+```
+
+**Package Information:**
+- **npm**: https://www.npmjs.com/package/jaegis-youtube-chat-mcp
+- **Version**: 1.0.0
+- **Node.js**: 18.0.0+ required
+
+### 🔧 Development Installation
 
 ```bash
 # 1. Clone the repository
@@ -172,17 +267,14 @@ cd youtube-free-deep-research-cli
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install the package
+# 3. Install in development mode
 pip install -e .
 
-# 4. Install dependencies
-pip install -r requirements.txt
-
-# 5. Configure environment variables
+# 4. Configure environment variables
 cp .env.template .env
 # Edit .env and add your API keys
 
-# 6. Install TTS libraries (optional)
+# 5. Install TTS libraries (optional)
 youtube-chat tts install-all --cpu-only
 ```
 
@@ -192,11 +284,6 @@ youtube-chat tts install-all --cpu-only
 ```bash
 chmod +x scripts/install_dependencies.sh
 ./scripts/install_dependencies.sh
-```
-
-**Direct pip installation (when published):**
-```bash
-pip install youtube-chat-cli
 ```
 
 **Using Docker:**
@@ -485,127 +572,105 @@ Configure default behavior for channel monitoring:
    - Sign up and generate an API key
    - Provides access to multiple AI models
 
+## 🤖 MCP Server Usage
+
+The JAEGIS YouTube Chat MCP Server exposes all CLI functionality as MCP tools for AI assistants. Once configured, AI assistants can directly use these tools to interact with YouTube content.
+
+### Available MCP Tools (35+ Tools)
+
+**Session Management:**
+- `jaegis_session_view` - View current session information
+- `jaegis_session_clear_history` - Clear chat history
+- `jaegis_session_clear_all` - Clear all session data
+- `jaegis_session_new_id` - Generate new session ID
+
+**Content Processing:**
+- `jaegis_set_source` - Set active source URL and process content
+- `jaegis_print_text` - Print processed text content
+- `jaegis_summarize` - Generate AI summaries
+- `jaegis_ask` - Ask questions to n8n RAG workflow
+
+**Podcast Generation:**
+- `jaegis_podcast_generate` - Generate podcasts with 14 styles
+- `jaegis_podcast_list` - List generated podcasts
+
+**Channel Monitoring:**
+- `jaegis_channel_add` - Add channels for monitoring
+- `jaegis_channel_list` - List monitored channels
+
+**TTS Management:**
+- `jaegis_tts_list` - List available TTS libraries
+- `jaegis_tts_install` - Install TTS libraries
+
+**Utilities:**
+- `jaegis_stats` - Show comprehensive statistics
+- `jaegis_verify_connections` - Verify service connections
+
+### MCP Client Examples
+
+**Claude Desktop Configuration:**
+```json
+{
+  "mcpServers": {
+    "jaegis-youtube-chat": {
+      "command": "npx",
+      "args": ["jaegis-youtube-chat-mcp"]
+    }
+  }
+}
+```
+
+**Usage in AI Assistant:**
+```
+Human: Use the jaegis_set_source tool to analyze this YouTube video: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+AI Assistant: I'll analyze this YouTube video for you using the JAEGIS YouTube Chat MCP server.
+
+[Tool execution: jaegis_set_source with URL parameter]
+
+✅ Video processed successfully! The content has been analyzed and is now available for further operations like summarization, podcast generation, or Q&A.
+```
+
 ## 🎙️ New Podcast Features (v2.1.0)
+
+YouTube Chat CLI now includes advanced podcast generation capabilities with 14 different styles, multiple voices, and n8n RAG integration for enhanced content quality.
 
 ### Available Styles
 
 | Style | Description | Length Range | Voice Roles | Best For |
 |-------|-------------|--------------|-------------|----------|
-| **Summary** | Quick overview of main points | 3-30 min | Narrator | Daily updates, quick insights |
-| **Interview** | Conversational host-expert format | 5-45 min | Host + Expert | Educational content, expert insights |
-| **Debate** | Multiple perspectives discussion | 7-60 min | Moderator + Advocates | Controversial topics, analysis |
-| **News Report** | Journalistic coverage style | 4-36 min | Anchor + Reporter | Current events, breaking news |
-| **Educational** | Teaching-focused presentation | 6-54 min | Instructor | Learning content, tutorials |
-| **Storytelling** | Narrative-driven content | 7-63 min | Narrator | Case studies, stories |
-| **Panel** | Multiple speakers discussion | 8-72 min | Moderator + Panelists | Roundtable discussions |
-| **Documentary** | In-depth investigative format | 10-90 min | Documentary narrator | Deep investigations |
-| **Quick Tips** | Short, actionable advice | 2-18 min | Tips host | How-to content |
-| **Deep Dive** | Extended technical analysis | 15-120 min | Technical analyst | Technical content, research |
-| **Roundup** | Compilation of multiple sources | 8-72 min | Roundup host | Weekly summaries |
+| **Conversational** | Natural dialogue format | 5-30 min | Host + Guest | General content, interviews |
+| **Interview** | Structured Q&A format | 10-45 min | Interviewer + Expert | Educational content, expert insights |
+| **Narrative** | Story-driven presentation | 8-40 min | Narrator | Documentaries, case studies |
+| **Educational** | Teaching-focused format | 12-60 min | Instructor | Learning content, tutorials |
+| **News** | Journalistic reporting style | 5-25 min | News Anchor | Current events, updates |
+| **Comedy** | Humorous take on content | 8-35 min | Comedic Hosts | Entertainment, light topics |
+| **Documentary** | In-depth investigative format | 15-90 min | Documentary Narrator | Deep investigations |
+| **Debate** | Multiple perspectives discussion | 10-60 min | Moderator + Debaters | Controversial topics |
+| **Monologue** | Single speaker presentation | 5-45 min | Solo Speaker | Personal insights, opinions |
+| **Panel** | Multiple experts discussion | 15-75 min | Moderator + Panelists | Roundtable discussions |
+| **Storytelling** | Narrative-driven content | 10-50 min | Storyteller | Creative content, stories |
+| **Technical** | Technical deep-dive format | 20-90 min | Technical Expert | Technical content, analysis |
+| **Casual** | Informal conversation style | 8-40 min | Friends/Colleagues | Casual discussions |
+| **Formal** | Professional presentation | 10-60 min | Professional Speaker | Business, formal content |
 
 ### Usage Examples
 
 ```bash
+# Generate conversational podcast
+youtube-chat podcast VIDEO_URL
+
 # Interview style with custom settings
 youtube-chat podcast --style interview --length long --tone conversational VIDEO_URL
 
 # News report with professional tone
-youtube-chat podcast --style news_report --length medium --tone professional VIDEO_URL
+youtube-chat podcast --style news --length medium --tone professional VIDEO_URL
+
+# Educational style with detailed analysis
+youtube-chat podcast --style educational --length extended --tone informative VIDEO_URL
 
 # Quick tips with enthusiastic delivery
-youtube-chat podcast --style quick_tips --length short --tone enthusiastic VIDEO_URL
-```
-
-## 📚 Multi-Source Processing
-
-### Supported File Types
-
-#### Documents
-- **PDF**: Research papers, reports, books
-- **DOCX/DOC**: Word documents, articles
-- **TXT**: Plain text files, notes
-- **MD**: Markdown documentation
-- **RTF**: Rich text format files
-
-#### Spreadsheets & Data
-- **CSV**: Data files, lists
-- **XLSX/XLS**: Excel spreadsheets
-- **ODS**: OpenDocument spreadsheets
-
-#### Media Files
-- **Audio**: MP3, WAV, M4A, FLAC, OGG (with transcription)
-- **Video**: MP4, AVI, MOV, MKV, WebM (with transcription)
-
-#### Web & Online Content
-- **URLs**: Website scraping and analysis
-- **HTML**: Local HTML files
-- **YouTube**: Videos, playlists, channels
-
-#### Presentations & Code
-- **PPTX/PPT**: PowerPoint presentations
-- **Code Files**: PY, JS, JSON, YAML, XML
-- **Images**: PNG, JPG (with OCR text extraction)
-
-### Multi-Source Commands
-
-```bash
-# Process entire directory
-youtube-chat podcast-create-multi --sources /path/to/documents --style roundup
-
-# Filter by file types and date
-youtube-chat podcast-create-multi \
-  --sources /path/to/content \
-  --file-types pdf,docx,md \
-  --days 30 \
-  --style comprehensive
-
-# Create from mixed sources
-youtube-chat podcast-create-multi \
-  --sources /path/to/research \
-  --title "Research Roundup" \
-  --style deep_dive \
-  --length extended \
-  --use-rag
-```
-
-## 📋 Blueprint Generation
-
-Create comprehensive documentation from multiple sources with AI-powered synthesis.
-
-### Blueprint Styles
-
-| Style | Purpose | Sections | Best For |
-|-------|---------|----------|----------|
-| **Comprehensive** | Complete documentation | Executive summary, overview, findings, analysis, recommendations | Project documentation |
-| **Executive** | High-level summary | Executive summary, key points, implications, next steps | Leadership presentations |
-| **Technical** | Technical documentation | Overview, architecture, implementation, best practices | Technical docs |
-| **Educational** | Learning materials | Objectives, concepts, guide, examples, exercises | Training materials |
-| **Reference** | Quick reference | Commands, configuration, troubleshooting, FAQ | Reference guides |
-
-### Blueprint Commands
-
-```bash
-# Create comprehensive blueprint
-youtube-chat blueprint-create \
-  --sources /path/to/research \
-  --title "Research Analysis" \
-  --style comprehensive \
-  --format pdf
-
-# Executive summary from recent files
-youtube-chat blueprint-create \
-  --sources /path/to/reports \
-  --title "Q4 Summary" \
-  --style executive \
-  --days 90 \
-  --use-rag
-
-# Technical documentation
-youtube-chat blueprint-create \
-  --sources /path/to/code \
-  --title "API Documentation" \
-  --style technical \
-  --format html
+youtube-chat podcast --style casual --length short --tone enthusiastic VIDEO_URL
 ```
 
 ## 🤖 Interactive Chat
@@ -869,9 +934,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📝 Changelog
 
-### Version 2.1.0 (2025-09-30) - Comprehensive Podcast Generation Platform
+### Version 2.1.0 (2025-09-30) - PyPI Package, MCP Server & Enhanced Features
 
 **🎉 Major New Features Added:**
+- ✨ **PyPI Package**: Official Python package published to PyPI (https://pypi.org/project/youtube-chat-cli/)
+- ✨ **MCP Server**: Complete Model Context Protocol server for AI assistants (npm: jaegis-youtube-chat-mcp)
+- ✨ **35+ MCP Tools**: Full CLI functionality exposed as MCP tools for Claude, ChatGPT, and other AI systems
 - ✨ **14 Professional Podcast Styles**: Interview, Debate, News Report, Educational, Storytelling, Panel Discussion, Documentary, Quick Tips, Deep Dive, Roundup
 - ✨ **Multi-Source Content Processing**: Support for 20+ file types including documents, audio, video, web content, presentations, and code files
 - ✨ **Blueprint Generation**: Create comprehensive documentation from multiple sources with 5 different styles
@@ -879,6 +947,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✨ **Workflow Management**: Complete n8n workflow management system with testing and configuration
 
 **🚀 Enhanced Features:**
+- 🔧 **AI Assistant Integration**: Direct integration with Claude, ChatGPT, and MCP-compatible systems
+- 🔧 **npx Compatibility**: Run MCP server directly with `npx jaegis-youtube-chat-mcp`
 - 🔧 **Enhanced Podcast Generation**: Multi-voice support, customizable length and tone, intelligent chunking
 - 🔧 **Advanced Filtering**: Date range, file type, size, and tag-based filtering for source selection
 - 🔧 **Batch Processing**: Efficiently handle hundreds of sources with parallel processing
@@ -886,8 +956,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🔧 **Professional Package Structure**: Modular architecture with proper separation of concerns
 
 **🔧 Technical Improvements:**
+- 📦 **PyPI Distribution**: Professional Python package with proper dependencies and metadata
+- 📦 **npm Distribution**: TypeScript MCP server package with comprehensive tooling
 - 📦 **Rich Dependencies**: Beautiful terminal UI with Rich library
 - 🏗️ **Comprehensive Error Handling**: Robust error handling and logging throughout
+- 🏗️ **JAEGIS Branding**: Consistent branding across all packages and documentation
 - 🧪 **Configuration Management**: Enhanced environment variable management
 - 📚 **Documentation**: Comprehensive guides and API reference
 

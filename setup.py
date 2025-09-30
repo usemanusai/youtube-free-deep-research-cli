@@ -16,13 +16,13 @@ with open("requirements.txt", "r") as f:
 
 setup(
     name="youtube-chat-cli",
-    version="2.0.0",
+    version="2.1.0",
     description="AI-powered CLI tool for YouTube video analysis, channel monitoring, and automated content processing",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/usemanusai/youtube-free-deep-research-cli",
     author="YouTube Chat CLI Team",
-    author_email="youtube-chat-cli@example.com",
+    author_email="use.manus.ai@gmail.com",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: End Users/Desktop",

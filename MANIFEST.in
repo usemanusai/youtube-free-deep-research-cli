@@ -1,0 +1,47 @@
+# Include the README and license
+include README.md
+include LICENSE
+
+# Include configuration files
+include .env.template
+include .tts_config.json
+recursive-include config *.yaml *.yml
+
+# Include documentation
+recursive-include docs *
+
+# Include examples
+recursive-include examples *
+
+# Include scripts
+recursive-include scripts *
+
+# Include template files
+recursive-include src/youtube_chat_cli *.template
+
+# Exclude unnecessary files
+exclude .gitignore
+exclude .env
+exclude *.pyc
+exclude *.pyo
+exclude *.pyd
+exclude __pycache__
+exclude .DS_Store
+exclude Thumbs.db
+
+# Exclude test files and directories
+exclude test_*.py
+exclude *_test.py
+recursive-exclude tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+# Exclude build artifacts
+exclude build
+exclude dist
+exclude *.egg-info
+
+# Exclude audio files (they're large and not needed for the package)
+exclude *.wav
+exclude *.mp3
+exclude *.m4a
