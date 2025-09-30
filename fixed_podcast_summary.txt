@@ -1,0 +1,22 @@
+
+PODCAST SCRIPT SUMMARY
+
+This podcast audio was generated using fallback mode because the MaryTTS server is not available.
+
+To enable full audio generation:
+1. Install MaryTTS server locally
+2. Run it on port 59125
+3. Update MARYTTS_SERVER_URL in .env if needed
+
+PODCAST SCRIPT:
+### Podcast Script: AI-Powered Software Development with BMAD Method  
+**Host:** Alex  
+**Expert:** Jordan  
+
+---
+
+**Host:** Hey everyone, and welcome back to DevTalk! Today, we’re diving into a hot topic in software development: AI tools like Cursor. They’ve made building apps easier than ever, but there’s a catch, right?  
+
+**Expert:** Totally, Alex. The problem is, many people skip the entire software development process. They just tell AI, “Build me an app,” and get a demo. But that’s not pr...
+
+Generated on: 2025-09-29 23:43:24

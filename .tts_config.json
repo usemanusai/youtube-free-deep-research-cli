@@ -1,0 +1,13 @@
+{
+  "current_library": "edge_tts",
+  "edge_tts": {
+    "default_voice": "en-US-AriaNeural"
+  },
+  "gtts": {
+    "default_lang": "en"
+  },
+  "installed_libraries": [
+    "edge_tts",
+    "gtts"
+  ]
+}
