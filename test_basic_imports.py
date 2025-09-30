@@ -9,33 +9,38 @@ def test_basic_imports():
 
     try:
         # Test core modules
-        import session_manager
-        print("✓ session_manager imports successfully")
+        from youtube_chat_cli.utils.session_manager import SessionManager
+        print("✓ SessionManager imports successfully")
 
-        import source_processor
-        print("✓ source_processor imports successfully")
+        from youtube_chat_cli.services.transcription.processor import get_source_processor
+        print("✓ SourceProcessor imports successfully")
 
-        import llm_service
-        print("✓ llm_service imports successfully")
+        from youtube_chat_cli.utils.llm_service import get_llm_service
+        print("✓ LLMService imports successfully")
 
-        import tts_service
-        print("✓ tts_service imports successfully")
+        from youtube_chat_cli.services.tts.service import get_tts_service
+        print("✓ TTSService imports successfully")
 
-        import n8n_client
-        print("✓ n8n_client imports successfully")
+        from youtube_chat_cli.services.n8n.client import get_n8n_client
+        print("✓ N8nClient imports successfully")
 
         # Test CLI
         import cli
         print("✓ cli imports successfully")
 
         # Test factory functions
-        from source_processor import get_source_processor
         processor = get_source_processor()
         print("✓ get_source_processor() works")
 
-        from session_manager import SessionManager
         manager = SessionManager("test_session.json")
         print("✓ SessionManager can be created")
+
+        # Test core functionality
+        from youtube_chat_cli.core.youtube_api import get_youtube_client
+        print("✓ YouTubeAPIClient imports successfully")
+
+        from youtube_chat_cli.core.database import get_video_database
+        print("✓ VideoDatabase imports successfully")
 
         print("\n✅ All basic imports successful!")
         print("The modular architecture is properly structured.")
