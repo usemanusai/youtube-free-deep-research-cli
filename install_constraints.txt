@@ -1,0 +1,53 @@
+# TTS Library Installation Constraints
+# This file ensures compatible versions across all TTS libraries
+
+# Core dependencies - CPU-only versions for maximum compatibility
+torch==2.8.0+cpu
+torchaudio==2.8.0+cpu
+torchvision==0.23.0+cpu
+
+# Transformers ecosystem - compatible versions
+transformers>=4.21.0,<5.0.0
+tokenizers>=0.13.0,<0.23.0
+huggingface-hub>=0.16.0,<1.0.0
+
+# Audio processing
+librosa>=0.9.1,<0.12.0
+soundfile>=0.12.0
+pydub>=0.25.0
+
+# Core ML libraries
+numpy>=1.21.0,<2.0.0
+scipy>=1.7.0,<2.0.0
+scikit-learn>=1.0.0
+
+# Text processing
+regex>=2022.1.18
+sentencepiece>=0.1.95
+
+# Networking and utilities
+requests>=2.25.0
+tqdm>=4.62.0
+packaging>=20.0
+filelock>=3.0.0
+fsspec>=2023.1.0
+
+# Audio codecs and formats
+ffmpeg-python>=0.2.0
+
+# Optional GPU support (will be skipped on CPU-only installs)
+# nvidia-cuda-runtime-cu12; platform_machine == "x86_64" and sys_platform == "linux"
+
+# Library-specific constraints
+# Chatterbox requirements (relaxed for compatibility)
+safetensors>=0.3.0,<1.0.0
+
+# OpenVoice requirements
+gradio>=3.0.0,<6.0.0
+
+# MeloTTS requirements
+phonemizer>=3.0.0
+espeak>=1.48.0
+
+# Development and testing
+pytest>=6.0.0

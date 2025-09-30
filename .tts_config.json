@@ -8,6 +8,10 @@
   },
   "installed_libraries": [
     "edge_tts",
-    "gtts"
+    "gtts",
+    "melotts",
+    "kokoro",
+    "openvoice_v2",
+    "chatterbox"
   ]
 }
