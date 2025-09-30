@@ -1,0 +1,131 @@
+# YouTube Chat CLI Default Configuration
+# This file contains default settings for the application
+
+# API Configuration
+api:
+  youtube:
+    # YouTube Data API v3 settings
+    quota_limit: 10000  # Daily quota limit
+    requests_per_second: 1  # Rate limiting
+    timeout: 30  # Request timeout in seconds
+  
+  openrouter:
+    # OpenRouter API settings
+    model: "anthropic/claude-3.5-sonnet"  # Default LLM model
+    timeout: 60  # Request timeout in seconds
+    max_tokens: 4000  # Maximum tokens per request
+
+# Rate Limiting Configuration
+rate_limiting:
+  max_videos_per_day: 5  # Maximum videos to process daily
+  min_delay_hours: 1     # Minimum delay between videos
+  max_delay_hours: 2     # Maximum delay between videos
+  backoff_hours: 2       # Backoff duration on rate limit
+  exponential_backoff: true  # Use exponential backoff
+
+# Channel Monitoring
+monitoring:
+  default_check_interval: 24  # Hours between channel checks
+  max_videos_per_check: 50    # Maximum videos to fetch per check
+  auto_process_transcripts: true  # Automatically process transcripts
+  
+  # Default filters
+  default_filters:
+    no_shorts: true      # Exclude YouTube Shorts by default
+    no_live: false       # Include live streams
+    min_duration: 60     # Minimum video duration in seconds
+    max_duration: null   # Maximum video duration (null = no limit)
+
+# Background Service
+service:
+  # Scheduler settings
+  channel_scan_hour: 8      # Hour to scan channels (24h format)
+  processing_interval: 2    # Hours between video processing runs
+  cleanup_interval: 24      # Hours between cleanup runs
+  health_check_interval: 30 # Minutes between health checks
+  
+  # Job settings
+  max_instances: 1          # Maximum instances of each job
+  misfire_grace_time: 300   # Seconds to allow for job delays
+  coalesce: true           # Combine multiple pending jobs
+
+# Database Configuration
+database:
+  # SQLite settings
+  timeout: 30              # Connection timeout in seconds
+  check_same_thread: false # Allow multi-threading
+  
+  # Cleanup settings
+  cleanup_days: 7          # Days to keep old queue entries
+  vacuum_interval: 168     # Hours between database vacuum (weekly)
+
+# TTS Configuration
+tts:
+  default_library: "edge-tts"  # Default TTS library
+  default_voice: "en-US-AriaNeural"  # Default voice
+  
+  # Library preferences (in order of preference)
+  library_priority:
+    - "edge-tts"
+    - "gtts"
+    - "kokoro"
+    - "openvoice"
+    - "melotts"
+    - "chatterbox"
+  
+  # Audio settings
+  audio_format: "wav"      # Output audio format
+  sample_rate: 22050       # Audio sample rate
+  
+# n8n Integration
+n8n:
+  timeout: 30              # Request timeout in seconds
+  max_retries: 3           # Maximum retry attempts
+  retry_delay: 2           # Base delay between retries (seconds)
+  exponential_backoff: true # Use exponential backoff for retries
+
+# Logging Configuration
+logging:
+  level: "INFO"            # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # File logging
+  file_logging: true       # Enable file logging
+  max_file_size: 10485760  # 10MB in bytes
+  backup_count: 5          # Number of backup files to keep
+  
+  # Console logging
+  console_logging: true    # Enable console logging
+  colored_output: true     # Use colored console output
+
+# User Interface
+ui:
+  # CLI settings
+  progress_bars: true      # Show progress bars
+  colored_output: true     # Use colored output
+  emoji_icons: true        # Use emoji icons in output
+  
+  # Pagination
+  default_page_size: 20    # Default number of items per page
+  max_page_size: 100       # Maximum items per page
+
+# Security
+security:
+  # API key validation
+  validate_api_keys: true  # Validate API keys on startup
+  
+  # File permissions
+  config_file_mode: 0o600  # Configuration file permissions
+  log_file_mode: 0o644     # Log file permissions
+
+# Performance
+performance:
+  # Threading
+  max_workers: 2           # Maximum worker threads
+  
+  # Caching
+  cache_enabled: true      # Enable caching
+  cache_ttl: 3600         # Cache TTL in seconds (1 hour)
+  
+  # Memory management
+  gc_threshold: 1000       # Garbage collection threshold
