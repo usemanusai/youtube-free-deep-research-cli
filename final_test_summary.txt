@@ -1,0 +1,20 @@
+
+PODCAST SCRIPT SUMMARY
+
+This podcast audio was generated using fallback mode because the MaryTTS server is not available.
+
+To enable full audio generation:
+1. Install MaryTTS server locally
+2. Run it on port 59125
+3. Update MARYTTS_SERVER_URL in .env if needed
+
+PODCAST SCRIPT:
+### Podcast Script: AI-Driven Software Development with BMAD  
+
+**Host (Alex):**  
+Hey everyone, and welcome to "Code & Coffee"! I’m Alex, and today we’re diving into a game-changing approach to building software with AI. Joining me is Dr. Maya Sharma, a seasoned software engineer and AI integration expert. Maya, thanks for being here!  
+
+**Expert (Maya):**  
+Absolutely, Alex! Great to chat. And you’re spot on—this topic is exploding right now. AI tools like Cursor have made coding accessible, b...
+
+Generated on: 2025-09-29 23:47:09
