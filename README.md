@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/usemanusai-youtube-free-deep-research-cli-badge.png)](https://mseep.ai/app/usemanusai-youtube-free-deep-research-cli)
+
 # 🎙️ YouTube Chat CLI - Professional Podcast Generation Platform
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
