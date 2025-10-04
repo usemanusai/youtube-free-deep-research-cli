@@ -35,17 +35,12 @@ jobs:
         with:
           sarif_file: semgrep.sarif
 
-      # Bandit (JSON only; no upload to Security tab)
+      # Bandit (JSON only)
       - run: python -m pip install bandit
       - run: bandit -q -r . -f json -o bandit.json || true
 
-      # Gitleaks
+      # Gitleaks (use action defaults, artifact only)
       - uses: gitleaks/gitleaks-action@v2
-        with:
-          args: detect --no-git --source . --report-format sarif --report-path gitleaks.sarif --redact --exit-code 0
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: gitleaks.sarif
 
       # Summarize to PR and issues
       - name: Summarize & Issues
@@ -55,11 +50,11 @@ jobs:
             const fs = require('fs');
             function exists(p){ try{ fs.accessSync(p); return true } catch { return false } }
             function readText(p){ try{ return fs.readFileSync(p,'utf8'); }catch(e){ return '' } }
-            const sarifs = ['semgrep.sarif','gitleaks.sarif'].filter(exists);
+            const sarifs = ['semgrep.sarif'].filter(exists);
             const hasFindings = sarifs.some(s => readText(s).includes('"results"') || readText(s).includes('"runs"')) || exists('bandit.json');
             const title = Security Audit ();
             if (hasFindings) {
-              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body: 'See Security tab for SARIF and bandit.json artifact.', labels: ['security','automated'] });
+              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body: 'See Security tab for SARIF and artifacts.', labels: ['security','automated'] });
             }
             if (context.eventName === 'pull_request') {
               const body = Security audit completed. SARIF uploaded for: . Bandit JSON: .;
