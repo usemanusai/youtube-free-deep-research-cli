@@ -35,12 +35,9 @@ jobs:
         with:
           sarif_file: semgrep.sarif
 
-      # Bandit
+      # Bandit (JSON only; no upload to Security tab)
       - run: python -m pip install bandit
-      - run: bandit -q -r . -f sarif -o bandit.sarif || true
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: bandit.sarif
+      - run: bandit -q -r . -f json -o bandit.json || true
 
       # Gitleaks
       - uses: gitleaks/gitleaks-action@v2
@@ -58,13 +55,13 @@ jobs:
             const fs = require('fs');
             function exists(p){ try{ fs.accessSync(p); return true } catch { return false } }
             function readText(p){ try{ return fs.readFileSync(p,'utf8'); }catch(e){ return '' } }
-            const sarifs = ['semgrep.sarif','bandit.sarif','gitleaks.sarif'].filter(exists);
-            const hasFindings = sarifs.some(s => readText(s).includes('"results"') || readText(s).includes('"runs"'));
+            const sarifs = ['semgrep.sarif','gitleaks.sarif'].filter(exists);
+            const hasFindings = sarifs.some(s => readText(s).includes('"results"') || readText(s).includes('"runs"')) || exists('bandit.json');
             const title = Security Audit ();
             if (hasFindings) {
-              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body: 'See Security tab (code scanning alerts).', labels: ['security','automated'] });
+              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body: 'See Security tab for SARIF and bandit.json artifact.', labels: ['security','automated'] });
             }
             if (context.eventName === 'pull_request') {
-              const body = Security audit completed. SARIF uploaded for: .;
+              const body = Security audit completed. SARIF uploaded for: . Bandit JSON: .;
               await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.payload.pull_request.number, body });
             }
