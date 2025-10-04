@@ -39,7 +39,7 @@ jobs:
       - run: python -m pip install bandit
       - run: bandit -q -r . -f json -o bandit.json || true
 
-      # Gitleaks (use action defaults, artifact only)
+      # Gitleaks (artifact only)
       - uses: gitleaks/gitleaks-action@v2
 
       # Summarize to PR and issues
@@ -52,11 +52,11 @@ jobs:
             function readText(p){ try{ return fs.readFileSync(p,'utf8'); }catch(e){ return '' } }
             const sarifs = ['semgrep.sarif'].filter(exists);
             const hasFindings = sarifs.some(s => readText(s).includes('"results"') || readText(s).includes('"runs"')) || exists('bandit.json');
-            const title = Security Audit ();
+            const title = 'Security Audit (' + new Date().toISOString().slice(0,10) + ')';
             if (hasFindings) {
               await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body: 'See Security tab for SARIF and artifacts.', labels: ['security','automated'] });
             }
             if (context.eventName === 'pull_request') {
-              const body = Security audit completed. SARIF uploaded for: . Bandit JSON: .;
+              const body = 'Security audit completed. SARIF uploaded for: ' + (sarifs.join(', ') || 'none') + '. Bandit JSON: ' + (exists('bandit.json') ? 'present' : 'not present') + '.';
               await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.payload.pull_request.number, body });
             }
