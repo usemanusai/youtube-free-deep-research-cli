@@ -1,0 +1,7 @@
+{
+  "melo": false,
+  "melo.api": false,
+  "chatterbox": false,
+  "chatterbox.tts": false,
+  "torchaudio": true
+}

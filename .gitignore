@@ -1,8 +1,11 @@
-# Environment variables and secrets
-.env
-.env.local
-.env.production
-.env.staging
+# Virtual Environments
+tts-bridge-py310/
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
 
 # Python
 __pycache__/
@@ -29,14 +32,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Virtual environments
-.venv/
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
 # IDEs and editors
 .idea/
 .vscode/
@@ -53,10 +48,18 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.staging
+.env.*.local
+
 # Application specific
 *.db
 *.sqlite
 *.sqlite3
+chroma_db/
 .youtube-chat-cli/
 service.pid
 service.log
@@ -68,6 +71,11 @@ audio_output/
 # Logs
 *.log
 logs/
+
+# Node (for Next.js dashboard)
+node_modules/
+.next/
+out/
 
 # Testing
 .pytest_cache/
@@ -118,3 +126,12 @@ dmypy.json
 
 # Legacy
 blog
+
+# Temporary
+*.tmp
+*.temp
+
+# Build artifacts
+.history/
+workspace-*/
+vscode-app-*.log

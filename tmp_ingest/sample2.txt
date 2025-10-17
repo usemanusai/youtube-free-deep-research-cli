@@ -1,0 +1,1 @@
+This is a plain text document to test the batch importer. It mentions ingestion and embeddings to be searchable.

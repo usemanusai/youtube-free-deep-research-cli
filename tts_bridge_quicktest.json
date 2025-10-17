@@ -1,0 +1,10 @@
+{
+  "melotts": {
+    "ok": false,
+    "error": "TTS bridge failed: 2025-10-07 03:35:04,824 - __main__ - INFO - Initializing MeloTTS for language: EN-US\n2025-10-07 03:35:04,825 - __main__ - ERROR - \\u274c MeloTTS generation failed: No module named 'melo'\n{\"success\": false, \"error\": \"No module named 'melo'\", \"engine\": \"melotts\"}\n2025-10-07 03:35:04,825 - __main__ - ERROR - TTS generation failed\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo ThinkPad T480\\Downloads\\youtube-chat-cli-main\\tts_bridge.py\", line 230, in main\n    result = generate_melotts(\n             ^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo ThinkPad T480\\Downloads\\youtube-chat-cli-main\\tts_bridge.py\", line 53, in generate_melotts\n    from melo.api import TTS\nModuleNotFoundError: No module named 'melo'\n"
+  },
+  "chatterbox": {
+    "ok": false,
+    "error": "TTS bridge timed out after 180 seconds"
+  }
+}

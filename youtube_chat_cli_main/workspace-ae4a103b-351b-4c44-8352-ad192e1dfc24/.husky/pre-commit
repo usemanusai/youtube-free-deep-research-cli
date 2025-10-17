@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Husky pre-commit hook
+# Runs TypeScript type-checks and lint-staged on staged files
+
+npm run type-check --silent || exit 1
+npx lint-staged -v
+

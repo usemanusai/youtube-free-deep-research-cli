@@ -1,0 +1,282 @@
+name: Helios Dependency Checks
+
+on:
+  schedule:
+    - cron: '0 2 * * 1' # Mondays at 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  dependency-scan:
+    name: Scan Python and Node dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python tooling
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pip-audit==2.*
+
+      - name: Python - detect requirements files
+        id: pyreq
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t REQS < <(git ls-files | grep -Ei '(^|/)requirements(\.(txt|in))$' || true)
+          if [[ ${#REQS[@]} -eq 0 ]]; then
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "found=true" >> $GITHUB_OUTPUT
+          printf '%s\n' "${REQS[@]}" > py_requirements_list.txt
+          echo "list=$(jq -R -s -c 'split("\n")|map(select(length>0))' py_requirements_list.txt)" >> $GITHUB_OUTPUT
+
+      - name: Python - vulnerabilities (pip-audit)
+        if: steps.pyreq.outputs.found == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/python
+          while IFS= read -r f; do
+            out="artifacts/python/$(echo "$f" | tr '/' '_').pip_audit.json"
+            echo "Auditing $f -> $out"
+            pip-audit -r "$f" -f json > "$out" || true
+          done < py_requirements_list.txt
+
+      - name: Python - outdated (pip list)
+        if: steps.pyreq.outputs.found == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r f; do
+            # Create a venv to avoid polluting the runner's site-packages
+            envdir=".venv-$(echo "$f" | tr '/' '_')"
+            python -m venv "$envdir"
+            source "$envdir/bin/activate"
+            python -m pip install --upgrade pip
+            python -m pip install -r "$f" || true
+            python -m pip list --outdated --format=json > "artifacts/python/$(echo "$f" | tr '/' '_').outdated.json" || true
+            deactivate
+          done < py_requirements_list.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Node - detect workspaces
+        id: workspaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Find package.json files, prioritize workspace-* dirs
+          mapfile -t PKGS < <(git ls-files | grep -E '(^|/)package.json$' | grep -E '^workspace-' || true)
+          # If none matched workspace-*, include root/package.json if present
+          if [[ ${#PKGS[@]} -eq 0 ]]; then
+            if [[ -f package.json ]]; then PKGS+=("package.json"); fi
+          fi
+          if [[ ${#PKGS[@]} -eq 0 ]]; then
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          mkdir -p artifacts/node
+          printf '%s\n' "${PKGS[@]}" > node_packages_list.txt
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "list=$(jq -R -s -c 'split("\n")|map(select(length>0))' node_packages_list.txt)" >> $GITHUB_OUTPUT
+
+      - name: Node - audit and outdated
+        if: steps.workspaces.outputs.found == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r pkgjson; do
+            dir=$(dirname "$pkgjson")
+            [[ "$dir" == "." ]] && dir="/"
+            echo "Processing $pkgjson (dir=$dir)"
+            pushd "$(dirname "$pkgjson")" >/dev/null
+            # Prefer ci for lockfile, fallback to install
+            (npm ci || npm install) || true
+            npm audit --json > "../artifacts/node/$(echo "$pkgjson" | tr '/' '_').audit.json" || true
+            npm outdated --json > "../artifacts/node/$(echo "$pkgjson" | tr '/' '_').outdated.json" || true
+            popd >/dev/null
+          done < node_packages_list.txt
+
+
+      - name: Install syft and grype (SBOM + vuln scanner)
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM and run Grype scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/sbom
+          syft packages dir:. -o cyclonedx-json > artifacts/sbom/sbom.cyclonedx.json || true
+          grype dir:. -o json -q > artifacts/sbom/grype.json || true
+
+      - name: Build Markdown report
+        id: build_report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            function readJSONSafe(p) {
+              try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; }
+            }
+
+            function summarizePipAudit(obj){
+              if (!obj) return { vulns: 0 };
+              return { vulns: Array.isArray(obj) ? obj.length : 0 };
+            }
+            function summarizeNpmAudit(obj){
+              if (!obj) return { vulns: 0 };
+              if (obj.metadata && obj.metadata.vulnerabilities) {
+                const counts = obj.metadata.vulnerabilities;
+                const total = Object.values(counts).reduce((a,b)=>a+b,0);
+                return { vulns: total, breakdown: counts };
+              }
+              if (obj.advisories) return { vulns: Object.keys(obj.advisories).length };
+              return { vulns: 0 };
+            }
+            function summarizeGrype(obj){
+              const sev = { Critical:0, High:0, Medium:0, Low:0, Negligible:0, Unknown:0 };
+              if (!obj || !Array.isArray(obj.matches)) return { total:0, sev };
+              for (const m of obj.matches) {
+                const s = (m.vulnerability && m.vulnerability.severity) || 'Unknown';
+                if (sev[s] === undefined) sev[s] = 0;
+                sev[s] += 1;
+              }
+              const total = Object.values(sev).reduce((a,b)=>a+b,0);
+              return { total, sev };
+            }
+
+            let md = [];
+            md.push(`# Helios: Weekly Dependency Audit Report`);
+            md.push(`Generated: ${new Date().toISOString()}`);
+            md.push('');
+
+            // Python section
+            md.push('## Python');
+            const pyDir = 'artifacts/python';
+            if (fs.existsSync(pyDir)) {
+              const files = fs.readdirSync(pyDir);
+              if (files.length === 0) { md.push('_No Python artifacts found._'); }
+              for (const f of files.filter(f=>f.endsWith('.pip_audit.json'))) {
+                const base = f.replace(/\.pip_audit\.json$/, '');
+                const audit = readJSONSafe(path.join(pyDir, f));
+                const outdated = readJSONSafe(path.join(pyDir, `${base}.outdated.json`));
+                const sum = summarizePipAudit(audit);
+                md.push(`- ${base}: ${sum.vulns} vulnerabilities`);
+                if (Array.isArray(outdated) && outdated.length) {
+                  md.push('  - Outdated:');
+                  for (const o of outdated) {
+                    md.push(`    - ${o.name} ${o.version} → ${o.latest} (${o.latest_type || 'latest'})`);
+                  }
+                }
+              }
+            } else {
+              md.push('_No Python artifacts directory._');
+            }
+
+            // Node section
+            md.push('\n## Node.js');
+            const nodeDir = 'artifacts/node';
+            if (fs.existsSync(nodeDir)) {
+              const files = fs.readdirSync(nodeDir);
+              if (files.length === 0) { md.push('_No Node artifacts found._'); }
+              for (const f of files.filter(f=>f.endsWith('.audit.json'))) {
+                const base = f.replace(/\.audit\.json$/, '');
+                const audit = readJSONSafe(path.join(nodeDir, f));
+                const outdated = readJSONSafe(path.join(nodeDir, `${base}.outdated.json`));
+                const sum = summarizeNpmAudit(audit);
+                md.push(`- ${base}: ${sum.vulns} vulnerabilities`);
+                if (sum.breakdown) {
+                  md.push(`  - Breakdown: ${JSON.stringify(sum.breakdown)}`);
+                }
+                if (outdated && Object.keys(outdated).length) {
+                  md.push('  - Outdated:');
+                  for (const [name, info] of Object.entries(outdated)) {
+                    md.push(`    - ${name} ${info.current} → ${info.latest} (${info.wanted ? `wanted ${info.wanted}` : 'latest'})`);
+                  }
+                }
+              }
+            } else {
+              md.push('_No Node artifacts directory._');
+            }
+
+            // SBOM / Grype section
+            md.push('\n## Security Scan (Grype)');
+            const grypePath = 'artifacts/sbom/grype.json';
+            const grype = readJSONSafe(grypePath);
+            if (grype) {
+              const g = summarizeGrype(grype);
+              md.push(`Total Vulnerabilities: ${g.total}`);
+              md.push('');
+              md.push('| Severity | Count |');
+              md.push('|---------:|------:|');
+              for (const k of ['Critical','High','Medium','Low','Negligible','Unknown']) {
+                md.push(`| ${k} | ${g.sev[k] || 0} |`);
+              }
+            } else {
+              md.push('_No Grype results found._');
+            }
+
+            const body = md.join('\n');
+            core.setOutput('body', body);
+
+      - name: Create or update Helios Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Helios: Weekly Dependency Audit Report';
+            const body = core.getInput('body', { required: true });
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependencies,security'
+            });
+            let existing = issues.find(i => i.title === title);
+            if (!existing) {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['dependencies','security']
+              });
+              core.info(`Created issue #${created.data.number}`);
+            } else {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body
+              });
+              core.info(`Updated issue #${existing.number}`);
+            }
+        env:
+          body: ${{ steps.build_report.outputs.body }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: helios-artifacts
+          path: artifacts
+          if-no-files-found: warn
+

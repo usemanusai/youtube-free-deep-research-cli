@@ -1,0 +1,75 @@
+# Ignore Python virtual environments
+.venv/
+venv/
+env/
+
+# Node.js dependencies
+node_modules/
+workspace-*/node_modules/
+
+# Python caches and test artifacts
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Git metadata
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.log
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Documentation builds
+docs/_build/
+
+# Large model files and TTS assets
+MeloTTS/
+*.pth
+*.bin
+*.onnx
+*.ckpt
+
+# Vector stores / databases / caches
+*.db
+*.sqlite
+chroma_db/
+qdrant_storage/
+
+# Frontend build outputs (if any)
+workspace-*/.next/
+.next/
+.out/
+
+# Docker-related locals
+**/.dockerignore.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc large or workspace-specific files
+*.mp3
+*.wav
+*.flac
+*.zip
+*.tar
+*.tar.gz
+*.7z
+

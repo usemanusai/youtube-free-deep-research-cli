@@ -1,0 +1,53 @@
+# Docker build context: default deny, explicit allowlist
+# 1) Ignore everything by default
+*
+
+# 2) Re-include only what's needed to build the API image
+!Dockerfile
+!docker-compose.yml
+!pyproject.toml
+!uv.lock
+!requirements.txt
+!requirements-dev.txt
+!README.md
+!CONTRIBUTING.md
+
+# App source: include only source code and small config/text assets
+!youtube_chat_cli_main/**/*.py
+!youtube_chat_cli_main/**/*.pyi
+!youtube_chat_cli_main/**/*.json
+!youtube_chat_cli_main/**/*.ini
+!youtube_chat_cli_main/**/*.toml
+!youtube_chat_cli_main/**/*.yaml
+!youtube_chat_cli_main/**/*.yml
+!youtube_chat_cli_main/**/*.txt
+!youtube_chat_cli_main/**/*.md
+!youtube_chat_cli_main/**/*.html
+!youtube_chat_cli_main/**/*.jinja2
+!youtube_chat_cli_main/**/__init__.py
+
+# If tests or docs are ever needed in the image, uncomment these
+#!tests/
+#!tests/**/*
+#!docs/
+
+# Exclude heavy subpaths inside included app tree
+youtube_chat_cli_main/**/node_modules/**
+youtube_chat_cli_main/**/.next/**
+youtube_chat_cli_main/**/.turbo/**
+youtube_chat_cli_main/**/.cache/**
+youtube_chat_cli_main/**/out/**
+youtube_chat_cli_main/**/build/**
+youtube_chat_cli_main/**/dist/**
+youtube_chat_cli_main/**/public/assets/**
+youtube_chat_cli_main/workspace-*/.vercel/**
+
+#!docs/**/*
+
+# Keep GitHub workflows out of the image by default
+#!.github/
+#!.github/**/*
+
+# Note: Everything else (e.g., venv/.venv, node_modules, MeloTTS models,
+# caches, build artifacts, large binaries) remains excluded by the leading '*'
+# If you need to include specific subpaths later, add additional '!<path>' lines above.

@@ -1,0 +1,78 @@
+# Custom Semgrep rules for youtube-chat-cli-main
+# Focus: FastAPI/SQLAlchemy, subprocess, requests/SSRF, Next.js XSS, LLM prompt injection heuristics
+# These augment the built-in community rules (we also run --config auto)
+
+rules:
+  - id: py-subprocess-shell-true
+    languages: [python]
+    severity: ERROR
+    message: Avoid shell=True with string concatenation; use list argv and check=True.
+    patterns:
+      - pattern: subprocess.run($CMD, shell=True, ...)
+      - metavariable-pattern:
+          metavariable: $CMD
+          pattern: $A + $B
+    metadata:
+      cwe: CWE-78
+      owasp: A03:2021 Injection
+
+  - id: py-unsafe-eval-exec
+    languages: [python]
+    severity: ERROR
+    message: Avoid eval/exec on untrusted data.
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: exec($X)
+    metadata:
+      cwe: CWE-94
+      owasp: A03:2021 Injection
+
+  - id: py-requests-ssrf
+    languages: [python]
+    severity: WARNING
+    message: Potential SSRF. Validate host/scheme; apply allowlist for outbound URLs.
+    patterns:
+      - pattern: requests.$FUNC($URL, ...)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: "get|post|put|delete|head|options"
+    metadata:
+      cwe: CWE-918
+      owasp: A10:2021 SSRF
+
+  - id: sqlalchemy-raw-sql
+    languages: [python]
+    severity: ERROR
+    message: Possible SQL injection via raw string-formatted SQL. Use bound parameters/ORM query builder.
+    patterns:
+      - pattern-either:
+          - pattern: $ENGINE.execute(f"...{...}...")
+          - pattern: $ENGINE.execute("..." + $X)
+          - pattern: $SESSION.execute(f"...{...}...")
+          - pattern: $SESSION.execute("..." + $X)
+    metadata:
+      cwe: CWE-89
+
+  - id: react-dangerouslysetinnerhtml
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Avoid dangerouslySetInnerHTML; sanitize or render safely.
+    pattern: |
+      <div dangerouslySetInnerHTML={{ __html: $HTML }} />
+    metadata:
+      cwe: CWE-79
+      owasp: A03:2021 Injection
+
+  - id: llm-prompt-injection-heuristic
+    languages: [python]
+    severity: WARNING
+    message: Heuristic: LLM tools consuming untrusted web content without sanitization.
+    patterns:
+      - pattern-either:
+          - pattern: llm.$CALL($INPUT)
+          - pattern: chain.$CALL($INPUT)
+    metadata:
+      notes: Heuristic only; review data flow and apply sanitization/guardrails.
+
+

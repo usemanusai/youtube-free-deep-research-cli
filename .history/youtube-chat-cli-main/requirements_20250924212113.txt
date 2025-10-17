@@ -1,0 +1,9 @@
+deepmultilingualpunctuation
+langchain
+langchain-community
+langchain-openai
+openai
+youtube-transcript-api
+python-dotenv
+halo
+colorama

@@ -1,0 +1,11 @@
+{
+  "agents_config_len": 560,
+  "roles": {
+    "planner": "deepseek/deepseek-chat-v3.1:free",
+    "orchestrator": "deepseek/deepseek-chat-v3.1:free",
+    "cortex": "deepseek/deepseek-chat-v3.1:free",
+    "executor": "deepseek/deepseek-chat-v3.1:free",
+    "hopper": "qwen/qwen3-coder:free",
+    "outputter": "deepseek/deepseek-chat-v3.1:free"
+  }
+}

@@ -1,0 +1,184 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # Sunday 03:00 UTC
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  sast-and-secrets:
+    name: Multi-language SAST & Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ---------- Semgrep ----------
+      - name: Install Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install semgrep
+      - name: Run Semgrep (SARIF + JSON)
+        run: |
+          semgrep --config auto --config ./.semgrep.yml --error --json > semgrep.json || true
+          semgrep --config auto --config ./.semgrep.yml --sarif > semgrep.sarif || true
+
+      - name: Upload Semgrep SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+
+      # ---------- Bandit (Python) ----------
+      - name: Install Bandit
+        run: python -m pip install bandit
+      - name: Run Bandit (JSON)
+        run: |
+          bandit -q -r youtube_chat_cli_main -f json -o bandit.json || true
+
+      # ---------- ESLint (JS/TS) ----------
+      - name: Install ESLint + SARIF formatter
+        working-directory: ./youtube_chat_cli_main/workspace-ae4a103b-351b-4c44-8352-ad192e1dfc24
+        run: |
+          npm ci || npm i
+          npm i -D eslint eslint-formatter-sarif eslint-plugin-security eslint-plugin-react || true
+      - name: Run ESLint (SARIF)
+        working-directory: ./youtube_chat_cli_main/workspace-ae4a103b-351b-4c44-8352-ad192e1dfc24
+        run: |
+          npx eslint . -f sarif -o ../eslint.sarif || true
+
+      - name: Upload ESLint SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: youtube_chat_cli_main/eslint.sarif
+
+      # ---------- Gitleaks (Secrets) ----------
+      - name: Run Gitleaks (PR-safe)
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      # ---------- Aggregate & Create Issues ----------
+      - name: Summarize and create GitHub Issues
+        id: summarize
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            function readJSON(p){ try{ return JSON.parse(fs.readFileSync(p,'utf8')); }catch(e){ return null; } }
+            function readText(p){ try{ return fs.readFileSync(p,'utf8'); }catch(e){ return ''; } }
+
+            const semgrep = readJSON('semgrep.json');
+            const bandit = readJSON('bandit.json');
+            const gitleaksSarif = readText('gitleaks.sarif');
+
+            // Extract Semgrep findings
+            const semFindings = (semgrep?.results||[]).map(r=>({
+              tool: 'semgrep',
+              rule: r.check_id,
+              path: r.path,
+              start: r.start?.line,
+              severity: (r.extra?.severity||'INFO').toUpperCase(),
+              message: r.extra?.message||''
+            }));
+            // Extract Bandit findings
+            const banFindings = (bandit?.results||[]).map(r=>({
+              tool: 'bandit',
+              rule: r.test_id,
+              path: r.filename,
+              start: r.line_number,
+              severity: (r.issue_severity||'LOW').toUpperCase(),
+              message: r.issue_text||''
+            }));
+
+            // Minimal dedupe key
+            const all = [...semFindings, ...banFindings];
+            const byKey = new Map();
+            for (const f of all){
+              const key = `${f.tool}:${f.rule}:${f.path}:${f.start}`;
+              if (!byKey.has(key)) byKey.set(key, f);
+            }
+
+            const findings = Array.from(byKey.values());
+            core.setOutput('count', findings.length.toString());
+
+            // Create or update issues for each finding (capped to 50 per run)
+            const cap = 50;
+            const labels = ['security','automated'];
+            const now = new Date().toISOString();
+
+            for (const f of findings.slice(0,cap)){
+              const title = `\uD83D\uDD12 ${f.tool.toUpperCase()} ${f.severity}: ${f.rule} in ${f.path}:${f.start}`;
+              const body = `**Tool:** ${f.tool}\n**Rule:** ${f.rule}\n**Severity:** ${f.severity}\n**File:** \`${f.path}\` (line ${f.start})\n\nMessage: ${f.message}\n\n---\n_Reported by Security Audit workflow on ${now}_`;
+
+              // Dedup by searching existing issues with same title
+              const search = await github.rest.search.issuesAndPullRequests({
+                q: `repo:${context.repo.owner}/${context.repo.repo} in:title "${title.replace(/\"/g,'\\\"')}" state:open`
+              });
+              if (search.data.items.length === 0){
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title,
+                  labels: [...labels, f.severity.toLowerCase()],
+                  body
+                });
+              } else {
+                // Update first match with a comment to keep it fresh
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: search.data.items[0].number,
+                  body: `Re-detected on ${now}.`,
+                });
+              }
+            }
+
+      - name: PR summary comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const count = core.getInput('count') || '0';
+            const body = `## Security Audit Summary\n\n- Findings (Semgrep/Bandit): ${count}\n- SARIF uploaded: semgrep.sarif, eslint.sarif\n- Gitleaks: ran with GitHub token; see workflow artifacts for details\n\n> See the Security tab for details.`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });
+
+  # Optional: Weekly deep CodeQL scan (python + javascript)
+  # codeql:
+  #   if: github.event_name == 'schedule'
+  #   name: CodeQL (weekly deep scan)
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     security-events: write
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: github/codeql-action/init@v3
+  #       with:
+  #         languages: python,javascript
+  #     - uses: github/codeql-action/analyze@v3
+

@@ -1,0 +1,175 @@
+"""
+Headless Web Scraper Service (initial functionality)
+
+Provides a production-ready interface for scraping pages. This version includes
+an HTTP-based fallback (requests + simple HTML to text) and stubs for an optional
+Playwright path that can be enabled later without changing the interface.
+"""
+from __future__ import annotations
+
+from typing import Any, Dict, List
+import logging
+from datetime import datetime, timezone
+import re
+
+import requests
+from urllib.parse import urlsplit, urlunsplit
+import urllib.robotparser as robotparser
+
+logger = logging.getLogger(__name__)
+
+
+def _html_to_text(html: str) -> str:
+    # Very small, dependency-free conversion to text
+    html = re.sub(r"<script[\s\S]*?</script>", " ", html, flags=re.I)
+    html = re.sub(r"<style[\s\S]*?</style>", " ", html, flags=re.I)
+    text = re.sub(r"<[^>]+>", " ", html)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+class WebScraperService:
+    """Headless web scraper interface (Playwright optional with graceful fallback)."""
+
+    def _fetch_playwright(self, url: str, timeout_s: int) -> str:
+        """Try to fetch page content using Playwright. Returns HTML or empty string."""
+        try:
+            from playwright.sync_api import sync_playwright  # type: ignore
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                context = browser.new_context(user_agent=self.user_agent)
+                page = context.new_page()
+                page.set_default_timeout(timeout_s * 1000)
+                page.goto(url)
+                html = page.content()
+                browser.close()
+                return html or ""
+        except Exception:
+            return ""
+
+    def __init__(self, rate_limit_qps: float = None):
+        from ..core.config import get_config
+        cfg = get_config()
+        logger.info("WebScraperService initialized")
+        self.rate_limit_qps = rate_limit_qps if rate_limit_qps is not None else cfg.scraper_rate_limit_qps
+        self.user_agent = cfg.scraper_user_agent
+        self.respect_robots = cfg.scraper_respect_robots
+        self._last_fetch_ts = 0.0
+
+    def _rate_limit(self):
+        try:
+            import time
+            min_interval = 1.0 / max(self.rate_limit_qps, 0.0001)
+            delta = time.time() - self._last_fetch_ts
+            if delta < min_interval:
+                time.sleep(min_interval - delta)
+            self._last_fetch_ts = time.time()
+        except Exception:
+            pass
+
+    def _extract_links_same_host(self, html: str, base_url: str, limit: int = 10) -> List[str]:
+        try:
+            parsed = urlsplit(base_url)
+            host = f"{parsed.scheme}://{parsed.netloc}"
+            links = []
+            for m in re.finditer(r"href=\"([^\"]+)\"", html, flags=re.I):
+                href = m.group(1)
+                if href.startswith("/"):
+                    href_abs = host + href
+                elif href.startswith("http://") or href.startswith("https://"):
+                    href_abs = href
+                else:
+                    continue
+                if urlsplit(href_abs).netloc == parsed.netloc and href_abs not in links:
+                    links.append(href_abs)
+                if len(links) >= limit:
+                    break
+            return links
+        except Exception:
+            return []
+
+    def scrape(self, url: str, depth: int = 1, max_pages: int = 50, timeout_s: int = 60) -> Dict[str, Any]:
+        """Scrape a URL with limited recursion (depth<=1 supported).
+
+        Returns a dict: {root_url, pages: [{url, title, text, status, fetched_at}], errors: []}
+        """
+        logger.info("[WebScraperService] scrape -> %s", url)
+        pages: List[Dict[str, Any]] = []
+        errors: List[str] = []
+        try:
+            # robots.txt respect (best-effort)
+            ua = self.user_agent
+            try:
+                parsed = urlsplit(url)
+                robots_url = urlunsplit((parsed.scheme, parsed.netloc, "/robots.txt", "", ""))
+                rp = robotparser.RobotFileParser()
+                rp.set_url(robots_url)
+                rp.read()
+                if self.respect_robots and hasattr(rp, "can_fetch") and not rp.can_fetch(ua, url):
+                    errors.append(f"Disallowed by robots.txt: {url}")
+                    return {
+                        "root_url": url,
+                        "pages": pages,
+                        "errors": errors,
+                        "fetched_at": datetime.now(timezone.utc).isoformat(),
+                    }
+            except Exception:
+                # If robots cannot be fetched/parsed, proceed
+                pass
+
+            self._rate_limit()
+            resp = requests.get(url, timeout=timeout_s, headers={"User-Agent": ua})
+            status = resp.status_code
+            text = _html_to_text(resp.text or "") if resp.ok else ""
+            pages.append({
+                "url": url,
+                "title": "",
+                "text": text,
+                "status": status,
+                "fetched_at": datetime.now(timezone.utc).isoformat(),
+            })
+
+            # Shallow recursion: fetch a few same-host links if depth>=1
+            if depth and depth > 1 and resp.ok:
+                links = self._extract_links_same_host(resp.text, url, limit=min(10, max_pages))
+                for link in links[: max_pages - 1]:
+                    try:
+                        self._rate_limit()
+                        r2 = requests.get(link, timeout=timeout_s, headers={"User-Agent": ua})
+                        text2 = _html_to_text(r2.text or "") if r2.ok else ""
+                        pages.append({
+                            "url": link,
+                            "title": "",
+                            "text": text2,
+                            "status": r2.status_code,
+                            "fetched_at": datetime.now(timezone.utc).isoformat(),
+                        })
+                    except Exception as sub_e:
+                        errors.append(f"{link}: {sub_e}")
+        except Exception as e:
+            errors.append(f"{url}: {e}")
+
+        return {
+            "root_url": url,
+            "pages": pages,
+            "errors": errors,
+            "fetched_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+    def scrape_many(self, urls: List[str], depth: int = 1, max_pages: int = 50, timeout_s: int = 60) -> Dict[str, Any]:
+        logger.info("[WebScraperService] scrape_many -> %d urls", len(urls))
+        all_pages: List[Dict[str, Any]] = []
+        errors: List[str] = []
+        for u in urls:
+            try:
+                result = self.scrape(u, depth=depth, max_pages=max_pages, timeout_s=timeout_s)
+                all_pages.extend(result.get("pages", []))
+            except Exception as e:
+                errors.append(f"{u}: {e}")
+        return {
+            "root_urls": urls,
+            "pages": all_pages,
+            "errors": errors,
+            "fetched_at": datetime.now(timezone.utc).isoformat(),
+        }
+
