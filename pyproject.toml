@@ -1,97 +1,98 @@
 [build-system]
-<<<<<<< HEAD
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "youtube-chat-cli"
-version = "2.1.0"
-description = "AI-powered CLI tool for YouTube video analysis, channel monitoring, and automated content processing"
+name = "youtube-free-deep-research-cli"
+version = "2.0.1"
+description = "Production-ready Python 3.13+ CLI/API system with Adaptive RAG, multi-engine TTS, OpenRouter key rotation, FastAPI backend, and Next.js dashboard"
 readme = "README.md"
-license = {text = "MIT"}
 authors = [
-    {name = "YouTube Chat CLI Team", email = "use.manus.ai@gmail.com"}
+  { name = "JAEGIS / NexusSync", email = "use.manus.ai@gmail.com" }
 ]
 maintainers = [
-    {name = "YouTube Chat CLI Team", email = "use.manus.ai@gmail.com"}
+  { name = "JAEGIS / NexusSync", email = "use.manus.ai@gmail.com" }
 ]
-keywords = ["cli", "ai", "youtube", "channel-monitoring", "tts", "transcription", "n8n", "rag", "automation"]
+requires-python = ">=3.13,<4"
+license = { text = "MIT" }
+keywords = [
+  "python", "cli", "rag", "langchain", "fastapi", "tts", "openrouter",
+  "youtube", "pdf-processing", "vector-database", "qdrant", "ollama",
+  "nextjs", "adaptive-rag", "modular-architecture"
+]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Operating System :: OS Independent",
-    "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Multimedia :: Sound/Audio :: Speech",
-    "Topic :: Communications :: Chat",
-    "Topic :: System :: Monitoring",
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+  "Topic :: Communications :: Chat",
 ]
-requires-python = ">=3.8"
+
 dependencies = [
-    "click>=8.0.0",
-    "python-dotenv>=1.0.0",
-    "requests>=2.25.0",
-    "halo>=0.0.31",
-    "youtube-transcript-api>=1.2.0",
-    "beautifulsoup4>=4.9.0",
-    "deepmultilingualpunctuation>=1.0.1",
-    "langchain-huggingface>=0.3.0",
-    "langchain-openai>=0.1.0",
-    "colorama>=0.4.4",
-    "tqdm>=4.64.0",
-    "google-api-python-client>=2.0.0",
-    "google-auth-oauthlib>=1.0.0",
-    "google-auth-httplib2>=0.2.0",
-    "apscheduler>=3.10.0",
-    "python-dateutil>=2.8.0",
-    "sqlalchemy>=1.4.0",
-    "rich>=13.0.0",
-    "PyPDF2>=3.0.0",
-    "python-docx>=0.8.11",
-    "pandas>=1.5.0",
-    "openpyxl>=3.1.0",
-    "Pillow>=9.0.0",
-    "pytesseract>=0.3.10",
-    "speechrecognition>=3.10.0",
-    "moviepy>=1.0.3",
-    "gtts>=2.5.0",
-    "pydub>=0.25.0",
-    "edge-tts>=6.1.0",
+  "click>=8.0.0",
+  "python-dotenv>=1.0.0",
+  "requests>=2.25.0",
+  "halo>=0.0.31",
+  "colorama>=0.4.6",
+  "youtube-transcript-api>=0.6.0",
+  "beautifulsoup4>=4.9.0",
+  "deepmultilingualpunctuation>=1.0.1",
+  "pypdf2>=3.0.0",
+  "python-docx>=0.8.11",
+  "markdown>=3.4.0",
+  "html2text>=2020.1.16",
+  "langchain>=0.1.0",
+  "langchain-community>=0.0.20",
+  "langchain-openai>=0.0.5",
+  "langchain-huggingface>=0.0.1",
+  "langgraph>=0.0.20",
+  "langchain-core>=0.1.0",
+  "google-auth>=2.16.0",
+  "google-auth-oauthlib>=1.0.0",
+  "google-auth-httplib2>=0.1.0",
+  "google-api-python-client>=2.80.0",
+  "qdrant-client>=1.7.0",
+  "chromadb>=0.4.0",
+  "sentence-transformers>=2.2.0",
+  "openai>=1.0.0",
+  "tavily-python>=0.3.0",
+  "duckduckgo-search>=4.0.0",
+  "pytesseract>=0.3.10",
+  "pillow>=10.0.0",
+  "pdf2image>=1.16.0",
+  "apscheduler>=3.10.0",
+  "gtts>=2.5.0",
+  "pydub>=0.25.0",
+  "edge-tts>=6.1.0",
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "python-multipart>=0.0.12",
+  "aiofiles>=24.1.0",
+  "websockets>=13.1",
+  "httpx>=0.27.0",
+  "tenacity>=8.2.3",
+  "aiolimiter>=1.1.0",
 ]
 
 [project.optional-dependencies]
+playwright = ["playwright>=1.40.0"]
 dev = [
-    "pytest>=7.0.0",
-    "pytest-mock>=3.0.0",
-    "pytest-cov>=4.0.0",
-    "black>=22.0.0",
-    "flake8>=5.0.0",
-    "mypy>=1.0.0",
-]
-tts = [
-    "gtts>=2.3.0",
-    "edge-tts>=6.1.0",
-    "torch>=2.0.0",
-    "torchaudio>=2.0.0",
-]
-all = [
-    "pytest>=7.0.0",
-    "pytest-mock>=3.0.0",
-    "pytest-cov>=4.0.0",
-    "black>=22.0.0",
-    "flake8>=5.0.0",
-    "mypy>=1.0.0",
-    "gtts>=2.3.0",
-    "edge-tts>=6.1.0",
-    "torch>=2.0.0",
-    "torchaudio>=2.0.0",
+  "pytest>=8.0.0",
+  "pytest-asyncio>=0.23.0",
+  "pytest-mock>=3.12.0",
+  "pytest-cov>=5.0.0",
+  "pytest-socket>=0.6.0",
+  "responses>=0.25.0",
+  "respx>=0.21.1",
+  "black>=24.0.0",
+  "flake8>=7.0.0",
+  "mypy>=1.10.0",
 ]
 
 [project.urls]
@@ -101,184 +102,14 @@ Documentation = "https://github.com/usemanusai/youtube-free-deep-research-cli#re
 "Bug Reports" = "https://github.com/usemanusai/youtube-free-deep-research-cli/issues"
 
 [project.scripts]
-youtube-chat = "youtube_chat_cli.cli.main:main"
-youtube-chat-cli = "youtube_chat_cli.cli.main:main"
+youtube-chat = "youtube_chat_cli_main.cli.main:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {"" = "."}
 
 [tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-youtube_chat_cli = ["*.template"]
-
-[tool.black]
-line-length = 100
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
-
-[tool.mypy]
-python_version = "3.8"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-ra -q --strict-markers --strict-config"
-testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-
-[tool.coverage.run]
-source = ["src/youtube_chat_cli"]
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/__pycache__/*",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
-=======
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "youtube-chat-cli-main"
-version = "0.1.0"
-description = "JAEGIS NexusSync: YouTube research CLI, FastAPI backend, and optional Next.js dashboard"
-readme = "README.md"
-authors = [
-  { name = "JAEGIS / NexusSync" }
-]
-requires-python = ">=3.13,<4"
-license = { text = "MIT" }
-keywords = ["fastapi", "cli", "rag", "llm", "web-scraping", "youtube"]
-
-# Core runtime dependencies (merged from youtube_chat_cli_main/requirements.txt and api_requirements.txt)
-dependencies = [
-  # Core CLI & config
-  "click>=8.0.0",
-  "python-dotenv>=1.0.0",
-  "requests>=2.25.0",
-  "halo>=0.0.31",
-  "colorama>=0.4.6",
-
-  # Content processing
-  "youtube-transcript-api>=0.6.0",
-  "beautifulsoup4>=4.9.0",
-  "deepmultilingualpunctuation>=1.0.1",
-  "pypdf2>=3.0.0",
-  "python-docx>=0.8.11",
-  "markdown>=3.4.0",
-  "html2text>=2020.1.16",
-
-  # LLM + workflows
-  "langchain>=0.1.0",
-  "langchain-community>=0.0.20",
-  "langchain-openai>=0.0.5",
-  "langchain-huggingface>=0.0.1",
-  "langgraph>=0.0.20",
-  "langchain-core>=0.1.0",
-
-  # Google Drive
-  "google-auth>=2.16.0",
-  "google-auth-oauthlib>=1.0.0",
-  "google-auth-httplib2>=0.1.0",
-  "google-api-python-client>=2.80.0",
-
-  # Vector stores
-  "qdrant-client>=1.7.0",
-  "chromadb>=0.4.0",
-
-  # Embeddings
-  "sentence-transformers>=2.2.0",
-  "openai>=1.0.0",
-
-  # Web search
-  "tavily-python>=0.3.0",
-  "duckduckgo-search>=4.0.0",
-
-  # OCR & image
-  "pytesseract>=0.3.10",
-  "pillow>=10.0.0",
-  "pdf2image>=1.16.0",
-
-  # Background jobs
-  "apscheduler>=3.10.0",
-
-  # TTS (existing lightweight options; advanced engines are external)
-  "gtts>=2.5.0",
-  "pydub>=0.25.0",
-  "edge-tts>=6.1.0",
-
-  # FastAPI backend
-  "fastapi>=0.115.0",
-  "uvicorn[standard]>=0.32.0",
-  "python-multipart>=0.0.12",
-  "aiofiles>=24.1.0",
-  "websockets>=13.1",
-
-  # New HTTP client infra
-  "httpx>=0.27.0",
-  "tenacity>=8.2.3",
-  "aiolimiter>=1.1.0",
-]
-
-[project.optional-dependencies]
-playwright = ["playwright>=1.40.0"]
-
-dev = [
-  # Testing & quality
-  "pytest>=8.0.0",
-  "pytest-asyncio>=0.23.0",
-  "pytest-mock>=3.12.0",
-  "pytest-cov>=5.0.0",
-  "pytest-socket>=0.6.0",
-  "responses>=0.25.0",
-  "respx>=0.21.1",
-
-  # Linters/formatters (kept here for completeness; repo uses ruff in CI)
-  "black>=24.0.0",
-  "flake8>=7.0.0",
-  "mypy>=1.10.0",
-]
+where = ["."]
+include = ["youtube_chat_cli_main*"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
@@ -288,9 +119,4 @@ python_files = ["test_*.py", "*_test.py"]
 
 [tool.uv]
 # Using uv with pyproject + uv.lock for reproducible resolves
-# Typical commands:
-#   uv lock                 # generate uv.lock
-#   uv pip sync --all       # sync environment from uv.lock
-#   uv run pytest           # run tools in a managed venv
 
->>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)
