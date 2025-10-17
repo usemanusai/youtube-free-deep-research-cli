@@ -1,0 +1,186 @@
+== Step 1 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install --upgrade pip
+RC: 0
+STDOUT_TAIL:
+Requirement already satisfied: pip in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (25.2)
+
+STDERR_TAIL:
+
+
+== Step 2 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install numpy==1.25.2
+RC: 0
+STDOUT_TAIL:
+Collecting numpy==1.25.2
+  Using cached numpy-1.25.2-cp311-cp311-win_amd64.whl.metadata (5.7 kB)
+Downloading numpy-1.25.2-cp311-cp311-win_amd64.whl (15.5 MB)
+   ---------------------------------------- 15.5/15.5 MB 25.7 MB/s  0:00:00
+Installing collected packages: numpy
+Successfully installed numpy-1.25.2
+
+STDERR_TAIL:
+  WARNING: The script f2py.exe is installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+== Step 3 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.6.0+cpu torchaudio==2.6.0+cpu
+RC: 0
+STDOUT_TAIL:
+Looking in indexes: https://download.pytorch.org/whl/cpu
+Collecting torch==2.6.0+cpu
+  Downloading https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl.metadata (28 kB)
+Collecting torchaudio==2.6.0+cpu
+  Downloading https://download.pytorch.org/whl/cpu/torchaudio-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl.metadata (6.7 kB)
+Requirement already satisfied: filelock in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from torch==2.6.0+cpu) (3.13.1)
+Requirement already satisfied: typing-extensions>=4.10.0 in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from torch==2.6.0+cpu) (4.12.2)
+Requirement already satisfied: networkx in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from torch==2.6.0+cpu) (3.3)
+Requirement already satisfied: jinja2 in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from torch==2.6.0+cpu) (3.1.4)
+Requirement already satisfied: fsspec in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from torch==2.6.0+cpu) (2024.6.1)
+Collecting sympy==1.13.1 (from torch==2.6.0+cpu)
+  Downloading https://download.pytorch.org/whl/sympy-1.13.1-py3-none-any.whl (6.2 MB)
+     ---------------------------------------- 6.2/6.2 MB 21.0 MB/s  0:00:00
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from sympy==1.13.1->torch==2.6.0+cpu) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (from jinja2->torch==2.6.0+cpu) (2.1.5)
+Downloading https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl (206.5 MB)
+   ---------------------------------------- 206.5/206.5 MB 25.5 MB/s  0:00:08
+Downloading https://download.pytorch.org/whl/cpu/torchaudio-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl (2.4 MB)
+   ---------------------------------------- 2.4/2.4 MB 17.5 MB/s  0:00:00
+Installing collected packages: sympy, torch, torchaudio
+  Attempting uninstall: sympy
+    Found existing installation: sympy 1.13.3
+    Uninstalling sympy-1.13.3:
+      Successfully uninstalled sympy-1.13.3
+  Attempting uninstall: torch
+    Found existing installation: torch 2.8.0+cpu
+    Uninstalling torch-2.8.0+cpu:
+      Successfully uninstalled torch-2.8.0+cpu
+  Attempting uninstall: torchaudio
+    Found existing installation: torchaudio 2.8.0+cpu
+    Uninstalling torchaudio-2.8.0+cpu:
+      Successfully uninstalled torchaudio-2.8.0+cpu
+
+Successfully installed sympy-1.13.1 torch-2.6.0+cpu torchaudio-2.6.0+cpu
+
+STDERR_TAIL:
+  WARNING: The script isympy.exe is installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts torchfrtrace.exe and torchrun.exe are installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+== Step 4 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install chatterbox-tts==0.1.4
+RC: 1
+STDOUT_TAIL:
+pooch-1.8.2-py3-none-any.whl (64 kB)
+Using cached platformdirs-4.4.0-py3-none-any.whl (18 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Using cached python_multipart-0.0.20-py3-none-any.whl (24 kB)
+Using cached pytz-2025.2-py2.py3-none-any.whl (509 kB)
+Downloading regex-2025.9.18-cp311-cp311-win_amd64.whl (276 kB)
+Using cached requests-2.32.5-py3-none-any.whl (64 kB)
+Downloading charset_normalizer-3.4.3-cp311-cp311-win_amd64.whl (107 kB)
+Using cached urllib3-2.5.0-py3-none-any.whl (129 kB)
+Downloading certifi-2025.10.5-py3-none-any.whl (163 kB)
+Using cached rich-14.1.0-py3-none-any.whl (243 kB)
+Using cached pygments-2.19.2-py3-none-any.whl (1.2 MB)
+Using cached markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Using cached ruff-0.13.3-py3-none-win_amd64.whl (13.5 MB)
+Downloading scikit_learn-1.7.2-cp311-cp311-win_amd64.whl (8.9 MB)
+   ---------------------------------------- 8.9/8.9 MB 27.6 MB/s  0:00:00
+Downloading scipy-1.16.2-cp311-cp311-win_amd64.whl (38.7 MB)
+   ---------------------------------------- 38.7/38.7 MB 12.9 MB/s  0:00:02
+Using cached shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+Using cached sniffio-1.3.1-py3-none-any.whl (10 kB)
+Using cached soundfile-0.13.1-py2.py3-none-win_amd64.whl (1.0 MB)
+Downloading cffi-2.0.0-cp311-cp311-win_amd64.whl (182 kB)
+Downloading soxr-1.0.0-cp311-cp311-win_amd64.whl (173 kB)
+Using cached threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+Using cached tqdm-4.67.1-py3-none-any.whl (78 kB)
+Using cached typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Using cached tzdata-2025.2-py2.py3-none-any.whl (347 kB)
+Using cached uvicorn-0.37.0-py3-none-any.whl (67 kB)
+Using cached colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Using cached cython-3.1.4-cp311-cp311-win_amd64.whl (2.7 MB)
+Using cached Deprecated-1.2.18-py2.py3-none-any.whl (10.0 kB)
+Downloading wrapt-1.17.3-cp311-cp311-win_amd64.whl (38 kB)
+Using cached ffmpy-0.6.1-py3-none-any.whl (5.5 kB)
+Using cached importlib_metadata-8.7.0-py3-none-any.whl (27 kB)
+Using cached zipp-3.23.0-py3-none-any.whl (10 kB)
+Using cached pycparser-2.23-py3-none-any.whl (118 kB)
+Using cached pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Downloading onnx-1.19.0-cp311-cp311-win_amd64.whl (16.5 MB)
+   ---------------------------------------- 16.5/16.5 MB 25.3 MB/s  0:00:00
+Using cached protobuf-6.32.1-cp310-abi3-win_amd64.whl (435 kB)
+Downloading ml_dtypes-0.5.3-cp311-cp311-win_amd64.whl (206 kB)
+Using cached pre_commit-4.3.0-py2.py3-none-any.whl (220 kB)
+Using cached cfgv-3.4.0-py2.py3-none-any.whl (7.2 kB)
+Using cached identify-2.6.15-py2.py3-none-any.whl (99 kB)
+Using cached nodeenv-1.9.1-py2.py3-none-any.whl (22 kB)
+Using cached virtualenv-20.34.0-py3-none-any.whl (6.0 MB)
+Using cached distlib-0.4.0-py2.py3-none-any.whl (469 kB)
+Building wheels for collected packages: pkuseg, jaconv, s3tokenizer
+  Building wheel for pkuseg (setup.py): started
+  Building wheel for pkuseg (setup.py): finished with status 'error'
+  Running setup.py clean for pkuseg
+  Building wheel for jaconv (setup.py): started
+  Building wheel for jaconv (setup.py): finished with status 'done'
+  Created wheel for jaconv: filename=jaconv-0.4.0-py3-none-any.whl size=18342 sha256=47db46ccead03934e23bbc5f9a3d443841b4f8f0d00a166a51987bfce1dce0fb
+  Stored in directory: c:\users\lenovo thinkpad t480\appdata\local\pip\cache\wheels\1c\63\71\95fb322fe9047ed7e61b007c47cbf03d23ecb77dd03665f151
+  Building wheel for s3tokenizer (setup.py): started
+  Building wheel for s3tokenizer (setup.py): finished with status 'done'
+  Created wheel for s3tokenizer: filename=s3tokenizer-0.2.0-py3-none-any.whl size=221690 sha256=d1330a7e0aba95e704d997f5562ff8657b5621e8cbb977340d6cf80afd98ace5
+  Stored in directory: c:\users\lenovo thinkpad t480\appdata\local\pip\cache\wheels\af\de\16\4967b3bfa69472030df5074d4b646ccae9630a6b3bc7000be0
+Successfully built jaconv s3tokenizer
+Failed to build pkuseg
+
+STDERR_TAIL:
+copying pkuseg\__init__.py -> build\lib.win-amd64-cpython-311\pkuseg
+  creating build\lib.win-amd64-cpython-311\pkuseg\dicts
+  copying pkuseg\dicts\__init__.py -> build\lib.win-amd64-cpython-311\pkuseg\dicts
+  creating build\lib.win-amd64-cpython-311\pkuseg\models
+  copying pkuseg\models\__init__.py -> build\lib.win-amd64-cpython-311\pkuseg\models
+  creating build\lib.win-amd64-cpython-311\pkuseg\postag
+  copying pkuseg\postag\model.py -> build\lib.win-amd64-cpython-311\pkuseg\postag
+  copying pkuseg\postag\__init__.py -> build\lib.win-amd64-cpython-311\pkuseg\postag
+  creating build\lib.win-amd64-cpython-311\pkuseg\models\default
+  copying pkuseg\models\default\__init__.py -> build\lib.win-amd64-cpython-311\pkuseg\models\default
+  copying pkuseg\feature_extractor.pyx -> build\lib.win-amd64-cpython-311\pkuseg
+  copying pkuseg\inference.pyx -> build\lib.win-amd64-cpython-311\pkuseg
+  copying pkuseg\dicts\default.pkl -> build\lib.win-amd64-cpython-311\pkuseg\dicts
+  copying pkuseg\postag\feature_extractor.pyx -> build\lib.win-amd64-cpython-311\pkuseg\postag
+  copying pkuseg\models\default\features.pkl -> build\lib.win-amd64-cpython-311\pkuseg\models\default
+  copying pkuseg\models\default\weights.npz -> build\lib.win-amd64-cpython-311\pkuseg\models\default
+  running build_ext
+  Compiling pkuseg/inference.pyx because it changed.
+  [1/1] Cythonizing pkuseg/inference.pyx
+  building 'pkuseg.inference' extension
+  creating build\temp.win-amd64-cpython-311\Release\pkuseg
+  "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD "-IC:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Lib\site-packages\numpy\core\include" "-IC:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\include" "-IC:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.10240.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" /EHsc /Tppkuseg/inference.cpp /Fobuild\temp.win-amd64-cpython-311\Release\pkuseg\inference.obj
+  inference.cpp
+  C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\include\pyconfig.h(207): fatal error C1083: Cannot open include file: 'basetsd.h': No such file or directory
+  error: command 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX86\\x64\\cl.exe' failed with exit code 2
+  [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for pkuseg
+  DEPRECATION: Building 'jaconv' using the legacy setup.py bdist_wheel mechanism, which will be removed in a future version. pip 25.3 will enforce this behaviour change. A possible replacement is to use the standardized build interface by setting the `--use-pep517` option, (possibly combined with `--no-build-isolation`), or adding a `pyproject.toml` file to the source tree of 'jaconv'. Discussion can be found at https://github.com/pypa/pip/issues/6334
+  DEPRECATION: Building 's3tokenizer' using the legacy setup.py bdist_wheel mechanism, which will be removed in a future version. pip 25.3 will enforce this behaviour change. A possible replacement is to use the standardized build interface by setting the `--use-pep517` option, (possibly combined with `--no-build-isolation`), or adding a `pyproject.toml` file to the source tree of 's3tokenizer'. Discussion can be found at https://github.com/pypa/pip/issues/6334
+error: failed-wheel-build-for-install
+
+Failed to build installable wheels for some pyproject.toml based projects
+
+pkuseg
+
+
+== Step 5 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe check_py311_pkgs2.py
+RC: 0
+STDOUT_TAIL:
+WROTE py311_tts_pkgs.json: {'melo': False, 'melo.api': False, 'chatterbox': False, 'chatterbox.tts': False, 'torchaudio': True}
+
+STDERR_TAIL:
+

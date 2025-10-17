@@ -1,0 +1,21 @@
+
+PODCAST SCRIPT SUMMARY
+
+This podcast audio was generated using fallback mode because the MaryTTS server is not available.
+
+To enable full audio generation:
+1. Install MaryTTS server locally
+2. Run it on port 59125
+3. Update MARYTTS_SERVER_URL in .env if needed
+
+PODCAST SCRIPT:
+### Podcast Script: The Future of AI-Driven Development  
+
+**[Intro Music - Upbeat, Techy Tones]**  
+**Host:** Welcome back to *Code & Coffee*, where we break down the latest in tech! Today, I’m thrilled to chat with Alex Rivera, a seasoned software engineer who’s been exploring how AI is revolutionizing development. Alex, thanks for joining us!  
+
+**Expert (Alex):** Thanks, Jamie! Excited to dive in—this is a game-changer.  
+
+**Host:** Let’s jump right in. You’ve seen AI tools like Cursor let p...
+
+Generated on: 2025-09-29 22:40:41

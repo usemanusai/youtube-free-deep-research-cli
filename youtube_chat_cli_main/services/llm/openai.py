@@ -1,0 +1,8 @@
+"""OpenAI LLM service implementation."""
+
+# This module re-exports from the legacy location for backward compatibility
+# The actual implementation is in services/llm_service.py
+from ..llm_service import OpenAILLMService
+
+__all__ = ["OpenAILLMService"]
+

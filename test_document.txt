@@ -1,0 +1,12 @@
+This is a test document for the n8n RAG integration.
+
+The document contains information about artificial intelligence and machine learning.
+
+Key topics covered:
+1. Neural networks and deep learning
+2. Natural language processing
+3. Computer vision
+4. Reinforcement learning
+
+This content will be processed by the n8n workflow and stored in the Qdrant vector database for retrieval.
+

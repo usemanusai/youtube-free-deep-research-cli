@@ -1,0 +1,14 @@
+In this episode of Prompt-Driven Development, Maxin Soniggov demonstrates how to use GitHub Copilot to automate documentation for a project.
+
+**Key Steps & Takeaways:**
+
+*   **The Problem:** Documentation is often skipped, but it's essential for any project.
+*   **The Solution:** Use carefully crafted prompts with GitHub Copilot to generate accurate documentation quickly.
+*   **Process:**
+    1.  Used a pre-made "README generator" prompt from the `awesome-copilot` GitHub repository to create a complete and validated `README.md` file.
+    2.  Asked Copilot in chat mode to generate detailed API documentation, resulting in both a human-readable guide and an OpenAPI YAML file.
+    3.  Used inline mode (`/doc`) to automatically add JSDoc comments to front-end methods.
+*   **Feature Highlight:** Showed "Bring Your Own Key" (BYOK), which allows users to connect their own AI model API keys (e.g., Gemini) for greater flexibility, security, and cost control.
+*   **Conclusion:** GitHub Copilot transformed an undocumented project into a well-documented one in minutes. It's a powerful documentation assistant that helps developers create clear, accurate docs without the usual time investment.
+
+The core message is that Copilot is more than autocomplete; it's a versatile tool that can drastically reduce the effort required for high-quality documentation.

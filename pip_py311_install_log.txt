@@ -1,0 +1,187 @@
+== Step 1 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install --upgrade pip wheel setuptools
+RC: 0
+STDOUT_TAIL:
+Requirement already satisfied: pip in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (24.0)
+Collecting pip
+  Using cached pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+Collecting wheel
+  Using cached wheel-0.45.1-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: setuptools in c:\users\lenovo thinkpad t480\appdata\local\programs\python\python311\lib\site-packages (65.5.0)
+Collecting setuptools
+  Using cached setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Using cached pip-25.2-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.45.1-py3-none-any.whl (72 kB)
+Using cached setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 65.5.0
+    Uninstalling setuptools-65.5.0:
+      Successfully uninstalled setuptools-65.5.0
+  Attempting uninstall: pip
+    Found existing installation: pip 24.0
+    Uninstalling pip-24.0:
+      Successfully uninstalled pip-24.0
+Successfully installed pip-25.2 setuptools-80.9.0 wheel-0.45.1
+
+STDERR_TAIL:
+  WARNING: The script wheel.exe is installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts pip.exe, pip3.11.exe and pip3.exe are installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+== Step 2 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install MeloTTS
+RC: 1
+STDOUT_TAIL:
+Collecting MeloTTS
+  Using cached melotts-0.1.1.tar.gz (4.6 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'error'
+
+STDERR_TAIL:
+  error: subprocess-exited-with-error
+  
+  python setup.py egg_info did not run successfully.
+  exit code: 1
+  
+  [7 lines of output]
+  Traceback (most recent call last):
+    File "<string>", line 2, in <module>
+    File "<pip-setuptools-caller>", line 35, in <module>
+    File "C:\Users\Lenovo ThinkPad T480\AppData\Local\Temp\pip-install-xvbe74yb\melotts_ca4f860817074124a769c8ddfc84b38d\setup.py", line 7, in <module>
+      requirements = open(os.path.join(cwd, "requirements.txt"), "r").readlines()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Lenovo ThinkPad T480\\AppData\\Local\\Temp\\pip-install-xvbe74yb\\melotts_ca4f860817074124a769c8ddfc84b38d\\requirements.txt'
+  [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+Encountered error while generating package metadata.
+
+See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+
+== Step 3 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install chatterbox-tts
+RC: 1
+STDOUT_TAIL:
+Collecting chatterbox-tts
+  Using cached chatterbox_tts-0.1.4-py3-none-any.whl.metadata (9.2 kB)
+Collecting numpy<1.26.0,>=1.24.0 (from chatterbox-tts)
+  Downloading numpy-1.25.2-cp311-cp311-win_amd64.whl.metadata (5.7 kB)
+Collecting librosa==0.11.0 (from chatterbox-tts)
+  Using cached librosa-0.11.0-py3-none-any.whl.metadata (8.7 kB)
+Collecting s3tokenizer (from chatterbox-tts)
+  Using cached s3tokenizer-0.2.0.tar.gz (225 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting torch==2.6.0 (from chatterbox-tts)
+  Downloading torch-2.6.0-cp311-cp311-win_amd64.whl.metadata (28 kB)
+Collecting torchaudio==2.6.0 (from chatterbox-tts)
+  Downloading torchaudio-2.6.0-cp311-cp311-win_amd64.whl.metadata (6.7 kB)
+Collecting transformers==4.46.3 (from chatterbox-tts)
+  Using cached transformers-4.46.3-py3-none-any.whl.metadata (44 kB)
+Collecting diffusers==0.29.0 (from chatterbox-tts)
+  Using cached diffusers-0.29.0-py3-none-any.whl.metadata (19 kB)
+Collecting resemble-perth==1.0.1 (from chatterbox-tts)
+  Using cached resemble_perth-1.0.1-py3-none-any.whl.metadata (4.8 kB)
+Collecting conformer==0.3.2 (from chatterbox-tts)
+  Using cached conformer-0.3.2-py3-none-any.whl.metadata (631 bytes)
+Collecting safetensors==0.5.3 (from chatterbox-tts)
+  Using cached safetensors-0.5.3-cp38-abi3-win_amd64.whl.metadata (3.9 kB)
+Collecting pkuseg==0.0.25 (from chatterbox-tts)
+  Using cached pkuseg-0.0.25.tar.gz (48.8 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'error'
+
+STDERR_TAIL:
+  error: subprocess-exited-with-error
+  
+  python setup.py egg_info did not run successfully.
+  exit code: 1
+  
+  [6 lines of output]
+  Traceback (most recent call last):
+    File "<string>", line 2, in <module>
+    File "<pip-setuptools-caller>", line 35, in <module>
+    File "C:\Users\Lenovo ThinkPad T480\AppData\Local\Temp\pip-install-sy9w9t36\pkuseg_aa682d769aaa40a3acc205b71e328de0\setup.py", line 5, in <module>
+      import numpy as np
+  ModuleNotFoundError: No module named 'numpy'
+  [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+Encountered error while generating package metadata.
+
+See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+
+== Step 4 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchaudio
+RC: 0
+STDOUT_TAIL:
+Looking in indexes: https://download.pytorch.org/whl/cpu
+Collecting torch
+  Downloading https://download.pytorch.org/whl/cpu/torch-2.8.0%2Bcpu-cp311-cp311-win_amd64.whl.metadata (29 kB)
+Collecting torchaudio
+  Downloading https://download.pytorch.org/whl/cpu/torchaudio-2.8.0%2Bcpu-cp311-cp311-win_amd64.whl.metadata (7.4 kB)
+Collecting filelock (from torch)
+  Downloading https://download.pytorch.org/whl/filelock-3.13.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting typing-extensions>=4.10.0 (from torch)
+  Downloading https://download.pytorch.org/whl/typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+Collecting sympy>=1.13.3 (from torch)
+  Downloading https://download.pytorch.org/whl/sympy-1.13.3-py3-none-any.whl.metadata (12 kB)
+Collecting networkx (from torch)
+  Downloading https://download.pytorch.org/whl/networkx-3.3-py3-none-any.whl.metadata (5.1 kB)
+Collecting jinja2 (from torch)
+  Downloading https://download.pytorch.org/whl/Jinja2-3.1.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting fsspec (from torch)
+  Downloading https://download.pytorch.org/whl/fsspec-2024.6.1-py3-none-any.whl.metadata (11 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch)
+  Downloading https://download.pytorch.org/whl/mpmath-1.3.0-py3-none-any.whl (536 kB)
+     ---------------------------------------- 536.2/536.2 kB 5.8 MB/s  0:00:00
+Collecting MarkupSafe>=2.0 (from jinja2->torch)
+  Downloading https://download.pytorch.org/whl/MarkupSafe-2.1.5-cp311-cp311-win_amd64.whl (17 kB)
+Downloading https://download.pytorch.org/whl/cpu/torch-2.8.0%2Bcpu-cp311-cp311-win_amd64.whl (619.4 MB)
+   ---------------------------------------- 619.4/619.4 MB 18.5 MB/s  0:00:26
+Downloading https://download.pytorch.org/whl/cpu/torchaudio-2.8.0%2Bcpu-cp311-cp311-win_amd64.whl (2.5 MB)
+   ---------------------------------------- 2.5/2.5 MB 11.0 MB/s  0:00:00
+Downloading https://download.pytorch.org/whl/sympy-1.13.3-py3-none-any.whl (6.2 MB)
+   ---------------------------------------- 6.2/6.2 MB 23.7 MB/s  0:00:00
+Downloading https://download.pytorch.org/whl/typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+Downloading https://download.pytorch.org/whl/filelock-3.13.1-py3-none-any.whl (11 kB)
+Downloading https://download.pytorch.org/whl/fsspec-2024.6.1-py3-none-any.whl (177 kB)
+Downloading https://download.pytorch.org/whl/Jinja2-3.1.4-py3-none-any.whl (133 kB)
+Downloading https://download.pytorch.org/whl/networkx-3.3-py3-none-any.whl (1.7 MB)
+   ---------------------------------------- 1.7/1.7 MB 18.5 MB/s  0:00:00
+Installing collected packages: mpmath, typing-extensions, sympy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch, torchaudio
+
+Successfully installed MarkupSafe-2.1.5 filelock-3.13.1 fsspec-2024.6.1 jinja2-3.1.4 mpmath-1.3.0 networkx-3.3 sympy-1.13.3 torch-2.8.0+cpu torchaudio-2.8.0+cpu typing-extensions-4.12.2
+
+STDERR_TAIL:
+  WARNING: The script isympy.exe is installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts torchfrtrace.exe and torchrun.exe are installed in 'C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+== Step 5 ==
+CMD: C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\python.exe check_py311_pkgs2.py
+RC: 0
+STDOUT_TAIL:
+WROTE py311_tts_pkgs.json: {'melo': False, 'melo.api': False, 'chatterbox': False, 'chatterbox.tts': False, 'torchaudio': True}
+
+STDERR_TAIL:
+C:\Users\Lenovo ThinkPad T480\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\_subclasses\functional_tensor.py:279: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:81.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+
