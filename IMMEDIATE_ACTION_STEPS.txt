@@ -1,0 +1,185 @@
+🚨 IMMEDIATE ACTION STEPS - DO THIS NOW! 🚨
+
+Your credentials were exposed for 1+ hour. You have ~30 minutes before they're actively used.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: REVOKE GOOGLE OAUTH (5 minutes)
+───────────────────────────────────────
+
+1. Go to: https://myaccount.google.com/permissions
+2. Find "YouTube Chat CLI" or similar app
+3. Click "Remove access"
+4. Go to: https://console.cloud.google.com/
+5. Click "Select a project" → Select your project
+6. Go to "APIs & Services" → "Credentials"
+7. Find the OAuth 2.0 Client ID
+8. Click the trash icon to delete it
+9. Click "Create Credentials" → "OAuth 2.0 Client ID"
+10. Create a NEW client ID
+11. Download the JSON file
+12. Save it securely (NOT in git!)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 2: REVOKE GOOGLE API KEYS (5 minutes)
+───────────────────────────────────────────
+
+1. Go to: https://console.cloud.google.com/apis/credentials
+2. Find the API key (looks like: AIza...)
+3. Click the trash icon to delete it
+4. Click "Create Credentials" → "API Key"
+5. Create a NEW API key
+6. Restrict it to specific APIs:
+   - YouTube Data API v3
+   - Google Drive API
+   - Google Sheets API
+7. Restrict to IP addresses (your IP only)
+8. Copy the new key
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 3: REVOKE TAVILY API KEY (3 minutes)
+──────────────────────────────────────────
+
+1. Go to: https://app.tavily.com/
+2. Log in to your account
+3. Go to "API Keys" section
+4. Find the exposed key (starts with: tvly-)
+5. Click "Delete" or "Revoke"
+6. Click "Generate New Key"
+7. Copy the new key
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 4: REVOKE FIREBASE CREDENTIALS (5 minutes)
+────────────────────────────────────────────────
+
+1. Go to: https://console.firebase.google.com/
+2. Select your project
+3. Go to "Project Settings" (gear icon)
+4. Go to "Service Accounts" tab
+5. Find the exposed service account
+6. Click "Delete" or "Revoke"
+7. Click "Generate New Private Key"
+8. Download the JSON file
+9. Save it securely (NOT in git!)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 5: REVOKE OPENROUTER KEYS (10 minutes)
+─────────────────────────────────────────────
+
+1. Go to: https://openrouter.ai/account/api-keys
+2. Log in to your account
+3. You have 31 exposed keys
+4. Click "Delete" on EACH key (or "Revoke All")
+5. Generate NEW keys:
+   - Click "Create New Key"
+   - Create 31 new keys (or as many as you need)
+   - Copy each key and save securely
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 6: UPDATE GITHUB SECRETS (5 minutes)
+──────────────────────────────────────────
+
+1. Go to: https://github.com/usemanusai/youtube-free-deep-research-cli/settings/secrets/actions
+
+2. Update each secret with NEW values:
+
+   GOOGLE_CLIENT_SECRET:
+   - Paste the client_secret from your new OAuth credentials
+   
+   GOOGLE_API_KEY:
+   - Paste your new Google API key
+   
+   TAVILY_API_KEY:
+   - Paste your new Tavily API key
+   
+   FIREBASE_CONFIG:
+   - Paste your new Firebase service account JSON
+   
+   OPENROUTER_API_KEYS:
+   - Paste your new OpenRouter keys (comma-separated)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 7: VERIFY GITHUB SECRET SCANNING (2 minutes)
+──────────────────────────────────────────────────
+
+1. Go to: https://github.com/usemanusai/youtube-free-deep-research-cli/security/secret-scanning
+2. Check all alerts
+3. Verify they show as "Resolved" or "No longer detected"
+4. If any still show as "Public leak", mark as resolved
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 8: MONITOR FOR UNAUTHORIZED ACCESS (Ongoing)
+──────────────────────────────────────────────────
+
+Google Account:
+- Go to: https://myaccount.google.com/security-checkup
+- Review "Your devices"
+- Review "Recent security events"
+- Check for unauthorized access
+
+Tavily Account:
+- Go to: https://app.tavily.com/
+- Check "API Usage" logs
+- Look for unusual search patterns
+
+Firebase:
+- Go to: https://console.firebase.google.com/
+- Check "Realtime Database" access logs
+- Check "Firestore" access logs
+- Look for unauthorized data access
+
+OpenRouter:
+- Go to: https://openrouter.ai/account/api-keys
+- Check usage logs
+- Look for unusual API calls
+- Monitor billing
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TOTAL TIME: ~35 minutes
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⏰ TIMELINE
+
+- NOW: Start revoking credentials
+- 5 min: Google OAuth revoked
+- 10 min: Google API keys revoked
+- 13 min: Tavily key revoked
+- 18 min: Firebase credentials revoked
+- 28 min: OpenRouter keys revoked
+- 33 min: GitHub secrets updated
+- 35 min: Verification complete
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 CRITICAL REMINDER
+
+After 30 minutes, assume your credentials are being used by attackers.
+
+If you see unauthorized activity:
+1. Change your passwords immediately
+2. Enable 2FA on all accounts
+3. Contact service providers
+4. File a security incident report
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WHAT I ALREADY FIXED
+
+- Git history cleaned (all secrets removed)
+- Force-pushed to GitHub
+- Created incident response documents
+- Created emergency removal script
+
+═══════════════════════════════════════════════════════════════════════════════
+
+START NOW! ⏱️
+
