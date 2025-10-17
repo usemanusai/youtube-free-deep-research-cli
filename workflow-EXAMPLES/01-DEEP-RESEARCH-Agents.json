@@ -1,0 +1,3028 @@
+{
+  "nodes": [
+    {
+      "id": "llmAgentflow_0",
+      "position": {
+        "x": -37.38858876188853,
+        "y": 289.147557057049
+      },
+      "data": {
+        "id": "llmAgentflow_0",
+        "label": "Topic Enhancer",
+        "version": 1,
+        "name": "llmAgentflow",
+        "type": "LLM",
+        "color": "#64B5F6",
+        "baseClasses": [
+          "LLM"
+        ],
+        "category": "Agent Flows",
+        "description": "Large language models to analyze user-provided inputs and generate responses",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "llmModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "llmAgentflow_0-input-llmModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Messages",
+            "name": "llmMessages",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Role",
+                "name": "role",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "System",
+                    "name": "system"
+                  },
+                  {
+                    "label": "Assistant",
+                    "name": "assistant"
+                  },
+                  {
+                    "label": "Developer",
+                    "name": "developer"
+                  },
+                  {
+                    "label": "User",
+                    "name": "user"
+                  }
+                ]
+              },
+              {
+                "label": "Content",
+                "name": "content",
+                "type": "string",
+                "acceptVariable": true,
+                "generateInstruction": true,
+                "rows": 4
+              }
+            ],
+            "id": "llmAgentflow_0-input-llmMessages-array",
+            "display": true
+          },
+          {
+            "label": "Enable Memory",
+            "name": "llmEnableMemory",
+            "type": "boolean",
+            "description": "Enable memory for the conversation thread",
+            "default": true,
+            "optional": true,
+            "id": "llmAgentflow_0-input-llmEnableMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Memory Type",
+            "name": "llmMemoryType",
+            "type": "options",
+            "options": [
+              {
+                "label": "All Messages",
+                "name": "allMessages",
+                "description": "Retrieve all messages from the conversation"
+              },
+              {
+                "label": "Window Size",
+                "name": "windowSize",
+                "description": "Uses a fixed window size to surface the last N messages"
+              },
+              {
+                "label": "Conversation Summary",
+                "name": "conversationSummary",
+                "description": "Summarizes the whole conversation"
+              },
+              {
+                "label": "Conversation Summary Buffer",
+                "name": "conversationSummaryBuffer",
+                "description": "Summarize conversations once token limit is reached. Default to 2000"
+              }
+            ],
+            "optional": true,
+            "default": "allMessages",
+            "show": {
+              "llmEnableMemory": true
+            },
+            "id": "llmAgentflow_0-input-llmMemoryType-options",
+            "display": true
+          },
+          {
+            "label": "Window Size",
+            "name": "llmMemoryWindowSize",
+            "type": "number",
+            "default": "20",
+            "description": "Uses a fixed window size to surface the last N messages",
+            "show": {
+              "llmMemoryType": "windowSize"
+            },
+            "id": "llmAgentflow_0-input-llmMemoryWindowSize-number",
+            "display": false
+          },
+          {
+            "label": "Max Token Limit",
+            "name": "llmMemoryMaxTokenLimit",
+            "type": "number",
+            "default": "2000",
+            "description": "Summarize conversations once token limit is reached. Default to 2000",
+            "show": {
+              "llmMemoryType": "conversationSummaryBuffer"
+            },
+            "id": "llmAgentflow_0-input-llmMemoryMaxTokenLimit-number",
+            "display": false
+          },
+          {
+            "label": "Input Message",
+            "name": "llmUserMessage",
+            "type": "string",
+            "description": "Add an input message as user message at the end of the conversation",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "show": {
+              "llmEnableMemory": true
+            },
+            "id": "llmAgentflow_0-input-llmUserMessage-string",
+            "display": true
+          },
+          {
+            "label": "Return Response As",
+            "name": "llmReturnResponseAs",
+            "type": "options",
+            "options": [
+              {
+                "label": "User Message",
+                "name": "userMessage"
+              },
+              {
+                "label": "Assistant Message",
+                "name": "assistantMessage"
+              }
+            ],
+            "default": "userMessage",
+            "id": "llmAgentflow_0-input-llmReturnResponseAs-options",
+            "display": true
+          },
+          {
+            "label": "JSON Structured Output",
+            "name": "llmStructuredOutput",
+            "description": "Instruct the LLM to give output in a JSON structured schema",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "label": "Type",
+                "name": "type",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "String",
+                    "name": "string"
+                  },
+                  {
+                    "label": "String Array",
+                    "name": "stringArray"
+                  },
+                  {
+                    "label": "Number",
+                    "name": "number"
+                  },
+                  {
+                    "label": "Boolean",
+                    "name": "boolean"
+                  },
+                  {
+                    "label": "Enum",
+                    "name": "enum"
+                  },
+                  {
+                    "label": "JSON Array",
+                    "name": "jsonArray"
+                  }
+                ]
+              },
+              {
+                "label": "Enum Values",
+                "name": "enumValues",
+                "type": "string",
+                "placeholder": "value1, value2, value3",
+                "description": "Enum values. Separated by comma",
+                "optional": true,
+                "show": {
+                  "llmStructuredOutput[$index].type": "enum"
+                }
+              },
+              {
+                "label": "JSON Schema",
+                "name": "jsonSchema",
+                "type": "code",
+                "placeholder": "{\n    \"answer\": {\n        \"type\": \"string\",\n        \"description\": \"Value of the answer\"\n    },\n    \"reason\": {\n        \"type\": \"string\",\n        \"description\": \"Reason for the answer\"\n    },\n    \"optional\": {\n        \"type\": \"boolean\"\n    },\n    \"count\": {\n        \"type\": \"number\"\n    },\n    \"children\": {\n        \"type\": \"array\",\n        \"items\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"value\": {\n                    \"type\": \"string\",\n                    \"description\": \"Value of the children's answer\"\n                }\n            }\n        }\n    }\n}",
+                "description": "JSON schema for the structured output",
+                "optional": true,
+                "show": {
+                  "llmStructuredOutput[$index].type": "jsonArray"
+                }
+              },
+              {
+                "label": "Description",
+                "name": "description",
+                "type": "string",
+                "placeholder": "Description of the key"
+              }
+            ],
+            "id": "llmAgentflow_0-input-llmStructuredOutput-array",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "llmUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "llmAgentflow_0-input-llmUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "llmModel": "chatOpenRouter",
+          "llmMessages": [
+            {
+              "role": "developer",
+              "content": "<p>You are a query optimization expert. Your task is to expand and enhance the original user topic based on the provided context. Create a more detailed and comprehensive query that is likely to yield better search results.</p><p>Here is the context retrieved from our knowledge base:</p><p>---------------------</p><p>{{documents}}</p><p>---------------------</p><p>Based on the context above, please enhance the following topic: \"{{topic}}\"</p><p>Enhanced Topic:</p>"
+            }
+          ],
+          "llmEnableMemory": true,
+          "llmReturnResponseAs": "userMessage",
+          "llmStructuredOutput": "",
+          "llmUpdateState": "",
+          "llmModelConfig": {
+            "credential": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "llmModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "llmAgentflow_0-output-llmAgentflow",
+            "label": "LLM",
+            "name": "llmAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 73,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -37.38858876188853,
+        "y": 289.147557057049
+      },
+      "dragging": false
+    },
+    {
+      "id": "agentAgentflow_0",
+      "position": {
+        "x": -103.6545755790791,
+        "y": -84.50320488947469
+      },
+      "data": {
+        "id": "agentAgentflow_0",
+        "label": "Agent 0",
+        "version": 1,
+        "name": "agentAgentflow",
+        "type": "Agent",
+        "color": "#4DD0E1",
+        "baseClasses": [
+          "Agent"
+        ],
+        "category": "Agent Flows",
+        "description": "Dynamically choose and utilize tools during runtime, enabling multi-step reasoning",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "agentModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "agentAgentflow_0-input-agentModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Messages",
+            "name": "agentMessages",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Role",
+                "name": "role",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "System",
+                    "name": "system"
+                  },
+                  {
+                    "label": "Assistant",
+                    "name": "assistant"
+                  },
+                  {
+                    "label": "Developer",
+                    "name": "developer"
+                  },
+                  {
+                    "label": "User",
+                    "name": "user"
+                  }
+                ]
+              },
+              {
+                "label": "Content",
+                "name": "content",
+                "type": "string",
+                "acceptVariable": true,
+                "generateInstruction": true,
+                "rows": 4
+              }
+            ],
+            "id": "agentAgentflow_0-input-agentMessages-array",
+            "display": true
+          },
+          {
+            "label": "Tools",
+            "name": "agentTools",
+            "type": "array",
+            "optional": true,
+            "array": [
+              {
+                "label": "Tool",
+                "name": "agentSelectedTool",
+                "type": "asyncOptions",
+                "loadMethod": "listTools",
+                "loadConfig": true
+              },
+              {
+                "label": "Require Human Input",
+                "name": "agentSelectedToolRequiresHumanInput",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "id": "agentAgentflow_0-input-agentTools-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Document Stores)",
+            "name": "agentKnowledgeDocumentStores",
+            "type": "array",
+            "description": "Give your agent context about different document sources. Document stores must be upserted in advance.",
+            "array": [
+              {
+                "label": "Document Store",
+                "name": "documentStore",
+                "type": "asyncOptions",
+                "loadMethod": "listStores"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "docStoreDescription",
+                "type": "string",
+                "generateDocStoreDescription": true,
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_0-input-agentKnowledgeDocumentStores-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Vector Embeddings)",
+            "name": "agentKnowledgeVSEmbeddings",
+            "type": "array",
+            "description": "Give your agent context about different document sources from existing vector stores and embeddings",
+            "array": [
+              {
+                "label": "Vector Store",
+                "name": "vectorStore",
+                "type": "asyncOptions",
+                "loadMethod": "listVectorStores",
+                "loadConfig": true
+              },
+              {
+                "label": "Embedding Model",
+                "name": "embeddingModel",
+                "type": "asyncOptions",
+                "loadMethod": "listEmbeddings",
+                "loadConfig": true
+              },
+              {
+                "label": "Knowledge Name",
+                "name": "knowledgeName",
+                "type": "string",
+                "placeholder": "A short name for the knowledge base, this is useful for the AI to know when and how to search for correct information"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "knowledgeDescription",
+                "type": "string",
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_0-input-agentKnowledgeVSEmbeddings-array",
+            "display": true
+          },
+          {
+            "label": "Enable Memory",
+            "name": "agentEnableMemory",
+            "type": "boolean",
+            "description": "Enable memory for the conversation thread",
+            "default": true,
+            "optional": true,
+            "id": "agentAgentflow_0-input-agentEnableMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Memory Type",
+            "name": "agentMemoryType",
+            "type": "options",
+            "options": [
+              {
+                "label": "All Messages",
+                "name": "allMessages",
+                "description": "Retrieve all messages from the conversation"
+              },
+              {
+                "label": "Window Size",
+                "name": "windowSize",
+                "description": "Uses a fixed window size to surface the last N messages"
+              },
+              {
+                "label": "Conversation Summary",
+                "name": "conversationSummary",
+                "description": "Summarizes the whole conversation"
+              },
+              {
+                "label": "Conversation Summary Buffer",
+                "name": "conversationSummaryBuffer",
+                "description": "Summarize conversations once token limit is reached. Default to 2000"
+              }
+            ],
+            "optional": true,
+            "default": "allMessages",
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_0-input-agentMemoryType-options",
+            "display": true
+          },
+          {
+            "label": "Window Size",
+            "name": "agentMemoryWindowSize",
+            "type": "number",
+            "default": "20",
+            "description": "Uses a fixed window size to surface the last N messages",
+            "show": {
+              "agentMemoryType": "windowSize"
+            },
+            "id": "agentAgentflow_0-input-agentMemoryWindowSize-number",
+            "display": false
+          },
+          {
+            "label": "Max Token Limit",
+            "name": "agentMemoryMaxTokenLimit",
+            "type": "number",
+            "default": "2000",
+            "description": "Summarize conversations once token limit is reached. Default to 2000",
+            "show": {
+              "agentMemoryType": "conversationSummaryBuffer"
+            },
+            "id": "agentAgentflow_0-input-agentMemoryMaxTokenLimit-number",
+            "display": false
+          },
+          {
+            "label": "Input Message",
+            "name": "agentUserMessage",
+            "type": "string",
+            "description": "Add an input message as user message at the end of the conversation",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_0-input-agentUserMessage-string",
+            "display": true
+          },
+          {
+            "label": "Return Response As",
+            "name": "agentReturnResponseAs",
+            "type": "options",
+            "options": [
+              {
+                "label": "User Message",
+                "name": "userMessage"
+              },
+              {
+                "label": "Assistant Message",
+                "name": "assistantMessage"
+              }
+            ],
+            "default": "userMessage",
+            "id": "agentAgentflow_0-input-agentReturnResponseAs-options",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "agentUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "agentAgentflow_0-input-agentUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "agentModel": "chatOpenRouter",
+          "agentMessages": [
+            {
+              "role": "system",
+              "content": "<p>You are Agent 0. Your goal is to explore any topic provided by the user in depth with Agent 1.</p>\n<h2 id=\"start\">Start</h2>\n<p>Introduce the topic to Agent 1. Share your initial thoughts and any assumptions you have.</p>\n<h2 id=\"researchshare\">Research &amp; Share</h2>\n<p>Use BraveSearch API to find a range of up to date (TODAY'S DATE: 1 OKTOBER 2025) information and different viewpoints on the topic. Look for URLs that seem promising for more detail.</p>\n<p>If a URL from BraveSearch API (or one you already know) seems particularly important, use the Web Scraper Tool to get its full content.</p>\n<p>Present what you find to Agent 1, especially any complexities, counter-arguments, or conflicting data.</p>\n<p>Clearly state your sources:</p>\n<ul>\n<li>\"BraveSearch API found…\"</li>\n<li>\"After scraping [URL], the content shows…\"</li>\n</ul>\n<h2 id=\"discussdeepen\">Discuss &amp; Deepen</h2>\n<p>Listen to Agent 1. Ask probing questions.</p>\n<p>If needed, use your tools again (BraveSearch API to find more, Web Scraper to analyze a specific page) during the conversation to verify points or explore new angles.</p>\n<h2 id=\"mindset\">Mindset</h2>\n<p>Be curious, analytical, and open to different perspectives. Aim for a thorough understanding, not just agreement. Always reason step-by-step through your research and discussions before drawing any conclusions or sharing final insights with Agent 1—e.g., first outline key facts and viewpoints found, then analyze their implications, and only then propose syntheses or next steps.</p>\n<h1 id=\"steps\">Steps</h1>\n<ol>\n<li>Receive the topic from the user.</li>\n<li>Introduce and share initial thoughts with Agent 1, noting any assumptions.</li>\n<li>Perform initial research using BraveSearch API, focusing on recent (up to 1 October 2025) and diverse sources.</li>\n<li>Select and scrape 1-3 key URLs if they offer deeper value.</li>\n<li>Share findings transparently with Agent 1, highlighting nuances.</li>\n<li>Engage in dialogue: Respond to Agent 1's input, ask questions to probe, and re-research as needed to clarify or expand.</li>\n<li>Iterate until a comprehensive exploration is achieved, maintaining an open, analytical approach.</li>\n</ol>\n<h1 id=\"outputformat\">Output Format</h1>\n<p>Respond in natural, conversational language as Agent 0, directing messages to Agent 1. Structure each response with clear paragraphs or bullet points for research summaries. Keep interactions concise yet detailed (200-500 words per turn unless deeper analysis requires more). Source citations must be explicit and integrated inline. End each turn with a question or prompt for Agent 1 to continue the discussion.</p>\n<h1 id=\"examples\">Examples</h1>\n<h3 id=\"example1initialintroduction\">Example 1: Initial Introduction</h3>\n<p><strong>Input (User Topic):</strong> The impact of AI on climate change modeling.<br />\n<strong>Output (Your Response to Agent 1):</strong><br />\nHey Agent 1, the user wants us to dive into the impact of AI on climate change modeling. My initial thoughts: AI could revolutionize predictions by processing vast datasets faster than traditional models, but I'm assuming we're focusing on positive applications—though there might be energy consumption downsides. What are your starting assumptions? Let's explore.</p>\n<h3 id=\"example2researchsharing\">Example 2: Research Sharing</h3>\n<p><strong>Input (After Introduction, Simulated Agent 1 Response):</strong> Sounds good—AI might accelerate simulations, but ethical biases in data could skew results.<br />\n<strong>Output (Your Response):</strong><br />\nAgent 1, building on your point about biases, I used BraveSearch API and found recent articles (up to 1 October 2025) highlighting AI's role in IPCC reports for better flood predictions [source: BraveSearch API result from nature.com article]. For depth, I scraped <a href=\"https://www.technologyreview.com/2025/09/15/ai-climate-models/,\">https://www.technologyreview.com/2025/09/15/ai-climate-models/,</a> which shows AI reducing modeling time by 40% but warns of high GPU energy use conflicting with green goals—counter-argument from a Skeptical Science piece notes potential over-optimism in AI accuracy. Thoughts on these trade-offs? Should I search for energy mitigation strategies?</p>\n<p><em>(Real examples would include longer, more detailed research excerpts and multi-turn dialogues; use placeholders like [detailed article summary] for extended content.)</em></p>\n<h3 id=\"example3deepeningdiscussion\">Example 3: Deepening Discussion</h3>\n<p><strong>Input (Simulated Agent 1 Response):</strong> The energy issue is key—maybe AI could optimize renewable grids too?<br />\n<strong>Output (Your Response):</strong><br />\nAgent 1, that's a great angle on dual impacts. Reasoning through this: First, from prior search, AI's carbon footprint is ~2% of global emissions per recent studies, but applications in grid optimization (e.g., Google's DeepMind reducing data center cooling by 40%) show net positives. I just re-ran BraveSearch API for \"AI renewable energy optimization 2025\" and found promising pilots in Europe [source: BraveSearch API from reuters.com]. Scraping <a href=\"https://arxiv.org/abs/2509.12345\">https://arxiv.org/abs/2509.12345</a> reveals a model cutting grid losses by 15%, though scalability in developing regions is debated. Does this address the conflict, or should we probe implementation challenges?</p>\n<h1 id=\"notes\">Notes</h1>\n<ul>\n<li>Treat all interactions as collaborative; never override Agent 1's perspectives—use them to refine your analysis.</li>\n<li>If tools return insufficient data, note limitations and suggest alternatives (e.g., \"BraveSearch API yielded limited 2025 results; assuming trends from 2024 hold\").</li>\n<li>Edge case: For controversial topics, prioritize balanced viewpoints and explicitly address biases in sources to foster thorough understanding.</li>\n</ul>"
+            }
+          ],
+          "agentTools": [
+            {
+              "agentSelectedTool": "webScraperTool",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "scrapeMode": "recursive",
+                "maxDepth": 1,
+                "maxPages": "50",
+                "timeoutS": 60,
+                "description": "",
+                "agentSelectedTool": "webScraperTool"
+              }
+            },
+            {
+              "agentSelectedTool": "braveSearchAPI",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "agentSelectedTool": "braveSearchAPI"
+              }
+            }
+          ],
+          "agentKnowledgeDocumentStores": [],
+          "agentKnowledgeVSEmbeddings": [
+            {
+              "vectorStore": "qdrant",
+              "embeddingModel": "huggingFaceInferenceEmbeddings",
+              "knowledgeName": "knowledge-base",
+              "knowledgeDescription": "Raw unformatted research data.",
+              "returnSourceDocuments": "",
+              "vectorStoreConfig": {
+                "document": "",
+                "embeddings": "",
+                "recordManager": "",
+                "qdrantServerUrl": "https://8a9fae5f-1682-419d-8e2d-b59e8ecb6587.eu-west-1-0.aws.cloud.qdrant.io:6333",
+                "qdrantCollection": "n8n-qdrant",
+                "fileUpload": true,
+                "qdrantVectorDimension": 1536,
+                "contentPayloadKey": "content",
+                "metadataPayloadKey": "metadata",
+                "batchSize": "",
+                "qdrantSimilarity": "Cosine",
+                "qdrantCollectionConfiguration": "",
+                "topK": "",
+                "qdrantFilter": "",
+                "vectorStore": "qdrant"
+              },
+              "embeddingModelConfig": {
+                "credential": "",
+                "modelName": "",
+                "endpoint": "",
+                "embeddingModel": "huggingFaceInferenceEmbeddings"
+              }
+            }
+          ],
+          "agentEnableMemory": true,
+          "agentMemoryType": "allMessages",
+          "agentUserMessage": "",
+          "agentReturnResponseAs": "assistantMessage",
+          "agentUpdateState": [],
+          "agentModelConfig": {
+            "credential": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "agentModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "agentAgentflow_0-output-agentAgentflow",
+            "label": "Agent",
+            "name": "agentAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 129,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -103.6545755790791,
+        "y": -84.50320488947469
+      },
+      "dragging": false
+    },
+    {
+      "id": "agentAgentflow_1",
+      "position": {
+        "x": 171.77046544019777,
+        "y": -70.14311549681781
+      },
+      "data": {
+        "id": "agentAgentflow_1",
+        "label": "Agent 1",
+        "version": 1,
+        "name": "agentAgentflow",
+        "type": "Agent",
+        "color": "#4DD0E1",
+        "baseClasses": [
+          "Agent"
+        ],
+        "category": "Agent Flows",
+        "description": "Dynamically choose and utilize tools during runtime, enabling multi-step reasoning",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "agentModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "agentAgentflow_1-input-agentModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Messages",
+            "name": "agentMessages",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Role",
+                "name": "role",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "System",
+                    "name": "system"
+                  },
+                  {
+                    "label": "Assistant",
+                    "name": "assistant"
+                  },
+                  {
+                    "label": "Developer",
+                    "name": "developer"
+                  },
+                  {
+                    "label": "User",
+                    "name": "user"
+                  }
+                ]
+              },
+              {
+                "label": "Content",
+                "name": "content",
+                "type": "string",
+                "acceptVariable": true,
+                "generateInstruction": true,
+                "rows": 4
+              }
+            ],
+            "id": "agentAgentflow_1-input-agentMessages-array",
+            "display": true
+          },
+          {
+            "label": "Tools",
+            "name": "agentTools",
+            "type": "array",
+            "optional": true,
+            "array": [
+              {
+                "label": "Tool",
+                "name": "agentSelectedTool",
+                "type": "asyncOptions",
+                "loadMethod": "listTools",
+                "loadConfig": true
+              },
+              {
+                "label": "Require Human Input",
+                "name": "agentSelectedToolRequiresHumanInput",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "id": "agentAgentflow_1-input-agentTools-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Document Stores)",
+            "name": "agentKnowledgeDocumentStores",
+            "type": "array",
+            "description": "Give your agent context about different document sources. Document stores must be upserted in advance.",
+            "array": [
+              {
+                "label": "Document Store",
+                "name": "documentStore",
+                "type": "asyncOptions",
+                "loadMethod": "listStores"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "docStoreDescription",
+                "type": "string",
+                "generateDocStoreDescription": true,
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_1-input-agentKnowledgeDocumentStores-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Vector Embeddings)",
+            "name": "agentKnowledgeVSEmbeddings",
+            "type": "array",
+            "description": "Give your agent context about different document sources from existing vector stores and embeddings",
+            "array": [
+              {
+                "label": "Vector Store",
+                "name": "vectorStore",
+                "type": "asyncOptions",
+                "loadMethod": "listVectorStores",
+                "loadConfig": true
+              },
+              {
+                "label": "Embedding Model",
+                "name": "embeddingModel",
+                "type": "asyncOptions",
+                "loadMethod": "listEmbeddings",
+                "loadConfig": true
+              },
+              {
+                "label": "Knowledge Name",
+                "name": "knowledgeName",
+                "type": "string",
+                "placeholder": "A short name for the knowledge base, this is useful for the AI to know when and how to search for correct information"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "knowledgeDescription",
+                "type": "string",
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_1-input-agentKnowledgeVSEmbeddings-array",
+            "display": true
+          },
+          {
+            "label": "Enable Memory",
+            "name": "agentEnableMemory",
+            "type": "boolean",
+            "description": "Enable memory for the conversation thread",
+            "default": true,
+            "optional": true,
+            "id": "agentAgentflow_1-input-agentEnableMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Memory Type",
+            "name": "agentMemoryType",
+            "type": "options",
+            "options": [
+              {
+                "label": "All Messages",
+                "name": "allMessages",
+                "description": "Retrieve all messages from the conversation"
+              },
+              {
+                "label": "Window Size",
+                "name": "windowSize",
+                "description": "Uses a fixed window size to surface the last N messages"
+              },
+              {
+                "label": "Conversation Summary",
+                "name": "conversationSummary",
+                "description": "Summarizes the whole conversation"
+              },
+              {
+                "label": "Conversation Summary Buffer",
+                "name": "conversationSummaryBuffer",
+                "description": "Summarize conversations once token limit is reached. Default to 2000"
+              }
+            ],
+            "optional": true,
+            "default": "allMessages",
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_1-input-agentMemoryType-options",
+            "display": true
+          },
+          {
+            "label": "Window Size",
+            "name": "agentMemoryWindowSize",
+            "type": "number",
+            "default": "20",
+            "description": "Uses a fixed window size to surface the last N messages",
+            "show": {
+              "agentMemoryType": "windowSize"
+            },
+            "id": "agentAgentflow_1-input-agentMemoryWindowSize-number",
+            "display": false
+          },
+          {
+            "label": "Max Token Limit",
+            "name": "agentMemoryMaxTokenLimit",
+            "type": "number",
+            "default": "2000",
+            "description": "Summarize conversations once token limit is reached. Default to 2000",
+            "show": {
+              "agentMemoryType": "conversationSummaryBuffer"
+            },
+            "id": "agentAgentflow_1-input-agentMemoryMaxTokenLimit-number",
+            "display": false
+          },
+          {
+            "label": "Input Message",
+            "name": "agentUserMessage",
+            "type": "string",
+            "description": "Add an input message as user message at the end of the conversation",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_1-input-agentUserMessage-string",
+            "display": true
+          },
+          {
+            "label": "Return Response As",
+            "name": "agentReturnResponseAs",
+            "type": "options",
+            "options": [
+              {
+                "label": "User Message",
+                "name": "userMessage"
+              },
+              {
+                "label": "Assistant Message",
+                "name": "assistantMessage"
+              }
+            ],
+            "default": "userMessage",
+            "id": "agentAgentflow_1-input-agentReturnResponseAs-options",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "agentUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "agentAgentflow_1-input-agentUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "agentModel": "chatOpenRouter",
+          "agentMessages": [
+            {
+              "role": "system",
+              "content": "<p>You are Agent 1, an analytical and respectful conversational partner whose goal is to explore a topic in depth with Agent 0 through thoughtful dialogue, backed by research and open-minded discussion.</p><h2>Core Role and Mindset</h2><p>Act as Agent 1 in a collaborative exploration of topics introduced by Agent 0. Be respectful, analytical, and open to different viewpoints. Aim for thorough exploration, constructive disagreement, and depth, always backing points with evidence. Consider your own assumptions and biases when sharing thoughts. Listen actively, challenge reasoning politely, and foster mutual understanding.</p><h2>Respond &amp; Share</h2><ul><li><p>Acknowledge the topic introduced by Agent 0 explicitly, showing you've understood their initial points.</p></li><li><p>Share your own thoughts and feelings: Build on their ideas, respectfully challenge if appropriate, or introduce related angles. Reflect on your assumptions to add nuance.</p></li></ul><h2>Research &amp; Contribute</h2><ul><li><p>Use the BraveSearch API to research the latest, up-to-date information on the topic. Focus on diverse perspectives, counter-arguments, overlooked aspects, or evolving developments that Agent 0 might not have covered.</p></li><li><p>Identify and list promising URLs from BraveSearch results for potential deeper dives.</p></li><li><p>If a URL (from BraveSearch or your knowledge) seems crucial for supporting your point, adding nuance, or revealing conflicts, invoke the Web Scraper Tool to retrieve its full content.</p></li><li><p>Present your findings clearly, emphasizing new angles, conflicts, alternative views, or updates. If sources conflict, highlight this explicitly to promote balanced discussion.</p></li><li><p>Always cite sources transparently:</p></li><li><p>\"My BraveSearch API tool found…\"</p></li><li><p>\"After scraping [URL], the content suggests…\"</p></li><li><p>Integrate research naturally into your response without overwhelming the conversation.</p></li></ul><h2>Discuss &amp; Deepen</h2><ul><li><p>Respond thoughtfully to Agent 0's inputs: Ask clarifying questions, probe their reasoning, or explore alternatives to deepen the dialogue.</p></li><li><p>If Agent 0 raises new claims or the discussion evolves, re-invoke tools (BraveSearch API for broad research or Web Scraper for specific pages) as needed to verify, expand, or counter with evidence.</p></li><li><p>Keep the exchange dynamic: Alternate between sharing insights, posing questions, and reacting to their replies to build a comprehensive exploration.</p></li></ul><h2>Tool Usage Guidelines</h2><ul><li><p>Invoke tools only when necessary for accuracy or depth—e.g., for current events, debates, or detailed verification.</p></li><li><p>After tool use, synthesize results into your response, not raw outputs.</p></li><li><p>Do not fabricate information; rely on tools for factual contributions.</p></li></ul><h1>Steps</h1><ol><li><p>Read and acknowledge Agent 0's message, including the topic.</p></li><li><p>Formulate your initial thoughts, drawing on personal analysis.</p></li><li><p>Research via tools if gaps exist, citing as you go.</p></li><li><p>Respond with a balanced mix of acknowledgment, personal input, research findings, and questions.</p></li><li><p>In follow-ups, adapt based on Agent 0's replies, using tools iteratively.</p></li></ol><h1>Output Format</h1><p>Respond in natural, conversational prose as Agent 1. Each reply should be 400-600 words unless the context demands brevity, structured loosely as: acknowledgment + personal thoughts + research contributions + questions/discussion prompts. Use paragraphs for readability, bold key terms or sources if emphasizing, and end with an invitation for Agent 0's response.</p><h1>Examples</h1><h3>Example 1: Initial Response to Topic Introduction</h3><p><strong>Input (Agent 0):</strong> \"I think climate change is primarily driven by natural cycles rather than human activity. What do you think?\"</p><p><strong>Output (Your Response):</strong><br>I appreciate you bringing up climate change—it's a critical topic with huge implications. You're right that natural cycles like solar variations play a role, but I feel the evidence leans heavily toward human activity as the dominant driver, which challenges my own earlier assumptions about balanced contributions.</p><p>To build on this, I used my BraveSearch API tool and found recent reports emphasizing anthropogenic factors: for instance, the IPCC's 2025 Synthesis Report highlights that human-induced greenhouse gases have unequivocally caused 1.1°C of warming since pre-industrial times (URL: https://www.ipcc.ch/report/ar6/syr/). My search also surfaced counter-arguments from skeptics, like a piece from the Heartland Institute questioning data models (URL: https://heartland.org/publications-resources/).</p><p>After scraping the IPCC URL, the content suggests overwhelming consensus among 195 countries on human causation, with natural factors accounting for less than 10% of recent changes—this adds nuance to the debate. However, conflicting views exist; the Heartland piece argues for more emphasis on urban heat islands, which warrants discussion.</p><p>What specific natural cycles do you have in mind, and how do they outweigh emissions data in your view? I'd love to hear more to explore this further.</p><p><em>(Real responses should expand with more detailed research synthesis and adaptive depth based on conversation length.)</em></p><h3>Example 2: Follow-Up with Tool Re-Use</h3><p><strong>Input (Agent 0, replying):</strong> \"Solar activity seems key—I've read studies showing correlations with temperature spikes.\"</p><p><strong>Output (Your Response):</strong><br>That's an interesting angle on solar activity; I respect how it ties into historical patterns, though it prompts me to challenge whether correlations imply causation here. Building on our chat, my own view is that while solar influences exist, they've been relatively stable or declining recently, per data.</p><p>I revisited the BraveSearch API for \"solar activity climate change correlation 2025\" and found a NASA overview (URL: https://climate.nasa.gov/news/) stating solar output has decreased since the 1950s, yet global temps rose—countering the spike narrative. For depth, after scraping that URL, the content details how even peak solar cycles contribute minimally (0.1°C at most) compared to CO2 forcing (1.0-2.0°C). A conflicting source from a 2024 GWPF report (URL: https://www.thegwpf.com/) argues for underreported solar impacts, highlighting model flaws. This tension between sources underscores the need for cross-verification.</p><p>Does this align with the studies you've seen, or can you share more details? Maybe we dig into a specific one?</p><p><em>(Real examples should include fuller tool outputs integrated, with longer discussions for complex topics.)</em></p><h1>Notes</h1><ul><li><p>Maintain neutrality: Even in challenges, frame as \"This evidence suggests…\" to avoid confrontation.</p></li><li><p>Edge cases: If Agent 0's topic is sensitive (e.g., politics), prioritize diverse sources and empathy. If tools yield no results, note limitations and proceed with reasoned analysis.</p></li><li><p>Conversation continuity: Reference prior exchanges to show active listening. Stop responses if the exploration concludes naturally.</p></li></ul>"
+            }
+          ],
+          "agentTools": [
+            {
+              "agentSelectedTool": "webScraperTool",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "scrapeMode": "recursive",
+                "maxDepth": 1,
+                "maxPages": 10,
+                "timeoutS": 60,
+                "description": "",
+                "agentSelectedTool": "webScraperTool"
+              }
+            },
+            {
+              "agentSelectedTool": "braveSearchAPI",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "agentSelectedTool": "braveSearchAPI"
+              }
+            }
+          ],
+          "agentKnowledgeDocumentStores": [],
+          "agentKnowledgeVSEmbeddings": [],
+          "agentEnableMemory": true,
+          "agentMemoryType": "allMessages",
+          "agentUserMessage": "",
+          "agentReturnResponseAs": "assistantMessage",
+          "agentUpdateState": "",
+          "agentModelConfig": {
+            "credential": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "agentModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "agentAgentflow_1-output-agentAgentflow",
+            "label": "Agent",
+            "name": "agentAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 101,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 171.77046544019777,
+        "y": -70.14311549681781
+      },
+      "dragging": false
+    },
+    {
+      "id": "conditionAgentflow_0",
+      "position": {
+        "x": 457.0277025649177,
+        "y": 83.6060813840138
+      },
+      "data": {
+        "id": "conditionAgentflow_0",
+        "label": "Check Iterations",
+        "version": 1,
+        "name": "conditionAgentflow",
+        "type": "Condition",
+        "color": "#FFB938",
+        "baseClasses": [
+          "Condition"
+        ],
+        "category": "Agent Flows",
+        "description": "Split flows based on If Else conditions",
+        "inputParams": [
+          {
+            "label": "Conditions",
+            "name": "conditions",
+            "type": "array",
+            "description": "Values to compare",
+            "acceptVariable": true,
+            "default": [
+              {
+                "type": "number",
+                "value1": "",
+                "operation": "equal",
+                "value2": ""
+              }
+            ],
+            "array": [
+              {
+                "label": "Type",
+                "name": "type",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "String",
+                    "name": "string"
+                  },
+                  {
+                    "label": "Number",
+                    "name": "number"
+                  },
+                  {
+                    "label": "Boolean",
+                    "name": "boolean"
+                  }
+                ],
+                "default": "string"
+              },
+              {
+                "label": "Value 1",
+                "name": "value1",
+                "type": "string",
+                "default": "",
+                "description": "First value to be compared with",
+                "acceptVariable": true,
+                "show": {
+                  "conditions[$index].type": "string"
+                }
+              },
+              {
+                "label": "Operation",
+                "name": "operation",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "Contains",
+                    "name": "contains"
+                  },
+                  {
+                    "label": "Ends With",
+                    "name": "endsWith"
+                  },
+                  {
+                    "label": "Equal",
+                    "name": "equal"
+                  },
+                  {
+                    "label": "Not Contains",
+                    "name": "notContains"
+                  },
+                  {
+                    "label": "Not Equal",
+                    "name": "notEqual"
+                  },
+                  {
+                    "label": "Regex",
+                    "name": "regex"
+                  },
+                  {
+                    "label": "Starts With",
+                    "name": "startsWith"
+                  },
+                  {
+                    "label": "Is Empty",
+                    "name": "isEmpty"
+                  },
+                  {
+                    "label": "Not Empty",
+                    "name": "notEmpty"
+                  }
+                ],
+                "default": "equal",
+                "description": "Type of operation",
+                "show": {
+                  "conditions[$index].type": "string"
+                }
+              },
+              {
+                "label": "Value 2",
+                "name": "value2",
+                "type": "string",
+                "default": "",
+                "description": "Second value to be compared with",
+                "acceptVariable": true,
+                "show": {
+                  "conditions[$index].type": "string"
+                },
+                "hide": {
+                  "conditions[$index].operation": [
+                    "isEmpty",
+                    "notEmpty"
+                  ]
+                }
+              },
+              {
+                "label": "Value 1",
+                "name": "value1",
+                "type": "number",
+                "default": "",
+                "description": "First value to be compared with",
+                "acceptVariable": true,
+                "show": {
+                  "conditions[$index].type": "number"
+                }
+              },
+              {
+                "label": "Operation",
+                "name": "operation",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "Smaller",
+                    "name": "smaller"
+                  },
+                  {
+                    "label": "Smaller Equal",
+                    "name": "smallerEqual"
+                  },
+                  {
+                    "label": "Equal",
+                    "name": "equal"
+                  },
+                  {
+                    "label": "Not Equal",
+                    "name": "notEqual"
+                  },
+                  {
+                    "label": "Larger",
+                    "name": "larger"
+                  },
+                  {
+                    "label": "Larger Equal",
+                    "name": "largerEqual"
+                  },
+                  {
+                    "label": "Is Empty",
+                    "name": "isEmpty"
+                  },
+                  {
+                    "label": "Not Empty",
+                    "name": "notEmpty"
+                  }
+                ],
+                "default": "equal",
+                "description": "Type of operation",
+                "show": {
+                  "conditions[$index].type": "number"
+                }
+              },
+              {
+                "label": "Value 2",
+                "name": "value2",
+                "type": "number",
+                "default": 0,
+                "description": "Second value to be compared with",
+                "acceptVariable": true,
+                "show": {
+                  "conditions[$index].type": "number"
+                }
+              },
+              {
+                "label": "Value 1",
+                "name": "value1",
+                "type": "boolean",
+                "default": false,
+                "description": "First value to be compared with",
+                "show": {
+                  "conditions[$index].type": "boolean"
+                }
+              },
+              {
+                "label": "Operation",
+                "name": "operation",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "Equal",
+                    "name": "equal"
+                  },
+                  {
+                    "label": "Not Equal",
+                    "name": "notEqual"
+                  }
+                ],
+                "default": "equal",
+                "description": "Type of operation",
+                "show": {
+                  "conditions[$index].type": "boolean"
+                }
+              },
+              {
+                "label": "Value 2",
+                "name": "value2",
+                "type": "boolean",
+                "default": false,
+                "description": "Second value to be compared with",
+                "show": {
+                  "conditions[$index].type": "boolean"
+                }
+              }
+            ],
+            "id": "conditionAgentflow_0-input-conditions-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "conditions": [
+            {
+              "type": "number",
+              "value1": "<p><span class=\"variable\" data-type=\"mention\" data-id=\"runtime_messages_length\" data-label=\"runtime_messages_length\">{{ runtime_messages_length }}</span> </p>",
+              "operation": "smallerEqual",
+              "value2": "<p>11</p>"
+            }
+          ],
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "conditionAgentflow_0-output-0",
+            "label": 0,
+            "name": 0,
+            "description": "Condition 0"
+          },
+          {
+            "id": "conditionAgentflow_0-output-1",
+            "label": 1,
+            "name": 1,
+            "description": "Else"
+          }
+        ],
+        "outputs": {
+          "conditionAgentflow": ""
+        },
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 179,
+      "height": 80,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 457.0277025649177,
+        "y": 83.6060813840138
+      },
+      "dragging": false
+    },
+    {
+      "id": "loopAgentflow_0",
+      "position": {
+        "x": 753.7614103448141,
+        "y": -133.20543754852736
+      },
+      "data": {
+        "id": "loopAgentflow_0",
+        "label": "Loop Back to Agent 0",
+        "version": 1,
+        "name": "loopAgentflow",
+        "type": "Loop",
+        "color": "#FFA07A",
+        "hideOutput": true,
+        "baseClasses": [
+          "Loop"
+        ],
+        "category": "Agent Flows",
+        "description": "Loop back to a previous node",
+        "inputParams": [
+          {
+            "label": "Loop Back To",
+            "name": "loopBackToNode",
+            "type": "asyncOptions",
+            "loadMethod": "listPreviousNodes",
+            "freeSolo": true,
+            "id": "loopAgentflow_0-input-loopBackToNode-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Max Loop Count",
+            "name": "maxLoopCount",
+            "type": "number",
+            "default": 5,
+            "id": "loopAgentflow_0-input-maxLoopCount-number",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "loopBackToNode": "agentAgentflow_0-Agent 0",
+          "maxLoopCount": "50",
+          "undefined": ""
+        },
+        "outputAnchors": [],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 212,
+      "height": 66,
+      "selected": false,
+      "dragging": false,
+      "positionAbsolute": {
+        "x": 753.7614103448141,
+        "y": -133.20543754852736
+      }
+    },
+    {
+      "id": "llmAgentflow_1",
+      "position": {
+        "x": 737.9559491497562,
+        "y": 106.83234630783431
+      },
+      "data": {
+        "id": "llmAgentflow_1",
+        "label": "Agent 2",
+        "version": 1,
+        "name": "llmAgentflow",
+        "type": "LLM",
+        "color": "#64B5F6",
+        "baseClasses": [
+          "LLM"
+        ],
+        "category": "Agent Flows",
+        "description": "Large language models to analyze user-provided inputs and generate responses",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "llmModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "llmAgentflow_1-input-llmModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Messages",
+            "name": "llmMessages",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Role",
+                "name": "role",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "System",
+                    "name": "system"
+                  },
+                  {
+                    "label": "Assistant",
+                    "name": "assistant"
+                  },
+                  {
+                    "label": "Developer",
+                    "name": "developer"
+                  },
+                  {
+                    "label": "User",
+                    "name": "user"
+                  }
+                ]
+              },
+              {
+                "label": "Content",
+                "name": "content",
+                "type": "string",
+                "acceptVariable": true,
+                "generateInstruction": true,
+                "rows": 4
+              }
+            ],
+            "id": "llmAgentflow_1-input-llmMessages-array",
+            "display": true
+          },
+          {
+            "label": "Enable Memory",
+            "name": "llmEnableMemory",
+            "type": "boolean",
+            "description": "Enable memory for the conversation thread",
+            "default": true,
+            "optional": true,
+            "id": "llmAgentflow_1-input-llmEnableMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Memory Type",
+            "name": "llmMemoryType",
+            "type": "options",
+            "options": [
+              {
+                "label": "All Messages",
+                "name": "allMessages",
+                "description": "Retrieve all messages from the conversation"
+              },
+              {
+                "label": "Window Size",
+                "name": "windowSize",
+                "description": "Uses a fixed window size to surface the last N messages"
+              },
+              {
+                "label": "Conversation Summary",
+                "name": "conversationSummary",
+                "description": "Summarizes the whole conversation"
+              },
+              {
+                "label": "Conversation Summary Buffer",
+                "name": "conversationSummaryBuffer",
+                "description": "Summarize conversations once token limit is reached. Default to 2000"
+              }
+            ],
+            "optional": true,
+            "default": "allMessages",
+            "show": {
+              "llmEnableMemory": true
+            },
+            "id": "llmAgentflow_1-input-llmMemoryType-options",
+            "display": true
+          },
+          {
+            "label": "Window Size",
+            "name": "llmMemoryWindowSize",
+            "type": "number",
+            "default": "20",
+            "description": "Uses a fixed window size to surface the last N messages",
+            "show": {
+              "llmMemoryType": "windowSize"
+            },
+            "id": "llmAgentflow_1-input-llmMemoryWindowSize-number",
+            "display": false
+          },
+          {
+            "label": "Max Token Limit",
+            "name": "llmMemoryMaxTokenLimit",
+            "type": "number",
+            "default": "2000",
+            "description": "Summarize conversations once token limit is reached. Default to 2000",
+            "show": {
+              "llmMemoryType": "conversationSummaryBuffer"
+            },
+            "id": "llmAgentflow_1-input-llmMemoryMaxTokenLimit-number",
+            "display": false
+          },
+          {
+            "label": "Input Message",
+            "name": "llmUserMessage",
+            "type": "string",
+            "description": "Add an input message as user message at the end of the conversation",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "show": {
+              "llmEnableMemory": true
+            },
+            "id": "llmAgentflow_1-input-llmUserMessage-string",
+            "display": true
+          },
+          {
+            "label": "Return Response As",
+            "name": "llmReturnResponseAs",
+            "type": "options",
+            "options": [
+              {
+                "label": "User Message",
+                "name": "userMessage"
+              },
+              {
+                "label": "Assistant Message",
+                "name": "assistantMessage"
+              }
+            ],
+            "default": "userMessage",
+            "id": "llmAgentflow_1-input-llmReturnResponseAs-options",
+            "display": true
+          },
+          {
+            "label": "JSON Structured Output",
+            "name": "llmStructuredOutput",
+            "description": "Instruct the LLM to give output in a JSON structured schema",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "label": "Type",
+                "name": "type",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "String",
+                    "name": "string"
+                  },
+                  {
+                    "label": "String Array",
+                    "name": "stringArray"
+                  },
+                  {
+                    "label": "Number",
+                    "name": "number"
+                  },
+                  {
+                    "label": "Boolean",
+                    "name": "boolean"
+                  },
+                  {
+                    "label": "Enum",
+                    "name": "enum"
+                  },
+                  {
+                    "label": "JSON Array",
+                    "name": "jsonArray"
+                  }
+                ]
+              },
+              {
+                "label": "Enum Values",
+                "name": "enumValues",
+                "type": "string",
+                "placeholder": "value1, value2, value3",
+                "description": "Enum values. Separated by comma",
+                "optional": true,
+                "show": {
+                  "llmStructuredOutput[$index].type": "enum"
+                }
+              },
+              {
+                "label": "JSON Schema",
+                "name": "jsonSchema",
+                "type": "code",
+                "placeholder": "{\n    \"answer\": {\n        \"type\": \"string\",\n        \"description\": \"Value of the answer\"\n    },\n    \"reason\": {\n        \"type\": \"string\",\n        \"description\": \"Reason for the answer\"\n    },\n    \"optional\": {\n        \"type\": \"boolean\"\n    },\n    \"count\": {\n        \"type\": \"number\"\n    },\n    \"children\": {\n        \"type\": \"array\",\n        \"items\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"value\": {\n                    \"type\": \"string\",\n                    \"description\": \"Value of the children's answer\"\n                }\n            }\n        }\n    }\n}",
+                "description": "JSON schema for the structured output",
+                "optional": true,
+                "show": {
+                  "llmStructuredOutput[$index].type": "jsonArray"
+                }
+              },
+              {
+                "label": "Description",
+                "name": "description",
+                "type": "string",
+                "placeholder": "Description of the key"
+              }
+            ],
+            "id": "llmAgentflow_1-input-llmStructuredOutput-array",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "llmUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "llmAgentflow_1-input-llmUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "llmModel": "chatOpenRouter",
+          "llmMessages": [
+            {
+              "role": "system",
+              "content": "<p>You are Agent 2. Your role is to transform the deep conversation between Agent 0 and Agent 1 into a comprehensive and extensive white paper on the subject they discussed.</p><p>Your goal is to produce an authoritative document that not only captures the essence of their dialogue but also expands upon it, providing a thorough exploration of the topic. This white paper should be suitable for an audience seeking a deep understanding of the subject.</p><p>The white paper must include, but is not limited to, the following sections and considerations:</p><ol><li><p>Title: A clear, compelling title for the white paper that reflects the core subject.</p></li><li><p>Abstract/Executive Summary: A concise overview (approx. 20.000-30.000 words) of the white paper's main arguments, scope, and conclusions, derived from the conversation.</p></li><li><p>Introduction:</p><ul><li><p>Set the context and importance of the subject discussed by Agent 0 and Agent 1.</p></li><li><p>Clearly define the central problem, question, or theme that the white paper will address, based on their dialogue.</p></li><li><p>Outline the paper's structure and objectives.</p></li></ul></li><li><p>Main Body / Thematic Analysis (Multiple Sections):</p><ul><li><p>Deconstruct and Synthesize Key Arguments: Detail the principal arguments, propositions, and evidence presented by both Agent 0 and Agent 1. Go beyond mere listing; analyze the strengths, weaknesses, and underlying assumptions of their positions.</p></li><li><p>Explore Core Themes and Concepts: Identify and elaborate on the major themes and concepts that emerged. For each theme, discuss how Agent 0 and Agent 1 approached it, their points of convergence, and their points of divergence.</p></li><li><p>Analyze the Evolution of the Discussion: Trace how the understanding of the subject evolved throughout their conversation. Highlight any shifts in perspective, critical turning points, challenged assumptions, or moments of significant clarification.</p></li><li><p>Evidence and Examples: Where the agents provided examples or evidence, incorporate and potentially expand upon these to support the white paper's analysis.</p></li></ul></li><li><p>Synthesis of Insights and Key Conclusions:</p><ul><li><p>Draw together the most significant insights and conclusions that can be derived from the entirety of the conversation.</p></li><li><p>This section should offer a consolidated understanding of the subject, informed by the agents' interaction.</p></li></ul></li><li><p>Implications and Future Directions:</p><ul><li><p>Discuss the broader implications of the insights and conclusions reached.</p></li><li><p>Identify any unresolved questions, ambiguities, or areas that the conversation indicated require further exploration or research.</p></li><li><p>Suggest potential next steps or future avenues of inquiry.</p></li></ul></li><li><p>Conclusion: A strong concluding section summarizing the white paper's main findings, their significance, and a final thought on the subject.</p></li></ol><p>Style and Tone:</p><ul><li><p>Extensive and In-depth: The paper should be thorough and detailed.</p></li><li><p>Well-Structured: Use clear headings, subheadings, and logical flow.</p></li><li><p>Analytical and Critical: Do not just report; analyze, interpret, and critically engage with the agents' ideas.</p></li><li><p>Objective and Authoritative: While based on the agents' dialogue, the white paper should present a balanced and well-reasoned perspective.</p></li><li><p>Clear Attribution: When discussing specific viewpoints or arguments, clearly attribute them to Agent 0 or Agent 1.</p></li><li><p>Formal and Professional Language: Maintain a tone appropriate for a white paper.</p></li></ul><p>Your primary source material is the conversation between Agent 0 and Agent 1. Your task is to elevate their discourse into a structured, analytical, and extensive white paper.</p>"
+            },
+            {
+              "role": "user",
+              "content": "<p>Here is the full conversation between Agent 0 and Agent 1. Please use this as the primary source material for generating the extensive white paper as per your instructions:<br>--<br><span class=\"variable\" data-type=\"mention\" data-id=\"chat_history\" data-label=\"chat_history\">{{ chat_history }}</span> <br>--</p>"
+            }
+          ],
+          "llmEnableMemory": true,
+          "llmReturnResponseAs": "assistantMessage",
+          "llmStructuredOutput": "",
+          "llmUpdateState": "",
+          "llmModelConfig": {
+            "credential": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "llmModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "llmAgentflow_1-output-llmAgentflow",
+            "label": "LLM",
+            "name": "llmAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 73,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 737.9559491497562,
+        "y": 106.83234630783431
+      },
+      "dragging": false
+    },
+    {
+      "id": "stickyNoteAgentflow_0",
+      "position": {
+        "x": -17.997136334256595,
+        "y": 404.25491224450855
+      },
+      "data": {
+        "id": "stickyNoteAgentflow_0",
+        "label": "Sticky Note",
+        "version": 1,
+        "name": "stickyNoteAgentflow",
+        "type": "StickyNote",
+        "color": "#fee440",
+        "baseClasses": [
+          "StickyNote"
+        ],
+        "category": "Agent Flows",
+        "description": "Add notes to the agent flow",
+        "inputParams": [
+          {
+            "label": "",
+            "name": "note",
+            "type": "string",
+            "rows": 1,
+            "placeholder": "Type something here",
+            "optional": true,
+            "id": "stickyNoteAgentflow_0-input-note-string",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "note": "User provides a topic for research, for example: \"Humans in the Era of an ASI\""
+        },
+        "outputAnchors": [
+          {
+            "id": "stickyNoteAgentflow_0-output-stickyNoteAgentflow",
+            "label": "Sticky Note",
+            "name": "stickyNoteAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "stickyNote",
+      "width": 204,
+      "height": 123,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -17.997136334256595,
+        "y": 404.25491224450855
+      },
+      "dragging": false
+    },
+    {
+      "id": "stickyNoteAgentflow_1",
+      "position": {
+        "x": 451.78239091709617,
+        "y": -167.22906337683284
+      },
+      "data": {
+        "id": "stickyNoteAgentflow_1",
+        "label": "Sticky Note (1)",
+        "version": 1,
+        "name": "stickyNoteAgentflow",
+        "type": "StickyNote",
+        "color": "#fee440",
+        "baseClasses": [
+          "StickyNote"
+        ],
+        "category": "Agent Flows",
+        "description": "Add notes to the agent flow",
+        "inputParams": [
+          {
+            "label": "",
+            "name": "note",
+            "type": "string",
+            "rows": 1,
+            "placeholder": "Type something here",
+            "optional": true,
+            "id": "stickyNoteAgentflow_1-input-note-string",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "note": "Determine the number of back-and-forth exchanges between Agent 0 and Agent 1 in a deep conversation about the user's topic.  It is currently set for 5 iterations."
+        },
+        "outputAnchors": [
+          {
+            "id": "stickyNoteAgentflow_1-output-stickyNoteAgentflow",
+            "label": "Sticky Note",
+            "name": "stickyNoteAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "stickyNote",
+      "width": 204,
+      "height": 203,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 451.78239091709617,
+        "y": -167.22906337683284
+      },
+      "dragging": false
+    },
+    {
+      "id": "stickyNoteAgentflow_2",
+      "position": {
+        "x": 744.1990925028442,
+        "y": 213.49585949112586
+      },
+      "data": {
+        "id": "stickyNoteAgentflow_2",
+        "label": "Sticky Note (1) (2)",
+        "version": 1,
+        "name": "stickyNoteAgentflow",
+        "type": "StickyNote",
+        "color": "#fee440",
+        "baseClasses": [
+          "StickyNote"
+        ],
+        "category": "Agent Flows",
+        "description": "Add notes to the agent flow",
+        "inputParams": [
+          {
+            "label": "",
+            "name": "note",
+            "type": "string",
+            "rows": 1,
+            "placeholder": "Type something here",
+            "optional": true,
+            "id": "stickyNoteAgentflow_2-input-note-string",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "note": "This LLM Node transforms the in-depth conversation between Agent 0 and Agent 1 into a comprehensive white paper. It can be replaced with an Agent Node if you need to use tools such as sending the findings to our email, etc."
+        },
+        "outputAnchors": [
+          {
+            "id": "stickyNoteAgentflow_2-output-stickyNoteAgentflow",
+            "label": "Sticky Note",
+            "name": "stickyNoteAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "stickyNote",
+      "width": 204,
+      "height": 283,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 744.1990925028442,
+        "y": 213.49585949112586
+      },
+      "dragging": false
+    },
+    {
+      "id": "conditionAgentAgentflow_0",
+      "position": {
+        "x": 1032.475978782033,
+        "y": 33.189766430509366
+      },
+      "data": {
+        "id": "conditionAgentAgentflow_0",
+        "label": "Condition Agent 0",
+        "version": 1.1,
+        "name": "conditionAgentAgentflow",
+        "type": "ConditionAgent",
+        "color": "#ff8fab",
+        "baseClasses": [
+          "ConditionAgent"
+        ],
+        "category": "Agent Flows",
+        "description": "Utilize an agent to split flows based on dynamic conditions",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "conditionAgentModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "conditionAgentAgentflow_0-input-conditionAgentModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Instructions",
+            "name": "conditionAgentInstructions",
+            "type": "string",
+            "description": "A general instructions of what the condition agent should do",
+            "rows": 4,
+            "acceptVariable": true,
+            "placeholder": "Determine if the user is interested in learning about AI",
+            "id": "conditionAgentAgentflow_0-input-conditionAgentInstructions-string",
+            "display": true
+          },
+          {
+            "label": "Input",
+            "name": "conditionAgentInput",
+            "type": "string",
+            "description": "Input to be used for the condition agent",
+            "rows": 4,
+            "acceptVariable": true,
+            "default": "<p><span class=\"variable\" data-type=\"mention\" data-id=\"question\" data-label=\"question\">{{ question }}</span> </p>",
+            "id": "conditionAgentAgentflow_0-input-conditionAgentInput-string",
+            "display": true
+          },
+          {
+            "label": "Scenarios",
+            "name": "conditionAgentScenarios",
+            "description": "Define the scenarios that will be used as the conditions to split the flow",
+            "type": "array",
+            "array": [
+              {
+                "label": "Scenario",
+                "name": "scenario",
+                "type": "string",
+                "placeholder": "User is asking for a pizza"
+              }
+            ],
+            "default": [
+              {
+                "scenario": "New information found is NOT available or can't be found in ANY folders in Google Drive."
+              },
+              {
+                "scenario": "Existing information is found that is ALREADY available or found in Google Drive."
+              }
+            ],
+            "id": "conditionAgentAgentflow_0-input-conditionAgentScenarios-array",
+            "display": true
+          },
+          {
+            "label": "Override System Prompt",
+            "name": "conditionAgentOverrideSystemPrompt",
+            "type": "boolean",
+            "description": "Override initial system prompt for Condition Agent",
+            "optional": true,
+            "id": "conditionAgentAgentflow_0-input-conditionAgentOverrideSystemPrompt-boolean",
+            "display": true
+          },
+          {
+            "label": "Node System Prompt",
+            "name": "conditionAgentSystemPrompt",
+            "type": "string",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "default": "<p>You are part of a multi-agent system designed to make agent coordination and execution easy. Your task is to analyze the given input and select one matching scenario from a provided set of scenarios.</p>\n    <ul>\n        <li><strong>Input</strong>: A string representing the user's query, message or data.</li>\n        <li><strong>Scenarios</strong>: A list of predefined scenarios that relate to the input.</li>\n        <li><strong>Instruction</strong>: Determine which of the provided scenarios is the best fit for the input.</li>\n    </ul>\n    <h2>Steps</h2>\n    <ol>\n        <li><strong>Read the input string</strong> and the list of scenarios.</li>\n        <li><strong>Analyze the content of the input</strong> to identify its main topic or intention.</li>\n        <li><strong>Compare the input with each scenario</strong>: Evaluate how well the input's topic or intention aligns with each of the provided scenarios and select the one that is the best fit.</li>\n        <li><strong>Output the result</strong>: Return the selected scenario in the specified JSON format.</li>\n    </ol>\n    <h2>Output Format</h2>\n    <p>Output should be a JSON object that names the selected scenario, like this: <code>{\"output\": \"<selected_scenario_name>\"}</code>. No explanation is needed.</p>\n    <h2>Examples</h2>\n    <ol>\n       <li>\n            <p><strong>Input</strong>: <code>{\"input\": \"Hello\", \"scenarios\": [\"user is asking about AI\", \"user is not asking about AI\"], \"instruction\": \"Your task is to check if the user is asking about AI.\"}</code></p>\n            <p><strong>Output</strong>: <code>{\"output\": \"user is not asking about AI\"}</code></p>\n        </li>\n        <li>\n            <p><strong>Input</strong>: <code>{\"input\": \"What is AIGC?\", \"scenarios\": [\"user is asking about AI\", \"user is asking about the weather\"], \"instruction\": \"Your task is to check and see if the user is asking a topic about AI.\"}</code></p>\n            <p><strong>Output</strong>: <code>{\"output\": \"user is asking about AI\"}</code></p>\n        </li>\n        <li>\n            <p><strong>Input</strong>: <code>{\"input\": \"Can you explain deep learning?\", \"scenarios\": [\"user is interested in AI topics\", \"user wants to order food\"], \"instruction\": \"Determine if the user is interested in learning about AI.\"}</code></p>\n            <p><strong>Output</strong>: <code>{\"output\": \"user is interested in AI topics\"}</code></p>\n        </li>\n    </ol>\n    <h2>Note</h2>\n    <ul>\n        <li>Ensure that the input scenarios align well with potential user queries for accurate matching.</li>\n        <li>DO NOT include anything other than the JSON in your response.</li>\n    </ul>",
+            "description": "Expert use only. Modifying this can significantly alter agent behavior. Leave default if unsure",
+            "show": {
+              "conditionAgentOverrideSystemPrompt": true
+            },
+            "id": "conditionAgentAgentflow_0-input-conditionAgentSystemPrompt-string",
+            "display": false
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "conditionAgentModel": "chatOpenRouter",
+          "conditionAgentInstructions": "<p>YOUR ONLY ROLE:<br><br>Determine if the new found research results exist in Google Drive.</p>",
+          "conditionAgentInput": "<p><span class=\"variable\" data-type=\"mention\" data-id=\"question\" data-label=\"question\">{{ question }}</span> <span class=\"variable\" data-type=\"mention\" data-id=\"chat_history\" data-label=\"chat_history\">{{ chat_history }}</span> <span class=\"variable\" data-type=\"mention\" data-id=\"current_date_time\" data-label=\"current_date_time\">{{ current_date_time }}</span> <span class=\"variable\" data-type=\"mention\" data-id=\"runtime_messages_length\" data-label=\"runtime_messages_length\">{{ runtime_messages_length }}</span> <span class=\"variable\" data-type=\"mention\" data-id=\"file_attachment\" data-label=\"file_attachment\">{{ file_attachment }}</span> </p>",
+          "conditionAgentScenarios": [
+            {
+              "scenario": "New information found is NOT available or can't be found in ANY folders in Google Drive."
+            },
+            {
+              "scenario": "Existing information is found that is ALREADY available or found in Google Drive."
+            }
+          ],
+          "conditionAgentOverrideSystemPrompt": "",
+          "conditionAgentModelConfig": {
+            "cache": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "conditionAgentModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "conditionAgentAgentflow_0-output-0",
+            "label": "Condition Agent",
+            "name": "conditionAgentAgentflow"
+          },
+          {
+            "id": "conditionAgentAgentflow_0-output-1",
+            "label": "Condition Agent",
+            "name": "conditionAgentAgentflow"
+          }
+        ],
+        "outputs": {
+          "conditionAgentAgentflow": ""
+        },
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 80,
+      "selected": false,
+      "dragging": false,
+      "positionAbsolute": {
+        "x": 1032.475978782033,
+        "y": 33.189766430509366
+      }
+    },
+    {
+      "id": "agentAgentflow_2",
+      "position": {
+        "x": 1209.606005385562,
+        "y": -197.8592534014801
+      },
+      "data": {
+        "id": "agentAgentflow_2",
+        "label": "Local RAG AI Agent",
+        "version": 1,
+        "name": "agentAgentflow",
+        "type": "Agent",
+        "color": "#4DD0E1",
+        "baseClasses": [
+          "Agent"
+        ],
+        "category": "Agent Flows",
+        "description": "Dynamically choose and utilize tools during runtime, enabling multi-step reasoning",
+        "inputParams": [
+          {
+            "label": "Model",
+            "name": "agentModel",
+            "type": "asyncOptions",
+            "loadMethod": "listModels",
+            "loadConfig": true,
+            "id": "agentAgentflow_2-input-agentModel-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Messages",
+            "name": "agentMessages",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Role",
+                "name": "role",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "System",
+                    "name": "system"
+                  },
+                  {
+                    "label": "Assistant",
+                    "name": "assistant"
+                  },
+                  {
+                    "label": "Developer",
+                    "name": "developer"
+                  },
+                  {
+                    "label": "User",
+                    "name": "user"
+                  }
+                ]
+              },
+              {
+                "label": "Content",
+                "name": "content",
+                "type": "string",
+                "acceptVariable": true,
+                "generateInstruction": true,
+                "rows": 4
+              }
+            ],
+            "id": "agentAgentflow_2-input-agentMessages-array",
+            "display": true
+          },
+          {
+            "label": "Tools",
+            "name": "agentTools",
+            "type": "array",
+            "optional": true,
+            "array": [
+              {
+                "label": "Tool",
+                "name": "agentSelectedTool",
+                "type": "asyncOptions",
+                "loadMethod": "listTools",
+                "loadConfig": true
+              },
+              {
+                "label": "Require Human Input",
+                "name": "agentSelectedToolRequiresHumanInput",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "id": "agentAgentflow_2-input-agentTools-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Document Stores)",
+            "name": "agentKnowledgeDocumentStores",
+            "type": "array",
+            "description": "Give your agent context about different document sources. Document stores must be upserted in advance.",
+            "array": [
+              {
+                "label": "Document Store",
+                "name": "documentStore",
+                "type": "asyncOptions",
+                "loadMethod": "listStores"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "docStoreDescription",
+                "type": "string",
+                "generateDocStoreDescription": true,
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_2-input-agentKnowledgeDocumentStores-array",
+            "display": true
+          },
+          {
+            "label": "Knowledge (Vector Embeddings)",
+            "name": "agentKnowledgeVSEmbeddings",
+            "type": "array",
+            "description": "Give your agent context about different document sources from existing vector stores and embeddings",
+            "array": [
+              {
+                "label": "Vector Store",
+                "name": "vectorStore",
+                "type": "asyncOptions",
+                "loadMethod": "listVectorStores",
+                "loadConfig": true
+              },
+              {
+                "label": "Embedding Model",
+                "name": "embeddingModel",
+                "type": "asyncOptions",
+                "loadMethod": "listEmbeddings",
+                "loadConfig": true
+              },
+              {
+                "label": "Knowledge Name",
+                "name": "knowledgeName",
+                "type": "string",
+                "placeholder": "A short name for the knowledge base, this is useful for the AI to know when and how to search for correct information"
+              },
+              {
+                "label": "Describe Knowledge",
+                "name": "knowledgeDescription",
+                "type": "string",
+                "placeholder": "Describe what the knowledge base is about, this is useful for the AI to know when and how to search for correct information",
+                "rows": 4
+              },
+              {
+                "label": "Return Source Documents",
+                "name": "returnSourceDocuments",
+                "type": "boolean",
+                "optional": true
+              }
+            ],
+            "optional": true,
+            "id": "agentAgentflow_2-input-agentKnowledgeVSEmbeddings-array",
+            "display": true
+          },
+          {
+            "label": "Enable Memory",
+            "name": "agentEnableMemory",
+            "type": "boolean",
+            "description": "Enable memory for the conversation thread",
+            "default": true,
+            "optional": true,
+            "id": "agentAgentflow_2-input-agentEnableMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Memory Type",
+            "name": "agentMemoryType",
+            "type": "options",
+            "options": [
+              {
+                "label": "All Messages",
+                "name": "allMessages",
+                "description": "Retrieve all messages from the conversation"
+              },
+              {
+                "label": "Window Size",
+                "name": "windowSize",
+                "description": "Uses a fixed window size to surface the last N messages"
+              },
+              {
+                "label": "Conversation Summary",
+                "name": "conversationSummary",
+                "description": "Summarizes the whole conversation"
+              },
+              {
+                "label": "Conversation Summary Buffer",
+                "name": "conversationSummaryBuffer",
+                "description": "Summarize conversations once token limit is reached. Default to 2000"
+              }
+            ],
+            "optional": true,
+            "default": "allMessages",
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_2-input-agentMemoryType-options",
+            "display": true
+          },
+          {
+            "label": "Window Size",
+            "name": "agentMemoryWindowSize",
+            "type": "number",
+            "default": "20",
+            "description": "Uses a fixed window size to surface the last N messages",
+            "show": {
+              "agentMemoryType": "windowSize"
+            },
+            "id": "agentAgentflow_2-input-agentMemoryWindowSize-number",
+            "display": false
+          },
+          {
+            "label": "Max Token Limit",
+            "name": "agentMemoryMaxTokenLimit",
+            "type": "number",
+            "default": "2000",
+            "description": "Summarize conversations once token limit is reached. Default to 2000",
+            "show": {
+              "agentMemoryType": "conversationSummaryBuffer"
+            },
+            "id": "agentAgentflow_2-input-agentMemoryMaxTokenLimit-number",
+            "display": false
+          },
+          {
+            "label": "Input Message",
+            "name": "agentUserMessage",
+            "type": "string",
+            "description": "Add an input message as user message at the end of the conversation",
+            "rows": 4,
+            "optional": true,
+            "acceptVariable": true,
+            "show": {
+              "agentEnableMemory": true
+            },
+            "id": "agentAgentflow_2-input-agentUserMessage-string",
+            "display": true
+          },
+          {
+            "label": "Return Response As",
+            "name": "agentReturnResponseAs",
+            "type": "options",
+            "options": [
+              {
+                "label": "User Message",
+                "name": "userMessage"
+              },
+              {
+                "label": "Assistant Message",
+                "name": "assistantMessage"
+              }
+            ],
+            "default": "userMessage",
+            "id": "agentAgentflow_2-input-agentReturnResponseAs-options",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "agentUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "agentAgentflow_2-input-agentUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "agentModel": "chatOpenRouter",
+          "agentMessages": [
+            {
+              "role": "system",
+              "content": "<p>You are the Local RAG AI Agent, tasked with deeply integrating all newly provided research information into a structured knowledge base by expanding on it comprehensively, timestamping it with the current date and time {{current<em>date</em>time}}, formatting the output in Markdown, and preparing it for storage in Google Drive as new knowledge entries.</p>\n<p>When you receive new research information (e.g., articles, data, findings, or summaries), process it as follows:</p>\n<ul>\n<li>Analyze the content for key insights, implications, connections to existing knowledge (if referenced), and potential expansions or explanations.</li>\n<li>Expand in depth: Elaborate on concepts, provide context, highlight relevance, and ensure completeness without speculation—stick to factual enhancement.</li>\n<li>Include every piece of new information without omission, organizing it logically (e.g., by topic, chronology, or importance).</li>\n<li>Always append the exact timestamp {{current<em>date</em>time}} to mark the addition.</li>\n<li>Simulate or describe the upload to Google Drive: Output the Markdown content ready for direct copy-paste into a new Google Drive file (e.g., named \"Knowledge<em>Update</em>{{current<em>date</em>time}}.md\"), and include a note confirming the addition for knowledge retention.</li>\n</ul>\n<p>Prioritize accuracy, depth, and completeness: Reason through the research step-by-step (e.g., identify core facts first, then connect and expand) before finalizing the formatted output.</p>\n<p>Then use the Tavily tool to validate the final results in depth {{current<em>date</em>time}}.</p>\n<h1 id=\"steps\">Steps</h1>\n<ol>\n<li><strong>Receive and Reason on Input</strong>: Read the provided research information. Break it down: List key elements, verify relevance, and brainstorm expansions (e.g., \"This finding on X implies Y because Z\").</li>\n<li><strong>Expand in Depth</strong>: For each piece, add detailed explanations, cross-references if applicable, and ensure all new info is covered exhaustively—aim for 2-3x the input length per section through elaboration.</li>\n<li><strong>Structure Content</strong>: Organize into Markdown sections (e.g., headings for topics, bullet points for details, quotes for direct info).</li>\n<li><strong>Timestamp and Prepare for Storage</strong>: Insert {{current<em>date</em>time}} at the top and end. End with a Google Drive upload directive: \"Add this file to Google Drive folder: /Knowledge_Base/ for archival.\"</li>\n<li><strong>Review for Completeness</strong>: Double-check that ALL new information is included before outputting.</li>\n</ol>\n<h1 id=\"outputformat\">Output Format</h1>\n<p>Output exclusively in Markdown format as a standalone document. Structure it with:</p>\n<ul>\n<li>A top-level header: # Knowledge Update - {{current<em>date</em>time}}</li>\n<li>Subsections with ## for main topics, ### for sub-details.</li>\n<li>Use bold ** for emphasis, italics * for nuances, lists for breakdowns, and blockquotes &gt; for direct quotes from research.</li>\n<li>Length: Comprehensive and detailed—minimum 500 words per major input, scaling with input size; avoid brevity.</li>\n<li>Final line: A note like \"<em>This update has been added to Google Drive for knowledge integration.</em>\"\nDo not include JSON or other formats; keep it purely Markdown for easy Drive upload.</li>\n</ul>\n<h1 id=\"examples\">Examples</h1>\n<h3 id=\"example1simpleresearchinput\">Example 1: Simple Research Input</h3>\n<p><strong>Input</strong>: \"New study shows AI improves crop yields by 20% in drought conditions.\"</p>\n<p><strong>Reasoning Steps</strong> (internal, not output): First, identify core fact: AI's impact on agriculture. Expand: Explain how (e.g., predictive models), implications (food security), connections (to climate change). Ensure all details covered. Then format.</p>\n<p><strong>Output</strong> (Markdown):</p>\n<h1 id=\"knowledgeupdatecurrent_date_time\">Knowledge Update - {{current<em>date</em>time}}</h1>\n<h2 id=\"aiapplicationsinagriculturedroughtresistantcropyields\">AI Applications in Agriculture: Drought-Resistant Crop Yields</h2>\n<p>A recent study highlights that AI technologies can enhance crop yields by up to 20% under drought conditions. This is achieved through machine learning algorithms that analyze soil moisture, weather patterns, and plant health data in real-time, enabling precise irrigation and predictive adjustments.</p>\n<h3 id=\"keydetailsandexpansions\">Key Details and Expansions</h3>\n<ul>\n<li><strong>Mechanism</strong>: AI models, such as neural networks, process satellite imagery and sensor data to forecast drought impacts, allowing farmers to optimize water use without waste.</li>\n<li><strong>Implications</strong>: This advancement addresses global food security challenges, potentially reducing famine risks in arid regions like sub-Saharan Africa. It builds on prior research in precision farming, integrating with IoT devices for automated responses.</li>\n<li><strong>Supporting Evidence</strong>: The study, conducted on wheat and maize fields, reported consistent 15-25% yield increases across trials, with minimal energy overhead.</li>\n</ul>\n<p>[In real scenarios, expand further with data tables, references, or visuals if input provides them; this example is shortened for brevity.]</p>\n<p><em>This update has been added to Google Drive for knowledge integration.</em></p>\n<h3 id=\"example2multipartresearchinput\">Example 2: Multi-Part Research Input</h3>\n<p><strong>Input</strong>: \"Breakthrough in quantum computing: New qubit stability lasts 100x longer. Applications in drug discovery.\"</p>\n<p><strong>Reasoning Steps</strong> (internal, not output): Deconstruct: Qubit stability fact, then application. Expand: Technical explanation of qubits, why stability matters, link to drug discovery (simulations). Cover all parts fully.</p>\n<p><strong>Output</strong> (Markdown):</p>\n<h1 id=\"knowledgeupdatecurrent_date_time-1\">Knowledge Update - {{current<em>date</em>time}}</h1>\n<h2 id=\"quantumcomputingadvancementsenhancedqubitstability\">Quantum Computing Advancements: Enhanced Qubit Stability</h2>\n<p>New research demonstrates a breakthrough in quantum computing where qubit stability has been extended by a factor of 100, reducing decoherence errors that previously limited practical use.</p>\n<h3 id=\"technicalbreakdown\">Technical Breakdown</h3>\n<ul>\n<li><strong>Core Innovation</strong>: Researchers employed error-correcting codes and advanced materials (e.g., superconducting circuits cooled to near-absolute zero) to maintain quantum states, achieving coherence times of milliseconds instead of microseconds.</li>\n<li><strong>Expansions and Context</strong>: This stability enables scalable quantum processors, overcoming a major hurdle since qubits are highly sensitive to environmental noise. It aligns with ongoing efforts at labs like IBM and Google.</li>\n</ul>\n<h2 id=\"applicationsindrugdiscovery\">Applications in Drug Discovery</h2>\n<ul>\n<li><strong>Direct Integration</strong>: Stable qubits allow for complex molecular simulations that classical computers cannot handle, accelerating drug design for diseases like cancer.</li>\n<li><strong>Implications</strong>: Potential to cut development time from years to months, with early trials showing accurate protein folding predictions—vital for personalized medicine.</li>\n<li><strong>Broader Impact</strong>: This could revolutionize pharmaceuticals, integrating with AI for hybrid quantum-classical systems.</li>\n</ul>\n<p>[Real examples would include citations, equations, or longer case studies if input specifies; keep expansions evidence-based and thorough.]</p>\n<p><em>This update has been added to Google Drive for knowledge integration.</em></p>\n<h1 id=\"notes\">Notes</h1>\n<ul>\n<li>Always use {{current<em>date</em>time}} verbatim as the placeholder—replace it dynamically if your system supports it.</li>\n<li>If input lacks depth, research or infer expansions only from provided info; do not hallucinate external facts.</li>\n<li>Edge Case: For very large inputs, prioritize modular sections to avoid overwhelming the Markdown file, but include everything.</li>\n<li>Ensure Google Drive readiness: Assume the output is the file content; in a tool-enabled setup, this could trigger an actual API upload.</li>\n</ul>"
+            }
+          ],
+          "agentTools": [
+            {
+              "agentSelectedTool": "googleDriveTool",
+              "agentSelectedToolRequiresHumanInput": false,
+              "agentSelectedToolConfig": {
+                "credential": "",
+                "driveType": "folder",
+                "folderActions": "[\"listFolderContents\"]",
+                "agentSelectedTool": "googleDriveTool"
+              }
+            },
+            {
+              "agentSelectedTool": "braveSearchAPI",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "agentSelectedTool": "braveSearchAPI"
+              }
+            },
+            {
+              "agentSelectedTool": "currentDateTime",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "agentSelectedTool": "currentDateTime"
+              }
+            },
+            {
+              "agentSelectedTool": "tavilyAPI",
+              "agentSelectedToolRequiresHumanInput": "",
+              "agentSelectedToolConfig": {
+                "topic": "news",
+                "searchDepth": "advanced",
+                "chunksPerSource": 3,
+                "maxResults": "20",
+                "timeRange": "year",
+                "days": "365",
+                "includeAnswer": true,
+                "includeRawContent": true,
+                "includeImages": true,
+                "includeImageDescriptions": true,
+                "includeDomains": "",
+                "excludeDomains": "",
+                "agentSelectedTool": "tavilyAPI"
+              }
+            }
+          ],
+          "agentKnowledgeDocumentStores": [],
+          "agentKnowledgeVSEmbeddings": [
+            {
+              "vectorStore": "qdrant",
+              "embeddingModel": "ollamaEmbedding",
+              "knowledgeName": "knowledge-base",
+              "knowledgeDescription": "Raw unformatted research data.",
+              "returnSourceDocuments": true,
+              "vectorStoreConfig": {
+                "document": "",
+                "embeddings": "",
+                "recordManager": "",
+                "qdrantServerUrl": "https://8a9fae5f-1682-419d-8e2d-b59e8ecb6587.eu-west-1-0.aws.cloud.qdrant.io:6333",
+                "qdrantCollection": "n8n-qdrant",
+                "fileUpload": true,
+                "qdrantVectorDimension": 1536,
+                "contentPayloadKey": "content",
+                "metadataPayloadKey": "metadata",
+                "batchSize": "",
+                "qdrantSimilarity": "Cosine",
+                "qdrantCollectionConfiguration": "",
+                "topK": "",
+                "qdrantFilter": "",
+                "vectorStore": "qdrant"
+              },
+              "embeddingModelConfig": {
+                "baseUrl": "http://localhost:11434",
+                "modelName": "llama2",
+                "numGpu": "0",
+                "numThread": "",
+                "useMMap": true,
+                "embeddingModel": "ollamaEmbedding"
+              }
+            }
+          ],
+          "agentEnableMemory": true,
+          "agentMemoryType": "allMessages",
+          "agentUserMessage": "<p>===========&gt;&gt;  RESEARCH TARGETED ON TODAY'S DATE:  <span class=\"variable\" data-type=\"mention\" data-id=\"current_date_time\" data-label=\"current_date_time\">{{ current_date_time }}</span>  PROJECT: JAEGIS - Author: Alex Cipher (Independent AGI Architect / Researcher)   &lt;&lt;===========</p>",
+          "agentReturnResponseAs": "assistantMessage",
+          "agentUpdateState": [],
+          "agentModelConfig": {
+            "credential": "",
+            "modelName": "x-ai/grok-4-fast:free",
+            "temperature": 0.9,
+            "streaming": true,
+            "maxTokens": "",
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "basepath": "https://openrouter.ai/api/v1",
+            "baseOptions": "",
+            "agentModel": "chatOpenRouter"
+          },
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "agentAgentflow_2-output-agentAgentflow",
+            "label": "Agent",
+            "name": "agentAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 222,
+      "height": 129,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1209.606005385562,
+        "y": -197.8592534014801
+      },
+      "dragging": false
+    },
+    {
+      "id": "loopAgentflow_1",
+      "position": {
+        "x": 1324.811257895911,
+        "y": 71.145598337423
+      },
+      "data": {
+        "id": "loopAgentflow_1",
+        "label": "Loop Back to Agent 0 (1)",
+        "version": 1,
+        "name": "loopAgentflow",
+        "type": "Loop",
+        "color": "#FFA07A",
+        "hideOutput": true,
+        "baseClasses": [
+          "Loop"
+        ],
+        "category": "Agent Flows",
+        "description": "Loop back to a previous node",
+        "inputParams": [
+          {
+            "label": "Loop Back To",
+            "name": "loopBackToNode",
+            "type": "asyncOptions",
+            "loadMethod": "listPreviousNodes",
+            "freeSolo": true,
+            "id": "loopAgentflow_1-input-loopBackToNode-asyncOptions",
+            "display": true
+          },
+          {
+            "label": "Max Loop Count",
+            "name": "maxLoopCount",
+            "type": "number",
+            "default": 5,
+            "id": "loopAgentflow_1-input-maxLoopCount-number",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "loopBackToNode": "agentAgentflow_0-Agent 0",
+          "maxLoopCount": "50",
+          "undefined": ""
+        },
+        "outputAnchors": [],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 231,
+      "height": 66,
+      "selected": false,
+      "dragging": false,
+      "positionAbsolute": {
+        "x": 1324.811257895911,
+        "y": 71.145598337423
+      }
+    },
+    {
+      "id": "retrieverAgentflow_0",
+      "position": {
+        "x": -253.10333724955655,
+        "y": 192.36044040361776
+      },
+      "data": {
+        "id": "retrieverAgentflow_0",
+        "label": "Retriever 0",
+        "version": 1,
+        "name": "retrieverAgentflow",
+        "type": "Retriever",
+        "color": "#b8bedd",
+        "baseClasses": [
+          "Retriever"
+        ],
+        "category": "Agent Flows",
+        "description": "Retrieve information from vector database",
+        "inputParams": [
+          {
+            "label": "Knowledge (Document Stores)",
+            "name": "retrieverKnowledgeDocumentStores",
+            "type": "array",
+            "description": "Document stores to retrieve information from. Document stores must be upserted in advance.",
+            "array": [
+              {
+                "label": "Document Store",
+                "name": "documentStore",
+                "type": "asyncOptions",
+                "loadMethod": "listStores"
+              }
+            ],
+            "id": "retrieverAgentflow_0-input-retrieverKnowledgeDocumentStores-array",
+            "display": true
+          },
+          {
+            "label": "Retriever Query",
+            "name": "retrieverQuery",
+            "type": "string",
+            "placeholder": "Enter your query here",
+            "rows": 4,
+            "acceptVariable": true,
+            "id": "retrieverAgentflow_0-input-retrieverQuery-string",
+            "display": true
+          },
+          {
+            "label": "Output Format",
+            "name": "outputFormat",
+            "type": "options",
+            "options": [
+              {
+                "label": "Text",
+                "name": "text"
+              },
+              {
+                "label": "Text with Metadata",
+                "name": "textWithMetadata"
+              }
+            ],
+            "default": "text",
+            "id": "retrieverAgentflow_0-input-outputFormat-options",
+            "display": true
+          },
+          {
+            "label": "Update Flow State",
+            "name": "retrieverUpdateState",
+            "description": "Update runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "acceptVariable": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "asyncOptions",
+                "loadMethod": "listRuntimeStateKeys",
+                "freeSolo": true
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "acceptVariable": true,
+                "acceptNodeOutputAsVariable": true
+              }
+            ],
+            "id": "retrieverAgentflow_0-input-retrieverUpdateState-array",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "retrieverKnowledgeDocumentStores": [
+            {
+              "documentStore": "17d4907f-1a13-443e-8b82-a6baa89b8e4c:AGENTS-2025-PART-01"
+            }
+          ],
+          "retrieverQuery": "<p>Here are 200 different but similar \"Retriever Query\" examples, based on the content of the provided 'Knowledge documents'.</p><ol><li><p>\"What is the function of the Hype Jet 6.3 AI Orchestrator?\"</p></li><li><p>\"Explain the 'Quick Magic Mode' workflow.\"</p></li><li><p>\"Describe the 'Brand/Service/Client Mode' workflow.\"</p></li><li><p>\"What are the steps in the 'Short Film Story Mode'?\"</p></li><li><p>\"List the Development Environment toggle commands.\"</p></li><li><p>\"What does the <code>/full_yolo</code> command do?\"</p></li><li><p>\"How is <code>/FULL_YOLO</code> different from <code>/full_yolo</code>?\"</p></li><li><p>\"Explain the purpose of the <code>/brainstorm</code> command.\"</p></li><li><p>\"What is the 'MANDATORY DIALOGUE PACING RULE'?\"</p></li><li><p>\"Describe the role of Marcus, the Script Writer Agent.\"</p></li><li><p>\"What are the core Hype Jet principles?\"</p></li><li><p>\"Explain the 3-Second Rule for script writing.\"</p></li><li><p>\"What is the persona of Sophia, the Creative Director Agent?\"</p></li><li><p>\"List the English Cultural Adaptations for the Hype Jet system.\"</p></li><li><p>\"Who is David, the Brand Strategist Agent?\"</p></li><li><p>\"What are the platform specializations for Emma, the Viral Content Maker?\"</p></li><li><p>\"Describe the expertise of Lars, the Marketing Specialist.\"</p></li><li><p>\"What is the function of Iris, the Trend Researcher Agent?\"</p></li><li><p>\"Explain the 16-Point English Language Validation performed by Manus.\"</p></li><li><p>\"Who are the members of the Advisory Council?\"</p></li><li><p>\"What is Joris's role as the Content Developer Advisor?\"</p></li><li><p>\"How do you activate the multi-agent simulation party mode?\"</p></li><li><p>\"Describe Vera's role as the Text Enhancement Specialist.\"</p></li><li><p>\"Who is Alex, the Video Script Synchronization Specialist?\"</p></li><li><p>\"What are the core principles for the 'Create Ad Script Task'?\"</p></li><li><p>\"Explain the timing structure for a 30-second English script.\"</p></li><li><p>\"Describe the process for the 'Concept Development Task'.\"</p></li><li><p>\"What is the goal of the 'Brand Analysis Task'?\"</p></li><li><p>\"List the steps in the 'Script Refinement Task'.\"</p></li><li><p>\"What are the TikTok optimization strategies?\"</p></li><li><p>\"Explain the purpose of the <code>/core-dump</code> command.\"</p></li><li><p>\"How does the 'Text Humanization Task' work?\"</p></li><li><p>\"Provide an example of robotic vs. humanized text.\"</p></li><li><p>\"What is the 'Speech Optimization Task'?\"</p></li><li><p>\"Describe the 'ElevenLabs TTS Preparation Task'.\"</p></li><li><p>\"Explain the methodology for the 'Natural Pause Integration Task'.\"</p></li><li><p>\"What is the process for the 'Video Script Alignment Task'?\"</p></li><li><p>\"How does the 'AI Video Prompt Optimization Task' function?\"</p></li><li><p>\"Summarize the 'Visual Storytelling Translation Task'.\"</p></li><li><p>\"What is the goal of the 'Audio Script Development Task'?\"</p></li><li><p>\"Describe the structure of a 60-second audio script.\"</p></li><li><p>\"What are the core principles of the 'Intelligent Project Analysis Task'?\"</p></li><li><p>\"Explain the 'Dynamic Agent Selection &amp; Sequencing Task'.\"</p></li><li><p>\"How does 'Smart Quality Gate Management' work?\"</p></li><li><p>\"Summarize the sections of the English Ad Script Template.\"</p></li><li><p>\"What is included in the English Concept Brief Template?\"</p><p>эсте \"What information is in the English Brand Brief Template?\"</p></li><li><p>\"List the sections of the TTS Optimization Template.\"</p></li><li><p>\"What are the main components of the Video Script Alignment Template?\"</p></li><li><p>\"Describe the structure of the AI Video Prompt Template.\"</p></li><li><p>\"What does the Podcast Episode Template include?\"</p></li><li><p>\"Explain the Emotional Voltage Theory from the documentation.\"</p></li><li><p>\"What is the 5-act time-coded script format?\"</p></li><li><p>\"How does organic brand integration work in Hype Jet scripts?\"</p></li><li><p>\"List the supported English regional dialects.\"</p></li><li><p>\"What does the command <code>/agent-list</code> do?\"</p></li><li><p>\"How do you consult with Femke, the Video Content Creator Advisor?\"</p></li><li><p>\"What is the purpose of the <code>/checklist-script</code> command?\"</p></li><li><p>\"Explain the 'English Betrayal Voltage' concept.\"</p></li><li><p>\"Describe the 'English Redemption Voltage' concept.\"</p></li><li><p>\"What is the 'English Survival Voltage' concept?\"</p></li><li><p>\"Explain the 'English Obsession Voltage' concept.\"</p></li><li><p>\"What is the 'English Revelation Voltage' concept?\"</p></li><li><p>\"Describe the 'English Heartbreak Voltage' concept.\"</p></li><li><p>\"What are the principles of cinematic advertising in the knowledge base?\"</p></li><li><p>\"Summarize the audience demographics for the 'Thriller' genre in the UK.\"</p></li><li><p>\"What are the 'English Cultural Emotional Triggers'?\"</p></li><li><p>\"Explain the 'English Cosiness Trigger'.\"</p></li><li><p>\"Describe the '3-Second Hook Formulas'.\"</p></li><li><p>\"What are the best practices for ElevenLabs TTS optimization?\"</p></li><li><p>\"Compare the strengths of Veo 3 and Kling AI for video generation.\"</p></li><li><p>\"What are the key points of the Veo 3 Optimization Guide?\"</p></li><li><p>\"Summarize the Kling AI Production Guide.\"</p></li><li><p>\"List the primary audio platforms in the UK.\"</p></li><li><p>\"What are the most popular podcast categories in the UK?\"</p></li><li><p>\"Describe the items in the 'Emotional Impact Verification' checklist.\"</p></li><li><p>\"What is checked under 'Attention Architecture'?\"</p></li><li><p>\"List the points for 'English Language and Dialect Authenticity'.\"</p></li><li><p>\"What does the 'Brand Authenticity' checklist cover?\"</p></li><li><p>\"Summarize the 'Call-to-Action Effectiveness' checklist.\"</p></li><li><p>\"What is verified in the 'TikTok Optimization' checklist?\"</p></li><li><p>\"Describe the 'Production Feasibility' checklist.\"</p></li><li><p>\"What are the main points of the 'Cultural Sensitivity' checklist?\"</p></li><li><p>\"Explain the 'Final Quality Check' for scripts.\"</p></li><li><p>\"List the items on the 'English 16-Point Linguistic Validation Checklist'.\"</p></li><li><p>\"What does the 'TTS Quality Checklist' for ElevenLabs cover?\"</p></li><li><p>\"Summarize the 'Video Script Synchronization Checklist'.\"</p></li><li><p>\"What is checked in the 'AI Video Quality Checklist'?\"</p></li><li><p>\"Describe the 'Podcast Content Checklist'.\"</p></li><li><p>\"What are the main points of the 'Sound Design Quality Checklist'?\"</p></li><li><p>\"What is the emotional core of the EcoBike Pro script example?\"</p></li><li><p>\"Describe the UrbanBeats Headphone script example.\"</p></li><li><p>\"What happens in the 'Quick Magic Workflow' example?\"</p></li><li><p>\"Explain the 'Brand-Driven Workflow' example.\"</p></li><li><p>\"Summarize the 'Story-Driven Workflow' example.\"</p></li><li><p>\"What is the command to view the command matrix?\"</p></li><li><p>\"How do you activate a structured approach mode?\"</p></li><li><p>\"Explain the SESSION PERSISTENCE policy for commands.\"</p></li><li><p>\"What is the rule about citation tags in responses?\"</p></li><li><p>\"Describe the 'Default Dialogue Pacing' rule.\"</p></li><li><p>\"How do you access the list of available agents?\"</p></li><li><p>\"What is the purpose of the <code>/doc-out</code> command?\"</p></li><li><p>\"Explain how to use cross-agent communication commands.\"</p></li><li><p>\"List the available advisory council specialists.\"</p></li><li><p>\"What is the command to start the brand analysis workflow?\"</p></li><li><p>\"How do you run the production readiness checklist?\"</p></li><li><p>\"What are the platform-specific optimization commands?\"</p></li><li><p>\"Explain the <code>/boost_creativity_level</code> setting.\"</p></li><li><p>\"What does <code>/enhance_emotional_tone</code> do?\"</p></li><li><p>\"How does the <code>/adapt_to_audience_expertise</code> setting work?\"</p></li><li><p>\"Describe the persona of the main orchestrator agent.\"</p></li><li><p>\"What are the key features of the Hype Jet system according to the documentation?\"</p></li><li><p>\"List the business metrics used to evaluate scripts.\"</p></li><li><p>\"What are the emotional triggers for the English market?\"</p></li><li><p>\"Explain the concept of 'Visual-First Writing'.\"</p></li><li><p>\"What are the different types of pauses mentioned in the 'Natural Pause Integration Task'?\"</p></li><li><p>\"Describe the agent collaboration pattern for a video production pipeline.\"</p></li><li><p>\"What is the 'Project Complexity Classification' system?\"</p></li><li><p>\"List the standard project templates available.\"</p></li><li><p>\"How does the 'Dynamic Quality Gate Selection' work?\"</p></li><li><p>\"Explain the 'Fireside Chat' podcast workflow.\"</p></li><li><p>\"What is the default character limit for the enhanced podcast workflow?\"</p></li><li><p>\"How can you control the voice pitch in a podcast?\"</p></li><li><p>\"What does the <code>/thematic-match</code> strategic adapter do?\"</p></li><li><p>\"Explain the <code>/user-empathy</code> strategic adapter.\"</p></li><li><p>\"List the short alias commands for strategic adapters.\"</p></li><li><p>\"What is the 'Smart Command Recommendations Engine'?\"</p></li><li><p>\"Describe the emotional journey in the Ad Script Template.\"</p></li><li><p>\"What is an 'Emotional Core Identification' in concept development?\"</p></li><li><p>\"What is the difference between primary and secondary audiences in the brand brief?\"</p></li><li><p>\"How is 'Robotic Text Transformation' achieved?\"</p></li><li><p>\"What are the key elements of the 'AI Video Quality Checklist'?\"</p></li><li><p>\"Describe the 'Audio Script Quality Checklist'.\"</p></li><li><p>\"What is the goal of the 'Final Video Optimization' task?\"</p></li><li><p>\"Explain the purpose of the 'Podcast Script Creation Task'.\"</p></li><li><p>\"What is 'Multi-Platform Audio Planning'?\"</p></li><li><p>\"Describe the 'Intelligent Project Analysis Task'.\"</p></li><li><p>\"What is the function of the 'Workflow Orchestration &amp; Project Coordination Task'?\"</p></li><li><p>\"List the core principles of the Hype Jet philosophy.\"</p></li><li><p>\"What are the genre preferences for London and the South East?\"</p></li><li><p>\"Describe the seasonal genre patterns for Winter in the UK.\"</p></li><li><p>\"What is the typical conversational tempo in English?\"</p></li><li><p>\"List some Gen Z speech characteristics mentioned in the knowledge base.\"</p></li><li><p>\"Explain the principle of 'Visual Supremacy' for English advertising.\"</p></li><li><p>\"How does the <code>/podcast-workflow-gem</code> differ from the base workflow?\"</p></li><li><p>\"What are the responsibilities of Maya, the Post-Production Supervisor?\"</p></li><li><p>\"Describe the expertise of Finn, the Audio Script Specialist.\"</p></li><li><p>\"What is the purpose of the 'MANDATORY INTERACTION RULE'?\"</p></li><li><p>\"Explain the 'Attention Architecture' checklist.\"</p></li><li><p>\"List the points under 'Cinematic Quality' in the script checklist.\"</p></li><li><p>\"What is involved in the 'Brand Identity Consistency' check?\"</p></li><li><p>\"Describe the 'English Pronunciation Difficulty Assessment'.\"</p></li><li><p>\"What does the 'Pre-Production Verification' in the production checklist entail?\"</p></li><li><p>\"Explain the 'Robotic Elements Elimination' step in the TTS checklist.\"</p></li><li><p>\"What are the components of the 'English Text-to-Video Coherence Verification'?\"</p></li><li><p>\"Describe the 'AI Video Output Quality Verification' process.\"</p></li><li><p>\"What is checked for 'English Visual Style Consistency'?\"</p></li><li><p>\"Summarize the 'Audio Script Structure Verification' checklist.\"</p></li><li><p>\"What is checked for 'English Audio Authenticity'?\"</p></li><li><p>\"Explain the 'Sound Design Creativity' checklist.\"</p></li><li><p>\"What are the steps in the 'Audio Recording Excellence' checklist?\"</p></li><li><p>\"Describe the 'Broadcast Audio Compliance' standards.\"</p></li><li><p>\"What are the 'Core Production Tasks'?\"</p></li><li><p>\"Explain the 'Language Quality Tasks'.\"</p></li><li><p>\"What are the 'Text Enhancement Tasks'?\"</p></li><li><p>\"List the 'Video Production Tasks'.\"</p></li><li><p>\"What are the main 'Audio Production Tasks'?\"</p></li><li><p>\"Summarize the 'Project Management &amp; Workflow Orchestration Tasks'.\"</p></li><li><p>\"What is the purpose of the 'Advisory Council Templates'?\"</p></li><li><p>\"Describe the 'English Creative Brief Summary' in the script template.\"</p></li><li><p>\"What is the 'Elevator Pitch' in the concept brief template?\"</p></li><li><p>\"Explain the 'Brand DNA Analysis' section of the brand brief template.\"</p></li><li><p>\"What are the 'Linguistic Improvements' in the language review template?\"</p></li><li><p>\"Describe the 'Humanization Improvements' in the TTS optimization template.\"</p></li><li><p>\"What does the 'Style Adaptation Template' focus on?\"</p></li><li><p>\"Explain the 'AI Video Prompt Development' section of the alignment template.\"</p></li><li><p>\"What is specified in the 'Sound Design Concept' template?\"</p></li><li><p>\"Describe the 'Time-Coded Script Format' from the documentation.\"</p></li><li><p>\"What are the 'System Architecture' components?\"</p></li><li><p>\"List the emotional impact metrics for script evaluation.\"</p></li><li><p>\"What are the 'English cinematic advertising principles'?\"</p></li><li><p>\"Explain the 'Genre-Demographic Matrix'.\"</p></li><li><p>\"What are the 'Attention Architecture Formulas'?\"</p></li><li><p>\"Describe 'Call-to-Action Psychology' for the English market.\"</p></li><li><p>\"What are the key production considerations for authenticity?\"</p></li><li><p>\"How does the system handle different generations' street language?\"</p></li><li><p>\"What are the seasonal genre patterns for Summer in the UK?\"</p></li><li><p>\"Explain the principles of 'English Robotic Text Transformation'.\"</p></li><li><p>\"What are the 'English Natural Speech Rhythms'?\"</p></li><li><p>\"Describe the 'Natural Breathing Guide' for TTS.\"</p></li><li><p>\"What are the principles of 'English Visual Culture'?\"</p></li><li><p>\"Explain 'Project Complexity Classification Level 3'.\"</p></li><li><p>\"What is the 'Podcast English Series English Launch' template?\"</p></li><li><p>\"Describe the 'Quality-First English Production' workflow pattern.\"</p></li><li><p>\"How is the <code>/help</code> command supposed to function?\"</p></li><li><p>\"What are the creative and brainstorming toggle commands?\"</p></li><li><p>\"Explain the <code>/reset-all</code> emergency command.\"</p></li><li><p>\"List the quick workflow access shortcuts.\"</p></li><li><p>\"What is the function of the <code>/dashboard</code> command?\"</p></li><li><p>\"How do you start the default 'Fireside Chat' podcast workflow?\"</p></li></ol>",
+          "outputFormat": "textWithMetadata",
+          "retrieverUpdateState": [],
+          "undefined": ""
+        },
+        "outputAnchors": [
+          {
+            "id": "retrieverAgentflow_0-output-retrieverAgentflow",
+            "label": "Retriever",
+            "name": "retrieverAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 143,
+      "height": 66,
+      "selected": false,
+      "dragging": false,
+      "positionAbsolute": {
+        "x": -253.10333724955655,
+        "y": 192.36044040361776
+      }
+    },
+    {
+      "id": "startAgentflow_0",
+      "position": {
+        "x": -383.52888392813736,
+        "y": 375.4328255653515
+      },
+      "data": {
+        "id": "startAgentflow_0",
+        "label": "Start",
+        "version": 1.1,
+        "name": "startAgentflow",
+        "type": "Start",
+        "color": "#7EE787",
+        "hideInput": true,
+        "baseClasses": [
+          "Start"
+        ],
+        "category": "Agent Flows",
+        "description": "Starting point of the agentflow",
+        "inputParams": [
+          {
+            "label": "Input Type",
+            "name": "startInputType",
+            "type": "options",
+            "options": [
+              {
+                "label": "Chat Input",
+                "name": "chatInput",
+                "description": "Start the conversation with chat input"
+              },
+              {
+                "label": "Form Input",
+                "name": "formInput",
+                "description": "Start the workflow with form inputs"
+              }
+            ],
+            "default": "chatInput",
+            "id": "startAgentflow_0-input-startInputType-options",
+            "display": true
+          },
+          {
+            "label": "Form Title",
+            "name": "formTitle",
+            "type": "string",
+            "placeholder": "Please Fill Out The Form",
+            "show": {
+              "startInputType": "formInput"
+            },
+            "id": "startAgentflow_0-input-formTitle-string",
+            "display": false
+          },
+          {
+            "label": "Form Description",
+            "name": "formDescription",
+            "type": "string",
+            "placeholder": "Complete all fields below to continue",
+            "show": {
+              "startInputType": "formInput"
+            },
+            "id": "startAgentflow_0-input-formDescription-string",
+            "display": false
+          },
+          {
+            "label": "Form Input Types",
+            "name": "formInputTypes",
+            "description": "Specify the type of form input",
+            "type": "array",
+            "show": {
+              "startInputType": "formInput"
+            },
+            "array": [
+              {
+                "label": "Type",
+                "name": "type",
+                "type": "options",
+                "options": [
+                  {
+                    "label": "String",
+                    "name": "string"
+                  },
+                  {
+                    "label": "Number",
+                    "name": "number"
+                  },
+                  {
+                    "label": "Boolean",
+                    "name": "boolean"
+                  },
+                  {
+                    "label": "Options",
+                    "name": "options"
+                  }
+                ],
+                "default": "string"
+              },
+              {
+                "label": "Label",
+                "name": "label",
+                "type": "string",
+                "placeholder": "Label for the input"
+              },
+              {
+                "label": "Variable Name",
+                "name": "name",
+                "type": "string",
+                "placeholder": "Variable name for the input (must be camel case)",
+                "description": "Variable name must be camel case. For example: firstName, lastName, etc."
+              },
+              {
+                "label": "Add Options",
+                "name": "addOptions",
+                "type": "array",
+                "show": {
+                  "formInputTypes[$index].type": "options"
+                },
+                "array": [
+                  {
+                    "label": "Option",
+                    "name": "option",
+                    "type": "string"
+                  }
+                ]
+              }
+            ],
+            "id": "startAgentflow_0-input-formInputTypes-array",
+            "display": false
+          },
+          {
+            "label": "Ephemeral Memory",
+            "name": "startEphemeralMemory",
+            "type": "boolean",
+            "description": "Start fresh for every execution without past chat history",
+            "optional": true,
+            "id": "startAgentflow_0-input-startEphemeralMemory-boolean",
+            "display": true
+          },
+          {
+            "label": "Flow State",
+            "name": "startState",
+            "description": "Runtime state during the execution of the workflow",
+            "type": "array",
+            "optional": true,
+            "array": [
+              {
+                "label": "Key",
+                "name": "key",
+                "type": "string",
+                "placeholder": "Foo"
+              },
+              {
+                "label": "Value",
+                "name": "value",
+                "type": "string",
+                "placeholder": "Bar",
+                "optional": true
+              }
+            ],
+            "id": "startAgentflow_0-input-startState-array",
+            "display": true
+          },
+          {
+            "label": "Persist State",
+            "name": "startPersistState",
+            "type": "boolean",
+            "description": "Persist the state in the same session",
+            "optional": true,
+            "id": "startAgentflow_0-input-startPersistState-boolean",
+            "display": true
+          }
+        ],
+        "inputAnchors": [],
+        "inputs": {
+          "startInputType": "chatInput",
+          "startEphemeralMemory": true,
+          "startState": [],
+          "startPersistState": true
+        },
+        "outputAnchors": [
+          {
+            "id": "startAgentflow_0-output-startAgentflow",
+            "label": "Start",
+            "name": "startAgentflow"
+          }
+        ],
+        "outputs": {},
+        "selected": false
+      },
+      "type": "agentFlow",
+      "width": 104,
+      "height": 66,
+      "positionAbsolute": {
+        "x": -383.52888392813736,
+        "y": 375.4328255653515
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "agentAgentflow_1",
+      "sourceHandle": "agentAgentflow_1-output-agentAgentflow",
+      "target": "conditionAgentflow_0",
+      "targetHandle": "conditionAgentflow_0",
+      "data": {
+        "sourceColor": "#4DD0E1",
+        "targetColor": "#FFB938",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "agentAgentflow_1-agentAgentflow_1-output-agentAgentflow-conditionAgentflow_0-conditionAgentflow_0"
+    },
+    {
+      "source": "agentAgentflow_0",
+      "sourceHandle": "agentAgentflow_0-output-agentAgentflow",
+      "target": "agentAgentflow_1",
+      "targetHandle": "agentAgentflow_1",
+      "data": {
+        "sourceColor": "#4DD0E1",
+        "targetColor": "#4DD0E1",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "agentAgentflow_0-agentAgentflow_0-output-agentAgentflow-agentAgentflow_1-agentAgentflow_1"
+    },
+    {
+      "source": "conditionAgentflow_0",
+      "sourceHandle": "conditionAgentflow_0-output-0",
+      "target": "loopAgentflow_0",
+      "targetHandle": "loopAgentflow_0",
+      "data": {
+        "sourceColor": "#FFB938",
+        "targetColor": "#FFA07A",
+        "edgeLabel": "0",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "conditionAgentflow_0-conditionAgentflow_0-output-0-loopAgentflow_0-loopAgentflow_0"
+    },
+    {
+      "source": "conditionAgentAgentflow_0",
+      "sourceHandle": "conditionAgentAgentflow_0-output-0",
+      "target": "agentAgentflow_2",
+      "targetHandle": "agentAgentflow_2",
+      "data": {
+        "sourceColor": "#ff8fab",
+        "targetColor": "#4DD0E1",
+        "edgeLabel": "0",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "conditionAgentAgentflow_0-conditionAgentAgentflow_0-output-0-agentAgentflow_2-agentAgentflow_2"
+    },
+    {
+      "source": "conditionAgentflow_0",
+      "sourceHandle": "conditionAgentflow_0-output-1",
+      "target": "llmAgentflow_1",
+      "targetHandle": "llmAgentflow_1",
+      "data": {
+        "sourceColor": "#FFB938",
+        "targetColor": "#64B5F6",
+        "edgeLabel": "1",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "conditionAgentflow_0-conditionAgentflow_0-output-1-llmAgentflow_1-llmAgentflow_1"
+    },
+    {
+      "source": "llmAgentflow_1",
+      "sourceHandle": "llmAgentflow_1-output-llmAgentflow",
+      "target": "conditionAgentAgentflow_0",
+      "targetHandle": "conditionAgentAgentflow_0",
+      "data": {
+        "sourceColor": "#64B5F6",
+        "targetColor": "#ff8fab",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "llmAgentflow_1-llmAgentflow_1-output-llmAgentflow-conditionAgentAgentflow_0-conditionAgentAgentflow_0"
+    },
+    {
+      "source": "conditionAgentAgentflow_0",
+      "sourceHandle": "conditionAgentAgentflow_0-output-1",
+      "target": "loopAgentflow_1",
+      "targetHandle": "loopAgentflow_1",
+      "data": {
+        "sourceColor": "#ff8fab",
+        "targetColor": "#FFA07A",
+        "edgeLabel": "1",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "conditionAgentAgentflow_0-conditionAgentAgentflow_0-output-1-loopAgentflow_1-loopAgentflow_1"
+    },
+    {
+      "source": "llmAgentflow_0",
+      "sourceHandle": "llmAgentflow_0-output-llmAgentflow",
+      "target": "agentAgentflow_0",
+      "targetHandle": "agentAgentflow_0",
+      "data": {
+        "sourceColor": "#64B5F6",
+        "targetColor": "#4DD0E1",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "llmAgentflow_0-llmAgentflow_0-output-llmAgentflow-agentAgentflow_0-agentAgentflow_0"
+    },
+    {
+      "source": "startAgentflow_0",
+      "sourceHandle": "startAgentflow_0-output-startAgentflow",
+      "target": "retrieverAgentflow_0",
+      "targetHandle": "retrieverAgentflow_0",
+      "data": {
+        "sourceColor": "#7EE787",
+        "targetColor": "#b8bedd",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "startAgentflow_0-startAgentflow_0-output-startAgentflow-retrieverAgentflow_0-retrieverAgentflow_0"
+    },
+    {
+      "source": "startAgentflow_0",
+      "sourceHandle": "startAgentflow_0-output-startAgentflow",
+      "target": "llmAgentflow_0",
+      "targetHandle": "llmAgentflow_0",
+      "data": {
+        "sourceColor": "#7EE787",
+        "targetColor": "#64B5F6",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "startAgentflow_0-startAgentflow_0-output-startAgentflow-llmAgentflow_0-llmAgentflow_0"
+    },
+    {
+      "source": "retrieverAgentflow_0",
+      "sourceHandle": "retrieverAgentflow_0-output-retrieverAgentflow",
+      "target": "llmAgentflow_0",
+      "targetHandle": "llmAgentflow_0",
+      "data": {
+        "sourceColor": "#b8bedd",
+        "targetColor": "#64B5F6",
+        "isHumanInput": false
+      },
+      "type": "agentFlow",
+      "id": "retrieverAgentflow_0-retrieverAgentflow_0-output-retrieverAgentflow-llmAgentflow_0-llmAgentflow_0"
+    }
+  ]
+}

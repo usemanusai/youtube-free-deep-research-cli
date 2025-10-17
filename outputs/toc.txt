@@ -1,0 +1,69 @@
+Of course. Here is a structured table of contents and outline for the provided video content.
+
+---
+
+### **Table of Contents: Prompt-Driven Documentation with GitHub Copilot**
+
+**I. Introduction & Overview**
+    A. Host Introduction: Maxin Soniggov, Senior Solution Engineer at Microsoft
+    B. Series: Promptdriven Development
+    C. Topic: Automating Documentation with GitHub Copilot
+    D. Core Promise: Turning documentation from a chore into a fast, accurate process.
+
+**II. The Starting Point: The Example Project**
+    A. Project Name: Personal Expense Tracker App
+    B. Project State:
+        1. Built with a PRD and Technical Specification.
+        2. Partially implemented with help from GitHub Copilot Agent Mode.
+        3. Simple, incomplete, and lacking documentation (a common hobby project state).
+
+**III. Generating Project-Wide Documentation: The README**
+    A. The Goal: Create a comprehensive `README.md` file.
+    B. The Method: Using a pre-built community prompt.
+    C. Source: The "awesome-copilot" GitHub repository.
+    D. Implementation:
+        1. Saves the "readme generator" prompt to a local `/Github/prompts` folder.
+        2. Follows naming conventions to make it instantly available as a comment.
+        3. Executes the prompt in Agent Mode.
+    E. Result: A perfectly formatted, complete, and validated README file.
+
+**IV. Documenting the Backend: API Documentation**
+    A. The Goal: Create detailed documentation for the API layer.
+    B. The Method: A new chat session using Edit Mode (to avoid running commands).
+    C. The Prompt: Request to create API documentation following best practices.
+    D. Results:
+        1. A human-readable API documentation file.
+        2. A YAML file for OpenAPI specification.
+        3. Both are accurate as Copilot scanned the backend code.
+
+**V. Key Feature Demonstration: Bring Your Own Key (BYOK)**
+    A. Purpose: Greater flexibility, compliance, security, and cost management.
+    B. Demonstration:
+        1. Accessing the model selector in GitHub Copilot.
+        2. Adding a personal API key (e.g., for Google's Gemini).
+        3. Switching between models for different tasks.
+
+**VI. Documenting the Frontend: Inline Code Comments**
+    A. The Goal: Add documentation to frontend components (e.g., `TransactionList`).
+    B. Method 1: Inline Mode
+        1. Using Ctrl+I (Windows) and the `/doc` slash command.
+        2. Result: Auto-generated JSDoc comments for a single method.
+    C. Method 2: Chat Mode
+        1. Prompt: Request to add inline documentation to all methods in a specific file (`dashboard.tsx`).
+        2. Result: Full file documentation generated in less than a minute.
+
+**VII. Summary of Best Practices & Workflow**
+    A. Steps Taken:
+        1. Used a community prompt from `awesome-copilot` for the README.
+        2. Used Edit Mode for backend API documentation.
+        3. Used Inline and Chat modes for frontend code documentation.
+        4. Leveraged the BYOK feature for model flexibility.
+    B. Outcome: Transformed the project from undocumented to developer-friendly.
+    C. Final Takeaway: GitHub Copilot is a powerful documentation assistant, not just an autocomplete tool.
+
+**VIII. Conclusion & Call to Action**
+    A. Encouragement to try the approach on personal projects.
+    B. Advice: Start small and refine prompts.
+    C. Closing: Thanks and preview of the next episode.
+
+---

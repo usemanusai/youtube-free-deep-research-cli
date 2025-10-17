@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        name: ruff (lint)
+        args: ["--fix"]
+      - id: ruff-format
+        name: ruff (format)
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        name: bandit (security)
+        args: ["-c", "pyproject.toml", "-q", "-r", "youtube_chat_cli_main"]
+        additional_dependencies: []
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: detect-secrets (secrets scan)
+        args: ["--baseline", ".secrets.baseline", "--all-files"]
+        # Generate a baseline with: detect-secrets scan > .secrets.baseline
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (quick)
+        entry: pytest -q -m "not slow"
+        language: system
+        pass_filenames: false
+        types: [python]
+

@@ -1,0 +1,20 @@
+# FastAPI Backend Server Requirements
+# Install with: pip install -r api_requirements.txt
+
+# Web Framework
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+
+# CORS and middleware
+python-dotenv==1.0.1
+
+# Async support
+aiofiles==24.1.0
+
+# WebSocket support (optional, for future streaming features)
+websockets==13.1
+
+# All existing project dependencies are already in requirements.txt
+# This file only adds FastAPI-specific dependencies
+

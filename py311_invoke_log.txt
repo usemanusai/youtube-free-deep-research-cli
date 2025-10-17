@@ -1,0 +1,6 @@
+cmd: ['C:\\Users\\Lenovo ThinkPad T480\\AppData\\Local\\Programs\\Python\\Python311\\python.exe', 'check_py311_pkgs2.py']
+returncode: 0
+stdout:
+WROTE py311_tts_pkgs.json: {'melo': False, 'melo.api': False, 'chatterbox': False, 'chatterbox.tts': False, 'torchaudio': False}
+
+stderr:

@@ -1,8 +1,17 @@
+<<<<<<< HEAD
 # Environment variables and secrets
 .env
 .env.local
 .env.production
 .env.staging
+=======
+# Virtual Environments
+tts-bridge-py310/
+venv/
+env/
+ENV/
+.venv
+>>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)
 
 # Python
 __pycache__/
@@ -22,6 +31,7 @@ parts/
 sdist/
 var/
 wheels/
+<<<<<<< HEAD
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
@@ -64,15 +74,47 @@ service.log
 *.mp3
 *.m4a
 audio_output/
+=======
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+>>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)
 
 # Logs
 *.log
 logs/
 
+<<<<<<< HEAD
+=======
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for Next.js dashboard)
+node_modules/
+.next/
+out/
+dist/
+
+>>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
+<<<<<<< HEAD
 .tox/
 .nox/
 
@@ -118,3 +160,10 @@ dmypy.json
 
 # Legacy
 blog
+=======
+
+# Temporary
+*.tmp
+*.temp
+
+>>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)

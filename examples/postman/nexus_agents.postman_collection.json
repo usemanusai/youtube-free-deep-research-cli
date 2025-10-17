@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "Nexus Agents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "8f8e5b0d-2f0f-4c4b-bc9e-1234567890ab"
+  },
+  "item": [
+    {
+      "name": "Deep Research",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/deep-research","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","deep-research"]},
+        "body": {"mode":"raw","raw":"{\n  \"topic\": \"AI safety\",\n  \"max_turns\": 2\n}"}
+      }
+    },
+    {
+      "name": "Content Check",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/content-check","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","content-check"]},
+        "body": {"mode":"raw","raw":"{\n  \"topic\": \"AI safety\",\n  \"max_loops\": 1\n}"}
+      }
+    },
+    {
+      "name": "Sessions List",
+      "request": {
+        "method": "GET",
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/sessions?limit=20","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","sessions"],"query":[{"key":"limit","value":"20"}]}
+      }
+    },
+    {
+      "name": "Archive Status",
+      "request": {
+        "method": "GET",
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/archive/status","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","archive","status"]}
+      }
+    },
+    {
+      "name": "Archive Reindex",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/archive/reindex","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","archive","reindex"]},
+        "body": {"mode":"raw","raw":"{\n  \"force\": false\n}"}
+      }
+    },
+    {
+      "name": "Archive Queue",
+      "request": {
+        "method": "GET",
+        "url": {"raw":"{{baseUrl}}/api/v1/nexus-agents/archive/queue","host":["{{baseUrl}}"],"path":["api","v1","nexus-agents","archive","queue"]}
+      }
+    }
+  ],
+  "variable": [{"key":"baseUrl","value":"http://localhost:8000"}]
+}
+

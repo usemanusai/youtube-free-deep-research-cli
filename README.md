@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎙️ YouTube Chat CLI - Professional Podcast Generation Platform
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
@@ -1032,3 +1033,69 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Made with ❤️ for content creators, researchers, and knowledge workers**
 
 Transform your content into professional podcasts with AI-powered intelligence! 🎙️✨
+=======
+# youtube-chat-cli-main
+
+Modernized, production-ready CLI and service stack for deep research, scraping, and LLM-assisted workflows.
+
+## Quickstart (Python)
+
+- Python: 3.13+
+- Preferred package manager: uv
+
+Install dependencies (pip fallback shown):
+
+```bash
+# Using uv (recommended)
+python -m pip install -U uv
+uv lock
+# Run tests directly with uv
+uv run --with dev pytest -q
+
+# Or fallback to pip
+python -m pip install -r requirements.txt -r youtube_chat_cli_main/api_requirements.txt
+python -m pytest -q
+```
+
+## Run the API
+
+```bash
+# Dev (reload) via uvicorn
+uv run uvicorn youtube_chat_cli_main.api_server:app --reload --port 8556
+```
+
+Health endpoints:
+- GET /health/live
+- GET /health/ready
+
+## HTTP Client
+
+Use centralized httpx client utilities:
+
+```python
+from youtube_chat_cli_main.core.http_client import request_with_retry, get_async_client
+```
+
+## Testing
+
+- Pytest with coverage: `pytest --cov=youtube_chat_cli_main`
+- Network policy: sockets blocked on Linux/macOS by default (Windows allowed for Starlette)
+- LLM offline: `NEXUS_LLM_BACKEND=placeholder`
+
+## Docker
+
+```bash
+docker build -t jaegis-api .
+docker run --rm -p 8556:8556 jaegis-api
+```
+
+## CI/CD
+
+- Lint/Test workflow: .github/workflows/quality-assurance.yml (Ubuntu, Windows, macOS)
+- Security audit: .github/workflows/security-audit.yml (Semgrep, Bandit, Gitleaks, ESLint)
+
+## Migration
+
+See docs/MIGRATION_GUIDE.md for details on breaking changes and updated practices.
+
+>>>>>>> 765be5f (Refactor: Implement modular architecture with 60+ files, 100% backward compatibility)

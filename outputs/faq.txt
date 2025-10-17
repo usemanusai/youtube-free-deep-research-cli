@@ -1,0 +1,25 @@
+Of course. Here is a FAQ based on the provided content from the "Promptdriven Development" episode.
+
+### Frequently Asked Questions (FAQ)
+
+**Q1: What is the main topic of this episode of Promptdriven Development?**
+**A:** This episode focuses on using GitHub Copilot to automatically generate comprehensive project documentation—including README files, API documentation, and inline code comments—by crafting effective prompts, turning a tedious task into a fast and accurate process.
+
+**Q2: Where did the host get the "Readme Generator" prompt used in the video?**
+**A:** The "Readme Generator" prompt was sourced from the **"awesome-copilot"** GitHub repository. This is a community-driven repo filled with chat modes, instructions, and pre-built prompts that users can download and use directly in their projects.
+
+**Q3: How can I use my own AI model API key with GitHub Copilot?**
+**A:** You can use the **"Bring Your Own Key" (BYOK)** feature. In the GitHub Copilot model selector, you can manage models and connect your own API keys (e.g., for Google's Gemini). This provides greater flexibility, helps with compliance and security requirements, and allows for better cost management.
+
+**Q4: What are the different modes of GitHub Copilot demonstrated for generating documentation?**
+**A:** The episode demonstrated three primary modes:
+*   **Agent Mode:** Used to run the "Readme Generator" prompt, which executed shell commands to validate the project and generate a complete, formatted README.
+*   **Chat Mode:** Used to create detailed API documentation (both human-readable and OpenAPI YAML) by issuing a prompt in a new chat session.
+*   **Inline Mode:** Used within a code file (e.g., `dashboard.tsx`) to quickly generate JSDoc comments for individual methods using a keyboard shortcut (Ctrl+I).
+
+**Q5: What was the final result of using GitHub Copilot for documentation in the example project?**
+**A:** The previously undocumented "Personal Expense Tracker" app was fully documented in just a few steps. The final result included:
+*   A complete and validated `README.md` file for the overall project.
+*   Detailed human-readable API documentation.
+*   An OpenAPI specification file (YAML) for the backend API.
+*   Fully documented frontend methods with JSDoc comments, making the entire project developer-friendly.

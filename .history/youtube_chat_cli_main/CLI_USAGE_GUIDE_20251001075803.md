@@ -1,0 +1,108 @@
+# 🚀 JAEGIS NexusSync - CLI Usage Guide
+
+Complete guide to using the JAEGIS NexusSync CLI with Adaptive RAG capabilities.
+
+## 📋 Table of Contents
+
+1. [Installation](#installation)
+2. [Quick Start](#quick-start)
+3. [RAG Commands](#rag-commands)
+4. [Background Service](#background-service)
+5. [File Processing](#file-processing)
+6. [Queue Management](#queue-management)
+7. [System Management](#system-management)
+8. [Examples](#examples)
+
+---
+
+## 🔧 Installation
+
+### Prerequisites
+
+Make sure you've completed the [FREE_TIER_SETUP_GUIDE.md](FREE_TIER_SETUP_GUIDE.md) first.
+
+### Install the CLI
+
+```bash
+# From the project directory
+cd youtube_chat_cli_main
+
+# Install in development mode
+pip install -e .
+```
+
+### Verify Installation
+
+```bash
+python -m youtube_chat_cli_main.cli.main --version
+# Should show: version 2.0.0
+```
+
+---
+
+## 🚀 Quick Start
+
+### 1. Verify All Services
+
+```bash
+python -m youtube_chat_cli_main.cli.main rag verify-connections
+```
+
+This will test:
+- ✅ Configuration
+- ✅ Database
+- ✅ LLM (Ollama)
+- ✅ Embeddings (Ollama)
+- ✅ Vector Store (Qdrant)
+- ✅ Web Search (Tavily/DuckDuckGo)
+- ✅ Google Drive
+
+### 2. Start Interactive RAG Chat
+
+```bash
+python -m youtube_chat_cli_main.cli.main rag chat
+```
+
+Ask questions and get answers from your knowledge base!
+
+### 3. Process Your First Document
+
+```bash
+python -m youtube_chat_cli_main.cli.main rag process-file document.pdf
+```
+
+### 4. Start Background Service
+
+```bash
+python -m youtube_chat_cli_main.cli.main rag background start
+```
+
+This will automatically:
+- Monitor your Google Drive folder
+- Process new files
+- Keep your knowledge base up-to-date
+
+---
+
+## 💬 RAG Commands
+
+### Interactive Chat
+
+Start an interactive RAG chat session:
+
+```bash
+python -m youtube_chat_cli_main.cli.main rag chat
+```
+
+**Features:**
+- Ask questions in natural language
+- Automatic retrieval from vector store
+- Web search fallback if needed
+- Query transformation for better results
+- Hallucination detection
+- Answer quality grading
+
+**Example Session:**
+```
+You: What is the main topic of the research paper?
+🤔 Thinking...

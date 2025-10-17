@@ -1,0 +1,11 @@
+click
+python-dotenv
+requests
+halo
+youtube-transcript-api
+beautifulsoup4
+deepmultilingualpunctuation
+langchain-huggingface
+langchain-openai
+gtts>=2.5.0
+pytest

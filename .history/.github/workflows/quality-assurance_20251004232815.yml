@@ -1,0 +1,95 @@
+name: Quality Assurance
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: qa-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python-ci:
+    name: Python Lint, Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install Python tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff bandit pytest pytest-cov
+      - name: Ruff (lint)
+        run: ruff check .
+      - name: Bandit (security)
+        run: bandit -r youtube_chat_cli_main -q || true
+      - name: Pytest (with coverage)
+        run: |
+          pytest -q --maxfail=1 --disable-warnings --cov=youtube_chat_cli_main --cov-report=xml || true
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-coverage
+          path: coverage.xml
+          if-no-files-found: ignore
+      - name: Backend import smoke
+        run: python -c "import importlib; importlib.import_module('youtube_chat_cli_main')"
+
+  node-ci:
+    name: Node Lint, Typecheck, Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Detect workspaces
+        id: detect
+        shell: bash
+        run: |
+          set -e
+          # find workspace-* package.json or root
+          found=$(ls -d workspace-*/ 2>/dev/null | head -n1 || true)
+          if [[ -n "$found" && -f "${found}package.json" ]]; then
+            echo "dir=${found}" >> $GITHUB_OUTPUT
+          elif [[ -f package.json ]]; then
+            echo "dir=." >> $GITHUB_OUTPUT
+          else
+            echo "dir=none" >> $GITHUB_OUTPUT
+          fi
+      - name: Install deps (if present)
+        if: steps.detect.outputs.dir != 'none'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - name: Type check (tsc) if script exists
+        if: steps.detect.outputs.dir != 'none'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          if npm run | grep -q "type-check"; then npm run type-check --silent; else echo "No type-check script"; fi
+      - name: ESLint if installed
+        if: steps.detect.outputs.dir != 'none'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          if npx --yes eslint -v >/dev/null 2>&1; then npx eslint . --ext .ts,.tsx,.js,.jsx || true; else echo "ESLint not installed"; fi
+      - name: Prettier check if installed
+        if: steps.detect.outputs.dir != 'none'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          if npx --yes prettier -v >/dev/null 2>&1; then npx prettier --check . || true; else echo "Prettier not installed"; fi
+      - name: Build if script exists
+        if: steps.detect.outputs.dir != 'none'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          if npm run | grep -q "build"; then npm run build --silent || true; else echo "No build script"; fi
+

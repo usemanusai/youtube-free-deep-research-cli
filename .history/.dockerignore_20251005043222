@@ -1,0 +1,31 @@
+# Docker build context: default deny, explicit allowlist
+# 1) Ignore everything by default
+*
+
+# 2) Re-include only what's needed to build the API image
+!Dockerfile
+!docker-compose.yml
+!pyproject.toml
+!uv.lock
+!requirements.txt
+!requirements-dev.txt
+!README.md
+!CONTRIBUTING.md
+
+# App source
+!youtube_chat_cli_main/
+!youtube_chat_cli_main/**/*
+
+# If tests or docs are ever needed in the image, uncomment these
+#!tests/
+#!tests/**/*
+#!docs/
+#!docs/**/*
+
+# Keep GitHub workflows out of the image by default
+#!.github/
+#!.github/**/*
+
+# Note: Everything else (e.g., venv/.venv, node_modules, MeloTTS models,
+# caches, build artifacts, large binaries) remains excluded by the leading '*'
+# If you need to include specific subpaths later, add additional '!<path>' lines above.
