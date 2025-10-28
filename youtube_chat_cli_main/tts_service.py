@@ -58,6 +58,14 @@ try:
 except Exception as e:
     logger.info(f"TTS Bridge not available: {e}")
 
+# E2-F5-TTS integration (voice cloning with zero-shot TTS)
+E2F5_TTS_AVAILABLE = False
+try:
+    from youtube_chat_cli_main.services.tts.engines.e2f5_tts import E2F5TTSEngine, E2F5_TTS_AVAILABLE
+    logger.info("✅ E2-F5-TTS available - Voice cloning with zero-shot TTS")
+except Exception as e:
+    logger.info(f"E2-F5-TTS not available: {e}")
+
 class APIError(Exception):
     """Error related to external API calls."""
     pass
@@ -78,6 +86,8 @@ class TTSService:
         self.chatterbox_available = CHATTERBOX_AVAILABLE
         self.pyttsx3_available = PYTTSX3_AVAILABLE
         self.tts_bridge_available = TTS_BRIDGE_AVAILABLE
+        self.e2f5_tts_available = E2F5_TTS_AVAILABLE
+        self.e2f5_engine = None  # Lazy load
 
         # Detect bridge availability via marker file if import check failed
         if not self.tts_bridge_available:
@@ -430,6 +440,49 @@ class TTSService:
         except Exception as e:
             logger.error(f"Chatterbox bridge generation failed: {e}")
             raise APIError(f"Chatterbox bridge generation failed: {e}")
+
+    def generate_audio_e2f5(self, text: str, reference_audio: str, output_file: str,
+                           speed: float = 1.0) -> str:
+        """Generate audio using E2-F5-TTS with voice cloning.
+
+        Args:
+            text: Text to convert to speech
+            reference_audio: Path to reference audio for voice cloning
+            output_file: Path to save the audio file
+            speed: Speech rate multiplier (0.5-2.0)
+
+        Returns:
+            Path to the generated audio file
+
+        Raises:
+            APIError: If generation fails
+        """
+        try:
+            # Lazy load E2-F5-TTS engine
+            if self.e2f5_engine is None:
+                from youtube_chat_cli_main.services.tts.engines.e2f5_tts import E2F5TTSEngine
+                self.e2f5_engine = E2F5TTSEngine()
+                logger.info("✅ E2-F5-TTS engine initialized")
+
+            logger.info(f"Generating audio with E2-F5-TTS (text: {len(text)} chars, speed: {speed}x)")
+
+            # Generate audio
+            result = self.e2f5_engine.generate_audio(
+                text=text,
+                reference_audio=reference_audio,
+                output_file=output_file,
+                speed=speed
+            )
+
+            file_size = os.path.getsize(result)
+            logger.info(f"✅ E2-F5-TTS audio generated: {result} ({file_size:,} bytes)")
+            logger.info("🎵 E2-F5-TTS quality: 4.0/5 - High-quality zero-shot TTS with voice cloning")
+
+            return result
+
+        except Exception as e:
+            logger.error(f"E2-F5-TTS generation failed: {e}")
+            raise APIError(f"E2-F5-TTS generation failed: {e}")
 
     def generate_audio(self, text: str, output_file: str = "overview.wav",
                       voice: str = "en-US-AriaNeural", audio_format: str = "wav", slow: bool = False) -> str:

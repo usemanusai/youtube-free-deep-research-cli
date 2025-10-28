@@ -5,6 +5,7 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli)
 [![JAEGIS](https://img.shields.io/badge/JAEGIS-AI%20Powered-purple.svg)](https://github.com/usemanusai)
 [![Release](https://img.shields.io/badge/release-v2.0.1-brightgreen.svg)](https://github.com/usemanusai/youtube-free-deep-research-cli/releases)
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/usemanusai-youtube-free-deep-research-cli-badge.png)](https://mseep.ai/app/usemanusai-youtube-free-deep-research-cli)
 
 **Production-ready Python 3.13+ CLI/API system with Adaptive RAG, multi-engine TTS, OpenRouter key rotation, FastAPI backend, and Next.js dashboard.**
 
@@ -40,6 +41,8 @@ A comprehensive, modular platform for deep research, content analysis, and intel
 - **Modular Architecture** - 60+ files organized into services, API, CLI, utils
 - **100% Backward Compatible** - Zero breaking changes
 - **Production-Ready** - Comprehensive error handling and logging
+- **Advanced Voice Cloning** - 13 prosody parameters for complete voice control
+- **Voice Cloning Parameters** - Speed, pitch, emotion, emphasis, pauses, breath patterns, and more
 
 ## 🚀 Quick Start
 
@@ -146,6 +149,44 @@ youtube_chat_cli_main/
 └── tests/            # 4 test packages
 ```
 
+## 🎙️ Advanced Voice Cloning Parameters (v2.0.0)
+
+Generate natural-sounding speech with complete prosody control using 13 advanced parameters:
+
+### CLI Usage
+```bash
+# Basic generation
+youtube-chat voice-clone generate --voice-id 1 --text "Hello world" --output output.wav
+
+# With emotion and pitch
+youtube-chat voice-clone generate --voice-id 1 --text "I'm so happy!" \
+  --emotion happy --pitch 3 --exaggeration 0.7 --output happy.wav
+
+# Professional presentation
+youtube-chat voice-clone generate --voice-id 1 --text "Welcome to our report" \
+  --speed 1.0 --pitch 1 --emotion confident --emphasis "earnings" "report" \
+  --output presentation.wav
+
+# View available presets
+youtube-chat voice-clone presets
+```
+
+### Available Parameters
+- **Speed** (0.5-2.0) - Speech rate multiplier
+- **Pitch** (-12 to +12) - Pitch adjustment in semitones
+- **Exaggeration** (0.25-2.0) - Emotional intensity
+- **Emotion** (10 types) - neutral, happy, sad, angry, joyful, excited, surprised, curious, confident, empathetic
+- **Emphasis** - Words to emphasize in speech
+- **Pauses** - Silence before/after speech (0-5000ms)
+- **Breath Frequency** - Insert breath every N words
+- **CFG Weight, Temperature, Top P, Min P** - Advanced generation parameters
+- **Seed** - For reproducible results
+
+### Documentation
+- **[Parameter Tuning Guide](docs/voice-cloning/PARAMETER_TUNING_GUIDE.md)** - Complete parameter reference
+- **[CLI Usage Guide](docs/voice-cloning/CLI_ADVANCED_USAGE.md)** - CLI examples and patterns
+- **[API Reference](docs/voice-cloning/API_ADVANCED_REFERENCE.md)** - REST API documentation
+
 ## 📚 Documentation
 
 Comprehensive documentation is available in the `/docs` directory:
@@ -156,6 +197,7 @@ Comprehensive documentation is available in the `/docs` directory:
 - **[Guides](docs/guides/)** - User guides and tutorials
 - **[Development](docs/development/)** - Contributing and deployment
 - **[Integrations](docs/integrations/)** - N8N, Google Drive, MCP server
+- **[Voice Cloning](docs/voice-cloning/)** - Advanced voice cloning with prosody control
 
 ## 🧪 Testing
 

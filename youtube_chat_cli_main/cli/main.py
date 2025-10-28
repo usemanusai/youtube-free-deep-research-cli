@@ -52,6 +52,14 @@ except ImportError as e:
     logger.warning(f"Failed to import Agents commands: {e}")
 
 
+# Import and register voice cloning commands
+try:
+    from .commands.voice_clone import voice_clone
+    cli.add_command(voice_clone, name='voice-clone')
+except ImportError as e:
+    logger.warning(f"Failed to import voice cloning commands: {e}")
+
+
 # Import and register original CLI commands (if available)
 try:
     import sys

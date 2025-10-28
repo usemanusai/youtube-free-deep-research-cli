@@ -281,6 +281,55 @@ class Database:
                 ON chat_sessions(workflow_id, created_at)
             """)
 
+            # Voice cloning tables
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS cloned_voices (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT UNIQUE NOT NULL,
+                    reference_audio_path TEXT NOT NULL,
+                    reference_audio_hash TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    metadata TEXT,
+                    usage_count INTEGER DEFAULT 0,
+                    last_used TIMESTAMP,
+                    user_id TEXT,
+                    consent_timestamp TIMESTAMP,
+                    consent_ip_address TEXT,
+                    is_active BOOLEAN DEFAULT 1
+                )
+            """)
+
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_cloned_voices_active
+                ON cloned_voices(is_active, created_at DESC)
+            """)
+
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_cloned_voices_hash
+                ON cloned_voices(reference_audio_hash)
+            """)
+
+            # Voice cloning operations log
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS voice_cloning_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    voice_id INTEGER,
+                    operation TEXT,
+                    text_length INTEGER,
+                    output_path TEXT,
+                    duration_seconds FLOAT,
+                    quality_score FLOAT,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (voice_id) REFERENCES cloned_voices(id)
+                )
+            """)
+
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_voice_logs_voice
+                ON voice_cloning_logs(voice_id, timestamp DESC)
+            """)
+
             logger.info("Database schema initialized successfully")
 
     # -------------------------------------------------------------------------

@@ -10,7 +10,7 @@
  * - Testing the published package
  */
 
-const { spawn, execSync } = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -47,12 +47,14 @@ function warning(message) {
 
 async function runCommand(command, args = [], options = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { 
-      stdio: 'inherit', 
-      shell: true,
-      ...options 
+    // Use execFile instead of spawn with shell=true for better security
+    // This avoids shell injection vulnerabilities
+    const { execFile } = require('child_process');
+    const child = execFile(command, args, {
+      stdio: 'inherit',
+      ...options
     });
-    
+
     child.on('close', (code) => {
       if (code === 0) {
         resolve();
@@ -60,7 +62,7 @@ async function runCommand(command, args = [], options = {}) {
         reject(new Error(`Command failed with exit code ${code}`));
       }
     });
-    
+
     child.on('error', reject);
   });
 }
