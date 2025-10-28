@@ -44,6 +44,90 @@ A comprehensive, modular platform for deep research, content analysis, and intel
 - **Advanced Voice Cloning** - 13 prosody parameters for complete voice control
 - **Voice Cloning Parameters** - Speed, pitch, emotion, emphasis, pauses, breath patterns, and more
 
+### 🎙️ **Advanced Podcast Generation (NEW in v2.1.0)**
+- **14 Professional Podcast Styles**: Interview, Debate, News Report, Educational, Storytelling, Panel Discussion, Documentary, Quick Tips, Deep Dive, Roundup, and more
+- **Multi-Voice Support**: Different speakers for different roles (host, expert, moderator, panelists)
+- **Customizable Length & Tone**: Short (2-8 min) to Extended (30+ min) with 8 different tone options
+- **Intelligent Content Synthesis**: AI-powered script generation with n8n RAG integration
+
+### 📁 **Multi-Source Content Processing (NEW in v2.1.0)**
+- **20+ File Types**: PDF, DOCX, TXT, MD, CSV, XLSX, MP3, WAV, MP4, AVI, URLs, YouTube videos/playlists/channels, PPTX, code files, images (OCR)
+- **Advanced Filtering**: Date range, file type, size, tags, location-based filtering
+- **Batch Processing**: Handle hundreds of sources efficiently with parallel processing
+- **Smart Content Prioritization**: AI selects most relevant content automatically
+
+### 📋 **Blueprint Generation (NEW in v2.1.0)**
+- **5 Blueprint Styles**: Comprehensive, Executive, Technical, Educational, Reference
+- **Multiple Output Formats**: Markdown, PDF, HTML, DOCX, JSON
+- **Intelligent Documentation**: AI-powered synthesis from multiple sources
+- **Structured Output**: Table of contents, citations, metadata, and professional formatting
+
+### 💬 **Interactive Chat Interface (NEW in v2.1.0)**
+- **Rich Terminal UI**: Beautiful formatting with syntax highlighting, tables, and markdown rendering
+- **Session Management**: Save, load, resume conversations with full history
+- **Real-time Streaming**: Live responses from n8n RAG workflows
+- **Export Capabilities**: JSON and Markdown export of chat sessions
+
+### 🔄 **Workflow Management (NEW in v2.1.0)**
+- **Multiple n8n Workflows**: Manage different RAG workflows for various use cases
+- **Connection Testing**: Automated workflow health checks
+- **Default Workflow**: Set preferred workflows for different tasks
+- **Import/Export**: Backup and share workflow configurations
+
+### YouTube Integration
+- **Interactive chat** with YouTube video transcripts using advanced AI models
+- **Automated channel monitoring** with configurable intervals (daily, weekly, custom)
+- **Bulk import** from channels, playlists, and URL files with comprehensive filtering
+- **Advanced filtering** by duration, keywords, view count, exclude shorts/live streams
+- **Video metadata extraction** and persistent storage with SQLite database
+- **Intelligent transcript processing** with punctuation restoration and formatting
+
+### Text-to-Speech (TTS)
+- **Support for 6 TTS libraries**: Kokoro, OpenVoice v2, MeloTTS, Chatterbox, Edge TTS, Google TTS
+- **Automated installer** with CPU-only support for compatibility
+- **Configurable voice selection** and audio settings per library
+- **Retry logic and timeout handling** for robust audio generation
+- **Podcast-style audio overviews** with natural speech patterns
+
+### Intelligent Rate Limiting
+- **Smart queue system** to prevent YouTube IP blocking and API quota exhaustion
+- **Maximum 5 videos per day** processing limit (configurable)
+- **1-2 hour delays** between video processing attempts with smart distribution
+- **Exponential backoff** on rate limit detection (2+ hour delays)
+- **Distributed processing** throughout the day instead of bulk operations
+- **Automatic rescheduling** of failed videos with intelligent retry logic
+
+### Background Service
+- **Automated channel monitoring** with APScheduler for cross-platform scheduling
+- **Daily video discovery scans** at configurable times (default: 8 AM)
+- **Continuous queue processing** every 2 hours respecting rate limits
+- **Health checks and stuck job detection** every 30 minutes
+
+## 🚀 Quick Start Options
+
+### 📦 **Python Package (PyPI)**
+```bash
+pip install youtube-chat-cli
+youtube-chat --help
+```
+
+### 🤖 **MCP Server for AI Assistants (npm)**
+```bash
+npx jaegis-youtube-chat-mcp
+```
+
+### 🔌 **MCP Client Configuration**
+```json
+{
+  "mcpServers": {
+    "jaegis-youtube-chat": {
+      "command": "npx",
+      "args": ["jaegis-youtube-chat-mcp"]
+    }
+  }
+}
+```
+
 ## 🚀 Quick Start
 
 ### Installation
